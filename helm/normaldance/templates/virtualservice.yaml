@@ -1,0 +1,108 @@
+{{- if .Values.serviceMesh.create -}}
+{{- if .Values.serviceMesh.istio.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "normaldance.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.istio.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.istio.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.istio.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.istio.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  hosts:
+    - {{ include "normaldance.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.serviceMesh.istio.clusterDomain | default "cluster.local" }}
+    - {{ include "normaldance.fullname" . }}.{{ .Release.Namespace }}.svc
+    - {{ include "normaldance.fullname" . }}
+  gateways:
+    - {{ .Values.serviceMesh.istio.gateway | default "mesh" }}
+  http:
+    - match:
+        - uri:
+            prefix: /api/
+        - uri:
+            prefix: /auth/
+        - uri:
+            prefix: /upload/
+        - uri:
+            prefix: /profile/
+        - uri:
+            prefix: /wallet/
+        - uri:
+            prefix: /tracks/
+        - uri:
+            prefix: /users/
+        - uri:
+            prefix: /rewards/
+        - uri:
+            prefix: /discovery/
+        - uri:
+            prefix: /nft/
+        - uri:
+            prefix: /staking/
+        - uri:
+            prefix: /ipfs/
+        - uri:
+            prefix: /filecoin/
+        - uri:
+            prefix: /health/
+      route:
+        - destination:
+            host: {{ include "normaldance.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.serviceMesh.istio.clusterDomain | default "cluster.local" }}
+            port:
+              number: {{ .Values.service.port }}
+      retries:
+        attempts: {{ .Values.serviceMesh.istio.retries.attempts | default "3" }}
+        perTryTimeout: {{ .Values.serviceMesh.istio.retries.perTryTimeout | default "2s" }}
+        retryOn: {{ .Values.serviceMesh.istio.retries.retryOn | default "gateway-error,connect-failure,refused-stream" }}
+      timeout: {{ .Values.serviceMesh.istio.timeout | default "30s" }}
+      corsPolicy:
+        allowOrigins:
+          - {{ .Values.serviceMesh.istio.cors.allowOrigins | default "*" }}
+        allowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        allowHeaders:
+          - {{ .Values.serviceMesh.istio.cors.allowHeaders | default "*" }}
+        exposeHeaders:
+          - {{ .Values.serviceMesh.istio.cors.exposeHeaders | default "*" }}
+        maxAge: {{ .Values.serviceMesh.istio.cors.maxAge | default "86400" }}
+        allowCredentials: {{ .Values.serviceMesh.istio.cors.allowCredentials | default "true" }}
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ include "normaldance.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.serviceMesh.istio.clusterDomain | default "cluster.local" }}
+            port:
+              number: {{ .Values.service.port }}
+      retries:
+        attempts: {{ .Values.serviceMesh.istio.retries.attempts | default "3" }}
+        perTryTimeout: {{ .Values.serviceMesh.istio.retries.perTryTimeout | default "2s" }}
+        retryOn: {{ .Values.serviceMesh.istio.retries.retryOn | default "gateway-error,connect-failure,refused-stream" }}
+      timeout: {{ .Values.serviceMesh.istio.timeout | default "30s" }}
+      corsPolicy:
+        allowOrigins:
+          - {{ .Values.serviceMesh.istio.cors.allowOrigins | default "*" }}
+        allowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        allowHeaders:
+          - {{ .Values.serviceMesh.istio.cors.allowHeaders | default "*" }}
+        exposeHeaders:
+          - {{ .Values.serviceMesh.istio.cors.exposeHeaders | default "*" }}
+        maxAge: {{ .Values.serviceMesh.istio.cors.maxAge | default "86400" }}
+        allowCredentials: {{ .Values.serviceMesh.istio.cors.allowCredentials | default "true" }}
+{{- end }}
+{{- end }}

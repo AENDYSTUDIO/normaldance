@@ -1,0 +1,274 @@
+groups:
+  - name: normaldance-alerts
+    rules:
+      # Оповещения о доступности
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service {{ $labels.instance }} is down"
+          description: "Service {{ $labels.job }} has been down for more than 1 minute."
+
+      # Оповещения о высокой загрузке CPU
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is above 80% for 5 minutes."
+
+      # Оповещения о высокой загрузке памяти
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is above 85% for 5 minutes."
+
+      # Оповещения о дисковом пространстве
+      - alert: LowDiskSpace
+        expr: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low disk space on {{ $labels.instance }}"
+          description: "Disk space usage is above 85% on {{ $labels.mountpoint }}."
+
+      # Оповещения о высокой нагрузке базы данных
+      - alert: HighDatabaseConnections
+        expr: pg_stat_database_numbackends / pg_settings_max_connections * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High database connections on {{ $labels.datname }}"
+          description: "Database connections are above 80% of maximum."
+
+      - alert: SlowDatabaseQueries
+        expr: rate(pg_stat_database_calls_total[5m]) / rate(pg_stat_database_total_time_seconds_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow database queries on {{ $labels.datname }}"
+          description: "Database query rate is above 100 queries per second."
+
+      # Оповещения о Redis
+      - alert: RedisMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Redis memory usage on {{ $labels.instance }}"
+          description: "Redis memory usage is above 80%."
+
+      # Оповещения о HTTP ошибках
+      - alert: HighHTTPErrorRate
+        expr: (rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m])) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High HTTP error rate on {{ $labels.instance }}"
+          description: "HTTP 5xx error rate is above 5%."
+
+      - alert: High4xxErrorRate
+        expr: (rate(http_requests_total{status=~"4.."}[5m]) / rate(http_requests_total[5m])) * 100 > 10
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "High HTTP 4xx error rate on {{ $labels.instance }}"
+          description: "HTTP 4xx error rate is above 10%."
+
+      # Оповещения о WebSocket соединениях
+      - alert: WebSocketConnectionsHigh
+        expr: websocket_connections > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of WebSocket connections"
+          description: "Number of WebSocket connections is above 1000."
+
+      # Оповещения о аудио потоках
+      - alert: HighAudioStreams
+        expr: rate(audio_streams_total[5m]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of audio streams"
+          description: "Audio streams rate is above 1000 per minute."
+
+      # Оповещения о NFT транзакциях
+      - alert: HighNFTTransactions
+        expr: rate(nft_transactions_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of NFT transactions"
+          description: "NFT transaction rate is above 100 per minute."
+
+      # Оповещения о Solana
+      - alert: SolanaSlotLag
+        expr: solana_slot_lag > 10
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Solana slot lag detected"
+          description: "Solana slot lag is above 10 slots."
+
+      - alert: SolanaRPCErrorRate
+        expr: rate(solana_rpc_errors_total[5m]) / rate(solana_rpc_requests_total[5m]) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Solana RPC error rate"
+          description: "Solana RPC error rate is above 5%."
+
+      # Оповещения о IPFS
+      - alert: IPFSDowntime
+        expr: up{job="ipfs"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "IPFS node is down"
+          description: "IPFS node has been down for more than 1 minute."
+
+      - alert: IPFSDiskUsage
+        expr: ipfs_repo_size_bytes / ipfs_repo_size_max_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High IPFS disk usage"
+          description: "IPFS disk usage is above 85%."
+
+      # Оповещения о Filecoin
+      - alert: FilecoinStorageDealFailures
+        expr: rate(filecoin_storage_deal_failures_total[5m]) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Filecoin storage deal failures"
+          description: "Filecoin storage deal failure rate is above 5 per minute."
+
+      # Оповещения о платежах
+      - alert: PaymentProcessingErrors
+        expr: rate(payment_processing_errors_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High payment processing error rate"
+          description: "Payment processing error rate is above 10 per minute."
+
+      # Оповещения о пользователях
+      - alert: HighUserRegistrationRate
+        expr: rate(user_registrations_total[5m]) > 100
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "High user registration rate"
+          description: "User registration rate is above 100 per minute."
+
+      - alert: HighUserLoginRate
+        expr: rate(user_logins_total[5m]) > 500
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "High user login rate"
+          description: "User login rate is above 500 per minute."
+
+      # Оповещения о треках
+      - alert: HighTrackUploadRate
+        expr: rate(track_uploads_total[5m]) > 50
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "High track upload rate"
+          description: "Track upload rate is above 50 per minute."
+
+      - alert: HighTrackPlayRate
+        expr: rate(track_plays_total[5m]) > 10000
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "High track play rate"
+          description: "Track play rate is above 10000 per minute."
+
+      # Оповещения о системе
+      - alert: SystemLoadHigh
+        expr: node_load1 > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High system load on {{ $labels.instance }}"
+          description: "System load (1m) is above 2."
+
+      - alert: HighNetworkTraffic
+        expr: rate(node_network_receive_bytes_total[5m]) / 1024 / 1024 > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High network traffic on {{ $labels.instance }}"
+          description: "Network receive rate is above 100 MB/s."
+
+      # Оповещения о сертификатах SSL
+      - alert: SSLCertificateExpiring
+        expr: ssl_cert_expires_seconds < 86400  # 24 hours
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL certificate expiring soon on {{ $labels.instance }}"
+          description: "SSL certificate for {{ $labels.domain }} expires in {{ $value }} seconds."
+
+      # Оповещения о бэкапах
+      - alert: BackupFailed
+        expr: backup_success == 0
+        for: 1h
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backup failed"
+          description: "Last backup failed or hasn't been completed in the last hour."
+
+      # Оповещения о безопасности
+      - alert: TooManyFailedLoginAttempts
+        expr: rate(failed_login_attempts_total[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of failed login attempts"
+          description: "Failed login attempts rate is above 10 per minute."
+
+      - alert: SuspiciousActivity
+        expr: rate(suspicious_activity_total[5m]) > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Suspicious activity detected"
+          description: "Suspicious activity rate is above 5 per minute."

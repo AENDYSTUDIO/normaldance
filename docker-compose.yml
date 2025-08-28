@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Основное приложение
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:password@db:5432/normaldance
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=your_super_secret_key_change_me
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - .:/app # Монтируем весь проект для live reload
+      - /app/node_modules # Исключаем node_modules из монтирования
+      - /app/.next
+    depends_on:
+      db: # Добавляем зависимость от готовности БД
+        condition: service_healthy
+      redis:
+        condition: service_started
+    restart: unless-stopped
+
+  # База данных PostgreSQL
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: normaldance
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d normaldance"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis для кэширования и сессий
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres-data:
+  redis_data:

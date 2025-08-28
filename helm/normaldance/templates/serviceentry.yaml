@@ -1,0 +1,60 @@
+{{- if .Values.serviceMesh.create -}}
+{{- if .Values.serviceMesh.istio.enabled -}}
+{{- if .Values.serviceMesh.istio.serviceEntry.create -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: {{ include "normaldance.fullname" . }}-external-services
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.istio.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.istio.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.istio.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.istio.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  hosts:
+    {{- range .Values.serviceMesh.istio.serviceEntry.hosts }}
+    - {{ . }}
+    {{- end }}
+  ports:
+    {{- range .Values.serviceMesh.istio.serviceEntry.ports }}
+    - number: {{ .number }}
+      name: {{ .name }}
+      protocol: {{ .protocol }}
+      {{- if .targetPort }}
+      targetPort: {{ .targetPort }}
+      {{- end }}
+      {{- if .port }}
+      port: {{ .port }}
+      {{- end }}
+    {{- end }}
+  resolution: {{ .Values.serviceMesh.istio.serviceEntry.resolution | default "DNS" }}
+  location: {{ .Values.serviceMesh.istio.serviceEntry.location | default "MESH_EXTERNAL" }}
+  {{- if .Values.serviceMesh.istio.serviceEntry.endpoints }}
+  endpoints:
+    {{- range .Values.serviceMesh.istio.serviceEntry.endpoints }}
+    - address: {{ .address }}
+      {{- if .port }}
+      port: {{ .port }}
+      {{- end }}
+      {{- if .tls }}
+      tls: {{ .tls }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+  {{- if .Values.serviceMesh.istio.serviceEntry.exportTo }}
+  exportTo:
+    {{- range .Values.serviceMesh.istio.serviceEntry.exportTo }}
+    - {{ . }}
+    {{- end }}
+  {{- else }}
+  exportTo:
+    - .
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

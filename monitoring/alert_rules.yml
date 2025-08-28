@@ -1,0 +1,322 @@
+groups:
+  - name: normaldance-alerts
+    rules:
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} errors per second for 5 minutes"
+
+      # High latency
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High latency detected"
+          description: "95th percentile latency is {{ $value }} seconds for 5 minutes"
+
+      # High memory usage
+      - alert: HighMemoryUsage
+        expr: (container_memory_usage_bytes / container_spec_memory_limit_bytes) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}% for 5 minutes"
+
+      # High CPU usage
+      - alert: HighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total[5m]) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}% for 5 minutes"
+
+      # Database connection issues
+      - alert: DatabaseConnectionIssues
+        expr: rate(pg_stat_database_numbackends[5m]) == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database connection issues detected"
+          description: "No database connections for 5 minutes"
+
+      # Redis connection issues
+      - alert: RedisConnectionIssues
+        expr: redis_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis connection issues detected"
+          description: "Redis is down for 1 minute"
+
+      # Low disk space
+      - alert: LowDiskSpace
+        expr: (1 - (node_filesystem_avail_bytes / node_filesystem_size_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low disk space detected"
+          description: "Disk usage is {{ $value }}% for 5 minutes"
+
+      # High request rate
+      - alert: HighRequestRate
+        expr: rate(http_requests_total[5m]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request rate detected"
+          description: "Request rate is {{ $value }} requests per second for 5 minutes"
+
+      # Failed health checks
+      - alert: FailedHealthChecks
+        expr: rate(http_requests_total{status=~"4.."}[5m]) > 0.05
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Failed health checks detected"
+          description: "Health check failure rate is {{ $value }} per second for 3 minutes"
+
+      # WebSocket connection issues
+      - alert: WebSocketConnectionIssues
+        expr: rate(ws_connections_total[5m]) < 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "WebSocket connection issues detected"
+          description: "WebSocket connections dropped to {{ $value }} for 5 minutes"
+
+      # Audio streaming issues
+      - alert: AudioStreamingIssues
+        expr: rate(audio_stream_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Audio streaming issues detected"
+          description: "Audio streaming error rate is {{ $value }} per second for 5 minutes"
+
+      # Payment processing issues
+      - alert: PaymentProcessingIssues
+        expr: rate(payment_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Payment processing issues detected"
+          description: "Payment error rate is {{ $value }} per second for 5 minutes"
+
+      # User authentication issues
+      - alert: AuthenticationIssues
+        expr: rate(auth_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Authentication issues detected"
+          description: "Authentication error rate is {{ $value }} per second for 5 minutes"
+
+      # File upload issues
+      - alert: FileUploadIssues
+        expr: rate(upload_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "File upload issues detected"
+          description: "File upload error rate is {{ $value }} per second for 5 minutes"
+
+      # Database query performance
+      - alert: SlowDatabaseQueries
+        expr: rate(pg_stat_database_call_time_total[5m]) / rate(pg_stat_database_calls_total[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow database queries detected"
+          description: "Average query time is {{ $value }} seconds for 5 minutes"
+
+      # Cache hit ratio
+      - alert: LowCacheHitRatio
+        expr: rate(cache_hits_total[5m]) / (rate(cache_hits_total[5m]) + rate(cache_misses_total[5m])) < 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low cache hit ratio detected"
+          description: "Cache hit ratio is {{ $value }} for 5 minutes"
+
+      # API rate limiting
+      - alert: APIRateLimiting
+        expr: rate(api_rate_limited_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API rate limiting detected"
+          description: "API rate limited requests: {{ $value }} per second for 5 minutes"
+
+      # Mobile app issues
+      - alert: MobileAppIssues
+        expr: rate(mobile_app_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Mobile app issues detected"
+          description: "Mobile app error rate is {{ $value }} per second for 5 minutes"
+
+      # Blockchain transaction issues
+      - alert: BlockchainTransactionIssues
+        expr: rate(blockchain_transaction_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Blockchain transaction issues detected"
+          description: "Blockchain transaction error rate is {{ $value }} per second for 5 minutes"
+
+      # NFT minting issues
+      - alert: NFTMintingIssues
+        expr: rate(nft_minting_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "NFT minting issues detected"
+          description: "NFT minting error rate is {{ $value }} per second for 5 minutes"
+
+      # User registration issues
+      - alert: UserRegistrationIssues
+        expr: rate(user_registration_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "User registration issues detected"
+          description: "User registration error rate is {{ $value }} per second for 5 minutes"
+
+      # Email delivery issues
+      - alert: EmailDeliveryIssues
+        expr: rate(email_delivery_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Email delivery issues detected"
+          description: "Email delivery error rate is {{ $value }} per second for 5 minutes"
+
+      # Social media integration issues
+      - alert: SocialMediaIntegrationIssues
+        expr: rate(social_media_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Social media integration issues detected"
+          description: "Social media integration error rate is {{ $value }} per second for 5 minutes"
+
+      # CDN issues
+      - alert: CDNIssues
+        expr: rate(cdn_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CDN issues detected"
+          description: "CDN error rate is {{ $value }} per second for 5 minutes"
+
+      # Payment gateway issues
+      - alert: PaymentGatewayIssues
+        expr: rate(payment_gateway_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Payment gateway issues detected"
+          description: "Payment gateway error rate is {{ $value }} per second for 5 minutes"
+
+      # File storage issues
+      - alert: FileStorageIssues
+        expr: rate(file_storage_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "File storage issues detected"
+          description: "File storage error rate is {{ $value }} per second for 5 minutes"
+
+      # Search functionality issues
+      - alert: SearchFunctionalityIssues
+        expr: rate(search_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Search functionality issues detected"
+          description: "Search error rate is {{ $value }} per second for 5 minutes"
+
+      # Recommendation system issues
+      - alert: RecommendationSystemIssues
+        expr: rate(recommendation_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Recommendation system issues detected"
+          description: "Recommendation system error rate is {{ $value }} per second for 5 minutes"
+
+      # Analytics issues
+      - alert: AnalyticsIssues
+        expr: rate(analytics_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Analytics issues detected"
+          description: "Analytics error rate is {{ $value }} per second for 5 minutes"
+
+      # Notification system issues
+      - alert: NotificationSystemIssues
+        expr: rate(notification_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Notification system issues detected"
+          description: "Notification system error rate is {{ $value }} per second for 5 minutes"
+
+      # Backup system issues
+      - alert: BackupSystemIssues
+        expr: rate(backup_errors_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backup system issues detected"
+          description: "Backup system error rate is {{ $value }} per second for 5 minutes"
+
+      # Security issues
+      - alert: SecurityIssues
+        expr: rate(security_events_total[5m]) > 0.01
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Security issues detected"
+          description: "Security event rate is {{ $value }} per second for 5 minutes"

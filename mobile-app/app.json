@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "NormalDance",
+    "slug": "normaldance-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.normaldance.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#121212"
+      },
+      "package": "com.normaldance.mobile",
+      "permissions": [
+        "INTERNET",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "static",
+      "publicPath": "/"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-av",
+      "expo-font",
+      "expo-linear-gradient",
+      "expo-splash-screen",
+      "expo-system-ui",
+      "expo-web-browser"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "normaldance-mobile"
+      }
+    }
+  }
+}

@@ -1,0 +1,1446 @@
+
+{{- if .Values.serviceMesh.create -}}
+{{- if .Values.serviceMesh.istio.enabled -}}
+{{- if .Values.serviceMesh.istio.telemetry.create -}}
+apiVersion: telemetry.istio.io/v1alpha1
+kind: Telemetry
+metadata:
+  name: {{ include "normaldance.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.istio.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.istio.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.istio.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.istio.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  metrics:
+    - providers:
+        - name: prometheus
+      overrides:
+        - match:
+            metricName: istio_requests_total
+          tagOverrides:
+            reporter: source
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_requests_total
+          tagOverrides:
+            reporter: destination
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_request_duration_milliseconds
+          tagOverrides:
+            reporter: source
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_request_duration_milliseconds
+          tagOverrides:
+            reporter: destination
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_bytes_sent
+          tagOverrides:
+            reporter: source
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_bytes_sent
+          tagOverrides:
+            reporter: destination
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_bytes_received
+          tagOverrides:
+            reporter: source
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_bytes_received
+          tagOverrides:
+            reporter: destination
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            response_code: "200"
+            request_method: "GET"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_received_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_opened_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_closed_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_active
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_connections_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+            source_service_name: "normaldance"
+            source_service_namespace: "{{ .Release.Namespace }}"
+            source_version: "{{ .Chart.AppVersion }}"
+            source_service_instance: "{{ .Release.Name }}-{{ .Values.deployment.name }}"
+          disabled: false
+        - match:
+            metricName: istio_tcp_sent_bytes_total
+          tagOverrides:
+            destination_service_name: "normaldance"
+            destination_service_namespace: "{{ .Release.Namespace }}"
+            destination_version: "{{ .Chart.AppVersion }}"
+            destination_service

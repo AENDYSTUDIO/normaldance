@@ -1,0 +1,1998 @@
+
+{{- if .Values.roleBinding.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "normaldance.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.roleBinding.additionalLabels }}
+    {{- toYaml .Values.roleBinding.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.roleBinding.annotations }}
+  annotations:
+    {{- toYaml .Values.roleBinding.annotations | nindent 4 }}
+  {{- end }}
+subjects:
+  {{- if .Values.roleBinding.subjects }}
+  {{- toYaml .Values.roleBinding.subjects | nindent 2 }}
+  {{- else }}
+  - kind: ServiceAccount
+    name: {{ include "normaldance.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: default
+    namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: monitoring
+    namespace: monitoring
+  - kind: ServiceAccount
+    name: logging
+    namespace: logging
+  - kind: ServiceAccount
+    name: security
+    namespace: security
+  - kind: ServiceAccount
+    name: backup
+    namespace: backup
+  - kind: ServiceAccount
+    name: analytics
+    namespace: analytics
+  - kind: ServiceAccount
+    name: notifications
+    namespace: notifications
+  - kind: ServiceAccount
+    name: database
+    namespace: database
+  - kind: ServiceAccount
+    name: cache
+    namespace: cache
+  - kind: ServiceAccount
+    name: storage
+    namespace: storage
+  - kind: ServiceAccount
+    name: search
+    namespace: search
+  - kind: ServiceAccount
+    name: messaging
+    namespace: messaging
+  - kind: ServiceAccount
+    name: workflow
+    namespace: workflow
+  - kind: ServiceAccount
+    name: integration
+    namespace: integration
+  - kind: ServiceAccount
+    name: api-gateway
+    namespace: api-gateway
+  - kind: ServiceAccount
+    name: load-balancer
+    namespace: load-balancer
+  - kind: ServiceAccount
+    name: ingress
+    namespace: ingress
+  - kind: ServiceAccount
+    name: network-policy
+    namespace: network-policy
+  - kind: ServiceAccount
+    name: certificate
+    namespace: certificate
+  - kind: ServiceAccount
+    name: dns
+    namespace: dns
+  - kind: ServiceAccount
+    name: certificate
+    namespace: certificate
+  - kind: ServiceAccount
+    name: secret
+    namespace: secret
+  - kind: ServiceAccount
+    name: configmap
+    namespace: configmap
+  - kind: ServiceAccount
+    name: persistent-volume
+    namespace: persistent-volume
+  - kind: ServiceAccount
+    name: storage-class
+    namespace: storage-class
+  - kind: ServiceAccount
+    name: volume-snapshot
+    namespace: volume-snapshot
+  - kind: ServiceAccount
+    name: custom-resource-definition
+    namespace: custom-resource-definition
+  - kind: ServiceAccount
+    name: operator
+    namespace: operator
+  - kind: ServiceAccount
+    name: controller
+    namespace: controller
+  - kind: ServiceAccount
+    name: scheduler
+    namespace: scheduler
+  - kind: ServiceAccount
+    name: autoscaler
+    namespace: autoscaler
+  - kind: ServiceAccount
+    name: cluster-autoscaler
+    namespace: cluster-autoscaler
+  - kind: ServiceAccount
+    name: horizontal-pod-autoscaler
+    namespace: horizontal-pod-autoscaler
+  - kind: ServiceAccount
+    name: vertical-pod-autoscaler
+    namespace: vertical-pod-autoscaler
+  - kind: ServiceAccount
+    name: pod-disruption-budget
+    namespace: pod-disruption-budget
+  - kind: ServiceAccount
+    name: resource-quota
+    namespace: resource-quota
+  - kind: ServiceAccount
+    name: limit-range
+    namespace: limit-range
+  - kind: ServiceAccount
+    name: namespace
+    namespace: namespace
+  - kind: ServiceAccount
+    name: service
+    namespace: service
+  - kind: ServiceAccount
+    name: endpoint
+    namespace: endpoint
+  - kind: ServiceAccount
+    name: ingress
+    namespace: ingress
+  - kind: ServiceAccount
+    name: network-policy
+    namespace: network-policy
+  - kind: ServiceAccount
+    name: pod-security-policy
+    namespace: pod-security-policy
+  - kind: ServiceAccount
+    name: security-context
+    namespace: security-context
+  - kind: ServiceAccount
+    name: pod-security-admission
+    namespace: pod-security-admission
+  - kind: ServiceAccount
+    name: admission-controller
+    namespace: admission-controller
+  - kind: ServiceAccount
+    name: mutating-webhook-configuration
+    namespace: mutating-webhook-configuration
+  - kind: ServiceAccount
+    name: validating-webhook-configuration
+    namespace: validating-webhook-configuration
+  - kind: ServiceAccount
+    name: certificate-signing-request
+    namespace: certificate-signing-request
+  - kind: ServiceAccount
+    name: lease
+    namespace: lease
+  - kind: ServiceAccount
+    name: endpoint-slice
+    namespace: endpoint-slice
+  - kind: ServiceAccount
+    name: service-import
+    namespace: service-import
+  - kind: ServiceAccount
+    name: service-export
+    namespace: service-export
+  - kind: ServiceAccount
+    name: discovery
+    namespace: discovery
+  - kind: ServiceAccount
+    name: federation
+    namespace: federation
+  - kind: ServiceAccount
+    name: cluster
+    namespace: cluster
+  - kind: ServiceAccount
+    name: node
+    namespace: node
+  - kind: ServiceAccount
+    name: pod
+    namespace: pod
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount
+    name: replication-controller
+    namespace: replication-controller
+  - kind: ServiceAccount
+    name: replica-set
+    namespace: replica-set
+  - kind: ServiceAccount
+    name: deployment
+    namespace: deployment
+  - kind: ServiceAccount
+    name: stateful-set
+    namespace: stateful-set
+  - kind: ServiceAccount
+    name: daemon-set
+    namespace: daemon-set
+  - kind: ServiceAccount
+    name: job
+    namespace: job
+  - kind: ServiceAccount
+    name: cron-job
+    namespace: cron-job
+  - kind: ServiceAccount
+    name: pod-template
+    namespace: pod-template
+  - kind: ServiceAccount

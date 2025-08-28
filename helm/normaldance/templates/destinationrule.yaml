@@ -1,0 +1,70 @@
+{{- if .Values.serviceMesh.create -}}
+{{- if .Values.serviceMesh.istio.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ include "normaldance.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.istio.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.istio.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.istio.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.istio.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  host: {{ include "normaldance.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.serviceMesh.istio.clusterDomain | default "cluster.local" }}
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: {{ .Values.serviceMesh.istio.tcp.maxConnections | default "100" }}
+        connectTimeout: {{ .Values.serviceMesh.istio.tcp.connectTimeout | default "10s" }}
+        idleTimeout: {{ .Values.serviceMesh.istio.tcp.idleTimeout | default "30s" }}
+      http:
+        http1MaxPendingRequests: {{ .Values.serviceMesh.istio.http.http1MaxPendingRequests | default "100" }}
+        http2MaxRequests: {{ .Values.serviceMesh.istio.http.http2MaxRequests | default "10000" }}
+        maxRequestsPerConnection: {{ .Values.serviceMesh.istio.http.maxRequestsPerConnection | default "100" }}
+        idleTimeout: {{ .Values.serviceMesh.istio.http.idleTimeout | default "300s" }}
+    tls:
+      mode: {{ .Values.serviceMesh.istio.tls.mode | default "AUTO" }}
+      {{- if .Values.serviceMesh.istio.tls.verification }}
+      verification: {{ .Values.serviceMesh.istio.tls.verification }}
+      {{- end }}
+      {{- if .Values.serviceMesh.istio.tls.subjectAltNames }}
+      subjectAltNames:
+        {{- toYaml .Values.serviceMesh.istio.tls.subjectAltNames | nindent 8 }}
+      {{- end }}
+    outlierDetection:
+      consecutiveGatewayErrors: {{ .Values.serviceMesh.istio.outlierDetection.consecutiveGatewayErrors | default "5" }}
+      consecutive5xxErrors: {{ .Values.serviceMesh.istio.outlierDetection.consecutive5xxErrors | default "5" }}
+      baseEjectionTime: {{ .Values.serviceMesh.istio.outlierDetection.baseEjectionTime | default "30s" }}
+      maxEjectionPercent: {{ .Values.serviceMesh.istio.outlierDetection.maxEjectionPercent | default "50" }}
+      minHealthPercent: {{ .Values.serviceMesh.istio.outlierDetection.minHealthPercent | default "50" }}
+      splitExternalLocalOriginErrors: {{ .Values.serviceMesh.istio.outlierDetection.splitExternalLocalOriginErrors | default "false" }}
+      splitLocalOriginErrors: {{ .Values.serviceMesh.istio.outlierDetection.splitLocalOriginErrors | default "false" }}
+  portLevelSettings:
+    - port:
+        number: {{ .Values.service.port }}
+      connectionPool:
+        tcp:
+          maxConnections: {{ .Values.serviceMesh.istio.tcp.maxConnections | default "100" }}
+          connectTimeout: {{ .Values.serviceMesh.istio.tcp.connectTimeout | default "10s" }}
+          idleTimeout: {{ .Values.serviceMesh.istio.tcp.idleTimeout | default "30s" }}
+        http:
+          http1MaxPendingRequests: {{ .Values.serviceMesh.istio.http.http1MaxPendingRequests | default "100" }}
+          http2MaxRequests: {{ .Values.serviceMesh.istio.http.http2MaxRequests | default "10000" }}
+          maxRequestsPerConnection: {{ .Values.serviceMesh.istio.http.maxRequestsPerConnection | default "100" }}
+          idleTimeout: {{ .Values.serviceMesh.istio.http.idleTimeout | default "300s" }}
+      tls:
+        mode: {{ .Values.serviceMesh.istio.tls.mode | default "AUTO" }}
+        {{- if .Values.serviceMesh.istio.tls.verification }}
+        verification: {{ .Values.serviceMesh.istio.tls.verification }}
+        {{- end }}
+        {{- if .Values.serviceMesh.istio.tls.subjectAltNames }}
+        subjectAltNames:
+          {{- toYaml .Values.serviceMesh.istio.tls.subjectAltNames | nindent 10 }}
+        {{- end }}
+{{- end }}
+{{- end }}

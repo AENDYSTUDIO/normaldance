@@ -1,0 +1,25 @@
+{{- if .Values.podDisruptionBudget.create -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "normaldance.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.podDisruptionBudget.additionalLabels }}
+    {{- toYaml .Values.podDisruptionBudget.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.podDisruptionBudget.annotations }}
+  annotations:
+    {{- toYaml .Values.podDisruptionBudget.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "normaldance.selectorLabels" . | nindent 6 }}
+  {{- if .Values.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  {{- else if .Values.podDisruptionBudget.maxUnavailable }}
+  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  {{- end }}
+{{- end }}

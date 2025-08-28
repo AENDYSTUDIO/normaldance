@@ -1,0 +1,51 @@
+{{- if .Values.limitRange.create -}}
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ include "normaldance.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.limitRange.additionalLabels }}
+    {{- toYaml .Values.limitRange.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.limitRange.annotations }}
+  annotations:
+    {{- toYaml .Values.limitRange.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: {{ .Values.limitRange.default.cpu }}
+        memory: {{ .Values.limitRange.default.memory }}
+      defaultRequest:
+        cpu: {{ .Values.limitRange.defaultRequest.cpu }}
+        memory: {{ .Values.limitRange.defaultRequest.memory }}
+      min:
+        cpu: {{ .Values.limitRange.min.cpu }}
+        memory: {{ .Values.limitRange.min.memory }}
+      max:
+        cpu: {{ .Values.limitRange.max.cpu }}
+        memory: {{ .Values.limitRange.max.memory }}
+    - type: Pod
+      default:
+        cpu: {{ .Values.limitRange.pod.default.cpu }}
+        memory: {{ .Values.limitRange.pod.default.memory }}
+      defaultRequest:
+        cpu: {{ .Values.limitRange.pod.defaultRequest.cpu }}
+        memory: {{ .Values.limitRange.pod.defaultRequest.memory }}
+      min:
+        cpu: {{ .Values.limitRange.pod.min.cpu }}
+        memory: {{ .Values.limitRange.pod.min.memory }}
+      max:
+        cpu: {{ .Values.limitRange.pod.max.cpu }}
+        memory: {{ .Values.limitRange.pod.max.memory }}
+    - type: PersistentVolumeClaim
+      default:
+        storage: {{ .Values.limitRange.pvc.default.storage }}
+      min:
+        storage: {{ .Values.limitRange.pvc.min.storage }}
+      max:
+        storage: {{ .Values.limitRange.pvc.max.storage }}
+{{- end }}

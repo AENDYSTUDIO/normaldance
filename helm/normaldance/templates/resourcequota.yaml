@@ -1,0 +1,1085 @@
+
+{{- if .Values.resourceQuota.create -}}
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{ include "normaldance.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.resourceQuota.additionalLabels }}
+    {{- toYaml .Values.resourceQuota.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.resourceQuota.annotations }}
+  annotations:
+    {{- toYaml .Values.resourceQuota.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  hard:
+    {{- if .Values.resourceQuota.requests.cpu }}
+    requests.cpu: {{ .Values.resourceQuota.requests.cpu }}
+    {{- end }}
+    {{- if .Values.resourceQuota.requests.memory }}
+    requests.memory: {{ .Values.resourceQuota.requests.memory }}
+    {{- end }}
+    {{- if .Values.resourceQuota.limits.cpu }}
+    limits.cpu: {{ .Values.resourceQuota.limits.cpu }}
+    {{- end }}
+    {{- if .Values.resourceQuota.limits.memory }}
+    limits.memory: {{ .Values.resourceQuota.limits.memory }}
+    {{- end }}
+    {{- if .Values.resourceQuota.pods }}
+    pods: {{ .Values.resourceQuota.pods }}
+    {{- end }}
+    {{- if .Values.resourceQuota.services }}
+    services: {{ .Values.resourceQuota.services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.secrets }}
+    secrets: {{ .Values.resourceQuota.secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.configMaps }}
+    configMaps: {{ .Values.resourceQuota.configMaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.persistentVolumeClaims }}
+    persistentVolumeClaims: {{ .Values.resourceQuota.persistentVolumeClaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.services.loadBalancers }}
+    services.loadBalancers: {{ .Values.resourceQuota.services.loadBalancers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.services.nodePorts }}
+    services.nodePorts: {{ .Values.resourceQuota.services.nodePorts }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments }}
+    count/deployments: {{ .Values.resourceQuota.count/deployments }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets }}
+    count/replicasets: {{ .Values.resourceQuota.count/replicasets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets }}
+    count/statefulsets: {{ .Values.resourceQuota.count/statefulsets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs }}
+    count/jobs: {{ .Values.resourceQuota.count/jobs }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs }}
+    count/cronjobs: {{ .Values.resourceQuota.count/cronjobs }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets }}
+    count/daemonsets: {{ .Values.resourceQuota.count/daemonsets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp }}
+    count/rp: {{ .Values.resourceQuota.count/rp }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota.count/services }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/secrets }}
+    count/secrets: {{ .Values.resourceQuota.count/secrets }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/configmaps }}
+    count/configmaps: {{ .Values.resourceQuota.count/configmaps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicationcontrollers }}
+    count/replicationcontrollers: {{ .Values.resourceQuota.count/replicationcontrollers }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/deployments.apps }}
+    count/deployments.apps: {{ .Values.resourceQuota.count/deployments.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/replicasets.apps }}
+    count/replicasets.apps: {{ .Values.resourceQuota.count/replicasets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/statefulsets.apps }}
+    count/statefulsets.apps: {{ .Values.resourceQuota.count/statefulsets.apps }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/jobs.batch }}
+    count/jobs.batch: {{ .Values.resourceQuota.count/jobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/cronjobs.batch }}
+    count/cronjobs.batch: {{ .Values.resourceQuota.count/cronjobs.batch }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/daemonsets.extensions }}
+    count/daemonsets.extensions: {{ .Values.resourceQuota.count/daemonsets.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/rp.extensions }}
+    count/rp.extensions: {{ .Values.resourceQuota.count/rp.extensions }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/persistentvolumeclaims }}
+    count/persistentvolumeclaims: {{ .Values.resourceQuota.count/persistentvolumeclaims }}
+    {{- end }}
+    {{- if .Values.resourceQuota.count/services }}
+    count/services: {{ .Values.resourceQuota

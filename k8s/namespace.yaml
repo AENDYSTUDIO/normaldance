@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: normaldance
+  labels:
+    name: normaldance
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: normaldance-staging
+  labels:
+    name: normaldance-staging
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: normaldance-production
+  labels:
+    name: normaldance-production

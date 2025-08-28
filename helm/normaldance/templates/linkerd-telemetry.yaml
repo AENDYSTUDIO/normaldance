@@ -1,0 +1,60 @@
+{{- if .Values.serviceMesh.create -}}
+{{- if .Values.serviceMesh.linkerd.enabled -}}
+{{- if .Values.serviceMesh.linkerd.telemetry.create -}}
+apiVersion: policy.linkerd.io/v1beta2
+kind: Server
+metadata:
+  name: {{ include "normaldance.fullname" . }}-telemetry
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.linkerd.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.linkerd.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.linkerd.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.linkerd.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "normaldance.selectorLabels" . | nindent 6 }}
+  port: {{ .Values.serviceMesh.linkerd.telemetry.port | default "4191" }}
+  resources:
+    requests:
+      cpu: {{ .Values.serviceMesh.linkerd.telemetry.resources.requests.cpu | default "100m" }}
+      memory: {{ .Values.serviceMesh.linkerd.telemetry.resources.requests.memory | default "128Mi" }}
+    limits:
+      cpu: {{ .Values.serviceMesh.linkerd.telemetry.resources.limits.cpu | default "500m" }}
+      memory: {{ .Values.serviceMesh.linkerd.telemetry.resources.limits.memory | default "256Mi" }}
+---
+apiVersion: policy.linkerd.io/v1beta2
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "normaldance.fullname" . }}-telemetry
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.linkerd.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.linkerd.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.linkerd.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.linkerd.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  targetRef:
+    group: ""
+    kind: Service
+    name: {{ include "normaldance.fullname" . }}
+  from:
+    - kind: ServiceAccount
+      name: {{ include "normaldance.serviceAccountName" . }}
+      namespace: {{ .Release.Namespace }}
+  to:
+    - kind: Server
+      name: {{ include "normaldance.fullname" . }}-telemetry
+      namespace: {{ .Release.Namespace }}
+{{- end }}
+{{- end }}
+{{- end }}

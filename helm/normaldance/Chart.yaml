@@ -1,0 +1,21 @@
+apiVersion: v2
+name: normaldance
+description: A Helm chart for NormalDance music platform
+type: application
+version: 0.1.0
+appVersion: "2.0.0"
+home: https://normaldance.com
+sources:
+  - https://github.com/normaldance/normaldance
+keywords:
+  - music
+  - streaming
+  - blockchain
+  - nft
+  - web3
+maintainers:
+  - name: NormalDance Team
+    email: team@normaldance.com
+annotations:
+  category: Music Streaming
+  licenses: MIT

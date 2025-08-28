@@ -1,0 +1,341 @@
+// This is your Prisma schema file for NORMAL DANCE Music Platform
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://user:password@localhost:5432/normaldance"
+}
+
+// User model for artists and listeners
+model User {
+  id          String      @id @default(cuid())
+  email       String      @unique
+  username    String      @unique
+  displayName String?
+  bio         String?
+  avatar      String?
+  banner      String?
+  wallet      String?     // Web3 wallet address
+  level       UserLevel   @default(BRONZE)
+  balance     Float       @default(0) // $NDT token balance
+  isArtist    Boolean     @default(false)
+  isActive    Boolean     @default(true)
+  role        UserRole   @default(LISTENER)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Relations
+  tracks      Track[]
+  playlists   Playlist[]
+  likes       Like[]
+  comments    Comment[]
+  rewards     Reward[]
+  follows     Follow[]    @relation("UserFollowing")
+  followedBy  Follow[]    @relation("UserFollowers")
+  playHistory PlayHistory[]
+  nfts        NFT[]
+  purchases   Purchase[]
+  stakes      Stake[]
+  pushSubscriptions PushSubscription[]
+  
+  @@map("users")
+}
+
+// Track model for music files
+model Track {
+  id          String   @id @default(cuid())
+  title       String
+  artistName  String   // Artist name as string
+  genre       String
+  duration    Int      // Duration in seconds
+  playCount   Int      @default(0)
+  likeCount   Int      @default(0)
+  ipfsHash    String   // IPFS hash for audio file
+  metadata    Json     // Additional metadata (BPM, key, etc.)
+  price       Float?   // Price in $NDT (null = free)
+  isExplicit  Boolean  @default(false)
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  artistId    String
+  artist      User     @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  
+  likes       Like[]
+  comments    Comment[]
+  playlistTracks PlaylistTrack[]
+  playHistory PlayHistory[]
+  nfts        NFT[]
+  
+  @@map("tracks")
+}
+
+// Playlist model for user playlists
+model Playlist {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isPublic    Boolean  @default(true)
+  coverImage  String?
+  playCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  tracks      PlaylistTrack[]
+  
+  @@map("playlists")
+}
+
+// Junction table for many-to-many relationship between playlists and tracks
+model PlaylistTrack {
+  id        String @id @default(cuid())
+  position  Int    // Order in playlist
+  
+  playlistId String
+  playlist  Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  
+  trackId   String
+  track     Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  
+  @@unique([playlistId, trackId])
+  @@map("playlist_tracks")
+}
+
+// Like model for track likes
+model Like {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  
+  // Relations
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  trackId String
+  track   Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, trackId])
+  @@map("likes")
+}
+
+// Comment model for track comments
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  trackId String
+  track   Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  
+  @@map("comments")
+}
+
+// Reward model for user rewards and earnings
+model Reward {
+  id        String      @id @default(cuid())
+  type      RewardType
+  amount    Float
+  reason    String?
+  createdAt DateTime    @default(now())
+  
+  // Relations
+  userId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("rewards")
+}
+
+// Follow model for user relationships
+model Follow {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  followerId  String
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  
+  followingId String
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+  
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+// Play history model for tracking user listens
+model PlayHistory {
+  id          String   @id @default(cuid())
+  duration    Int      // Listen duration in seconds
+  completed   Boolean  @default(false) // Did user finish the track?
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  trackId String
+  track   Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  
+  @@map("play_history")
+}
+
+// NFT model for music NFTs
+model NFT {
+  id          String      @id @default(cuid())
+  tokenId     String      @unique // Solana token ID
+  name        String
+  description String?
+  imageUrl    String?
+  metadata    Json        // NFT metadata
+  price       Float?      // Price in $NDT
+  status      NFTStatus   @default(MINTED)
+  type        NFTType     @default(TRACK)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Relations
+  ownerId     String
+  owner       User        @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  
+  trackId     String?
+  track       Track?      @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  
+  purchases   Purchase[]
+  
+  @@map("nfts")
+}
+
+// Purchase model for NFT purchases
+model Purchase {
+  id          String   @id @default(cuid())
+  price       Float    // Purchase price in $NDT
+  transaction String   // Blockchain transaction hash
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  buyerId String
+  buyer   User     @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  
+  nftId   String
+  nft     NFT      @relation(fields: [nftId], references: [id], onDelete: Cascade)
+  
+  @@unique([buyerId, nftId])
+  @@map("purchases")
+}
+
+// Stake model for token staking
+model Stake {
+  id          String      @id @default(cuid())
+  amount      Float       // Amount of NDT tokens staked
+  rewardRate  Float       // Annual percentage rate (APR)
+  earned      Float       @default(0) // Earned rewards
+  status      StakeStatus @default(ACTIVE)
+  startDate   DateTime    @default(now())
+  endDate     DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Relations
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  tokenId String
+  token   Token    @relation(fields: [tokenId], references: [id], onDelete: Cascade)
+  
+  @@map("stakes")
+}
+
+// Push Notification Subscription model
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  // Relations
+  userId String
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("push_subscriptions")
+}
+
+// Token model for different token types
+model Token {
+  id          String     @id @default(cuid())
+  symbol      String     @unique
+  name        String
+  decimals    Int        @default(9)
+  totalSupply Float      @default(0)
+  type        TokenType  @default(NDT)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  // Relations
+  stakes Stake[]
+  
+  @@map("tokens")
+}
+
+// Enums
+enum UserLevel {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum UserRole {
+  LISTENER
+  ARTIST
+  CURATOR
+  ADMIN
+}
+
+enum RewardType {
+  LISTENING     // Rewards for listening to tracks
+  UPLOAD        // Rewards for uploading tracks
+  LIKE          // Rewards for liking tracks
+  COMMENT       // Rewards for commenting
+  REFERRAL      // Rewards for referring users
+  DAILY_BONUS   // Daily login bonuses
+  PLAYLIST      // Rewards for creating playlists
+  FOLLOW        // Rewards for following artists
+}
+
+enum NFTStatus {
+  LISTED
+  SOLD
+  MINTED
+  TRANSFERRED
+}
+
+enum NFTType {
+  TRACK
+  ALBUM
+  PLAYLIST
+  ARTIST
+}
+
+enum StakeStatus {
+  ACTIVE
+  WITHDRAWN
+  PENDING
+}
+
+enum TokenType {
+  NDT // Normal Dance Token
+  TRACK_NFT
+}

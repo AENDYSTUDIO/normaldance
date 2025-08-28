@@ -1,0 +1,103 @@
+{{- if .Values.serviceMesh.create -}}
+{{- if .Values.serviceMesh.istio.enabled -}}
+{{- if .Values.serviceMesh.istio.authorizationPolicy.create -}}
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "normaldance.fullname" . }}-allow-internal
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.istio.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.istio.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.istio.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.istio.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "normaldance.selectorLabels" . | nindent 6 }}
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/{{ .Release.Namespace }}/sa/{{ include "normaldance.serviceAccountName" . }}
+      to:
+        - operation:
+            methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            paths:
+              - /api/*
+              - /auth/*
+              - /upload/*
+              - /profile/*
+              - /wallet/*
+              - /tracks/*
+              - /users/*
+              - /rewards/*
+              - /discovery/*
+              - /nft/*
+              - /staking/*
+              - /ipfs/*
+              - /filecoin/*
+              - /health/*
+              - /
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "normaldance.fullname" . }}-allow-external
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "normaldance.labels" . | nindent 4 }}
+    {{- if .Values.serviceMesh.istio.additionalLabels }}
+    {{- toYaml .Values.serviceMesh.istio.additionalLabels | nindent 4 }}
+    {{- end }}
+  {{- if .Values.serviceMesh.istio.annotations }}
+  annotations:
+    {{- toYaml .Values.serviceMesh.istio.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "normaldance.selectorLabels" . | nindent 6 }}
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - "*"
+      to:
+        - operation:
+            methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            paths:
+              - /api/*
+              - /auth/*
+              - /upload/*
+              - /profile/*
+              - /wallet/*
+              - /tracks/*
+              - /users/*
+              - /rewards/*
+              - /discovery/*
+              - /nft/*
+              - /staking/*
+              - /ipfs/*
+              - /filecoin/*
+              - /health/*
+              - /
+{{- end }}
+{{- end }}
+{{- end }}
