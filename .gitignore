@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/jest.config.js
+/jest.setup.js
 
 # next.js
 /.next/
@@ -23,6 +25,10 @@
 # misc
 .DS_Store
 *.pem
+*.log
+*.tmp
+temp/
+tmp/
 
 # debug
 npm-debug.log*
@@ -46,4 +52,42 @@ dev.log
 test
 prompt
 
+# databases
+*.db
+*.sqlite
+*.sqlite3
+
+# backup directories
+backup/
+trash/
+
+# mobile app
+mobile-app/jest.config.js
+mobile-app/jest.setup.js
+mobile-app/node_modules/
+
+# Docker
+.dockerignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# scripts
+run-tests-simple.js
+scripts/port-manager.js
+
+# logs
 server.log
+logs/
+*.log
+
+# test artifacts
+test-results/
+test-results/

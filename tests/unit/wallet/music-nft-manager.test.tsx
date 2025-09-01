@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import React from 'react'
 import { MusicNFTManager } from '@/components/wallet/music-nft-manager'
 import { useWalletContext } from '@/components/wallet/wallet-provider'
 import { useTransactions } from '@/components/wallet/wallet-provider'
@@ -95,7 +96,7 @@ describe('MusicNFTManager - Comprehensive Tests', () => {
 
   describe('Rendering States', () => {
     it('should render disconnected state when wallet is not connected', () => {
-      render(<MusicNFTManager />)
+      render(React.createElement(MusicNFTManager))
       
       expect(screen.getByText('Пожалуйста, подключите кошелек для использования Music NFT Manager')).toBeInTheDocument()
     })

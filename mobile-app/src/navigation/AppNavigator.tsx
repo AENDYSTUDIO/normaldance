@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 // Импорт экранов
 import HomeScreen from '../screens/HomeScreen'
-import ProfileScreen from '../components/ProfileScreen'
+import ProfileScreen from '../screens/ProfileScreen'
 import UploadScreen from '../screens/UploadScreen'
 import SearchScreen from '../screens/SearchScreen'
 import PlayerScreen from '../screens/PlayerScreen'

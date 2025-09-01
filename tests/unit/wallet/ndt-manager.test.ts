@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import React from 'react'
 import { NDTManager } from '@/components/wallet/ndt-manager'
 import { useWalletContext } from '@/components/wallet/wallet-provider'
 import { useTransactions } from '@/components/wallet/wallet-provider'

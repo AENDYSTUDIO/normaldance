@@ -32,16 +32,24 @@ interface Achievement {
   name: string
   description: string
   icon: string
-  rarity: 'common' | 'rare' | 'epic' | 'legendary'
-  category: 'listening' | 'uploading' | 'social' | 'special'
+  rarity: 'common' | 'rare' | 'epic' | 'legendary' | 'mythic'
+  category: 'listening' | 'uploading' | 'social' | 'special' | 'streak' | 'milestone' | 'seasonal'
   progress: number
   maxProgress: number
   unlocked: boolean
   unlockedAt?: string
+  type: 'single' | 'progressive' | 'streak' | 'time-limited'
+  expiresAt?: string
+  chain?: string[] // For achievement chains
   reward?: {
-    type: 'tokens' | 'badge' | 'title' | 'exclusive'
+    type: 'tokens' | 'badge' | 'title' | 'exclusive' | 'nft' | 'multiplier'
     amount: number
     description: string
+    multiplier?: number
+  }
+  animation?: {
+    effect: 'glow' | 'pulse' | 'bounce' | 'sparkle'
+    color: string
   }
 }
 
@@ -56,6 +64,12 @@ interface UserStats {
   totalUploads: number
   followers: number
   following: number
+  streakDays: number
+  longestStreak: number
+  seasonalPoints: number
+  nftCollected: number
+  multiplierActive: number
+  lastActivity: string
 }
 
 interface AchievementsSystemProps {
@@ -248,7 +262,13 @@ export function AchievementsSystem({ className }: AchievementsSystemProps) {
       totalShares: 45,
       totalUploads: 3,
       followers: 89,
-      following: 12
+      following: 12,
+      streakDays: 7,
+      longestStreak: 15,
+      seasonalPoints: 450,
+      nftCollected: 2,
+      multiplierActive: 1.5,
+      lastActivity: new Date().toISOString()
     }
 
     setAchievements(mockAchievements)
@@ -261,7 +281,19 @@ export function AchievementsSystem({ className }: AchievementsSystemProps) {
       case 'rare': return 'bg-blue-100 text-blue-800 border-blue-300'
       case 'epic': return 'bg-purple-100 text-purple-800 border-purple-300'
       case 'legendary': return 'bg-yellow-100 text-yellow-800 border-yellow-300'
+      case 'mythic': return 'bg-gradient-to-r from-pink-100 to-purple-100 text-pink-800 border-pink-300'
       default: return 'bg-gray-100 text-gray-800 border-gray-300'
+    }
+  }
+
+  const getAnimationClass = (animation?: Achievement['animation']) => {
+    if (!animation) return ''
+    switch (animation.effect) {
+      case 'glow': return 'animate-pulse shadow-lg'
+      case 'pulse': return 'animate-bounce'
+      case 'bounce': return 'hover:animate-bounce'
+      case 'sparkle': return 'animate-pulse bg-gradient-to-r from-yellow-200 to-pink-200'
+      default: return ''
     }
   }
 
@@ -271,6 +303,9 @@ export function AchievementsSystem({ className }: AchievementsSystemProps) {
       case 'social': return <Users className="h-4 w-4" />
       case 'uploading': return <Trophy className="h-4 w-4" />
       case 'special': return <Crown className="h-4 w-4" />
+      case 'streak': return <Zap className="h-4 w-4" />
+      case 'milestone': return <Award className="h-4 w-4" />
+      case 'seasonal': return <Star className="h-4 w-4" />
       default: return <Target className="h-4 w-4" />
     }
   }

@@ -616,7 +616,7 @@ describe('Filecoin API - Comprehensive Tests', () => {
     })
   })
 
-  describe('Edge Cases', {
+  describe('Edge Cases', () => {
     it('should handle special characters in metadata', async () => {
       const formData = new FormData()
       formData.append('file', new Blob(['test content'], { type: 'audio/mpeg' }), 'test.mp3')
@@ -766,7 +766,7 @@ describe('Filecoin API - Comprehensive Tests', () => {
     })
   })
 
-  describe('Performance Tests', {
+  describe('Performance Tests', () => {
     it('should handle upload requests quickly', async () => {
       const formData = new FormData()
       formData.append('file', new Blob(['test content'], { type: 'audio/mpeg' }), 'test.mp3')
@@ -845,7 +845,7 @@ describe('Filecoin API - Comprehensive Tests', () => {
     })
   })
 
-  describe('Security Tests', {
+  describe('Security Tests', () => {
     it('should prevent file path traversal', async () => {
       const formData = new FormData()
       formData.append('file', new Blob(['test content'], { type: 'audio/mpeg' }), '../../../malicious.mp3')
@@ -942,7 +942,7 @@ describe('Filecoin API - Comprehensive Tests', () => {
     })
   })
 
-  describe('Integration Tests', {
+  describe('Integration Tests', () => {
     it('should handle complete upload workflow', async () => {
       const formData = new FormData()
       formData.append('file', new Blob(['test content'], { type: 'audio/mpeg' }), 'test.mp3')

@@ -47,7 +47,7 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
-});
+})
 
 // Mock ResizeObserver
 global.ResizeObserver = jest.fn().mockImplementation(() => ({
@@ -90,7 +90,20 @@ afterEach(() => {
   jest.restoreAllMocks()
 })
 
-// Mock IPFS client
+// Mock IPFS client - moved to separate file to avoid module resolution issues
+jest.mock('./tests/__mocks__/ipfs-http-client', () => ({
+  create: jest.fn(() => ({
+    add: jest.fn().mockResolvedValue({ cid: 'test-cid' }),
+    cat: jest.fn().mockImplementation(async function* () {
+      yield new Uint8Array([1, 2, 3])
+    }),
+    object: {
+      stat: jest.fn().mockResolvedValue({ size: 1000 }),
+    },
+  })),
+}))
+
+// Mock the actual ipfs-http-client module
 jest.mock('ipfs-http-client', () => ({
   create: jest.fn(() => ({
     add: jest.fn().mockResolvedValue({ cid: 'test-cid' }),
@@ -103,23 +116,14 @@ jest.mock('ipfs-http-client', () => ({
   })),
 }))
 
-// Mock Pinata SDK
-jest.mock('pinata-sdk', () => ({
-  PinataSDK: jest.fn(() => ({
-    pinFile: jest.fn().mockResolvedValue({ pinSize: 1000 }),
-    pinList: jest.fn().mockResolvedValue({ count: 1 }),
-  })),
-}))
+// Mock Pinata SDK - moved to separate file
+jest.mock('pinata-sdk', () => require('./tests/__mocks__/pinata-sdk'))
 
-// Mock fileType
-jest.mock('file-type', () => ({
-  fileTypeFromBuffer: jest.fn().mockResolvedValue({ mime: 'audio/mpeg', ext: 'mp3' }),
-}))
+// Mock fileType - moved to separate file
+jest.mock('file-type', () => require('./tests/__mocks__/file-type'))
 
-// Mock mime-types
-jest.mock('mime-types', () => ({
-  lookup: jest.fn().mockReturnValue('audio/mpeg'),
-}))
+// Mock mime-types - moved to separate file
+jest.mock('mime-types', () => require('./tests/__mocks__/mime-types'))
 
 // Mock Solana web3
 jest.mock('@solana/web3.js', () => ({
@@ -146,18 +150,39 @@ jest.mock('@solana/web3.js', () => ({
 
 // Mock wallet adapters
 jest.mock('@solana/wallet-adapter-base', () => ({
-  WalletAdapter: jest.fn(),
-  BaseSignerWalletAdapter: jest.fn(),
+  WalletAdapter: class {
+    constructor() {
+      this.connect = jest.fn()
+      this.disconnect = jest.fn()
+      this.signTransaction = jest.fn()
+      this.signAllTransactions = jest.fn()
+    }
+  },
+  BaseSignerWalletAdapter: class {
+    constructor() {
+      this.connect = jest.fn()
+      this.disconnect = jest.fn()
+      this.signTransaction = jest.fn()
+      this.signAllTransactions = jest.fn()
+    }
+  },
 }))
 
 jest.mock('@solana/wallet-adapter-phantom', () => ({
-  PhantomWalletAdapter: jest.fn(),
+  PhantomWalletAdapter: class {
+    constructor() {
+      this.connect = jest.fn()
+      this.disconnect = jest.fn()
+      this.signTransaction = jest.fn()
+      this.signAllTransactions = jest.fn()
+    }
+  },
 }))
 
 // Mock Anchor
 jest.mock('@coral-xyz/anchor', () => ({
-  Program: jest.fn(),
-  AnchorProvider: jest.fn(),
+  Program: jest.fn().mockImplementation(() => ({})),
+  AnchorProvider: jest.fn().mockImplementation(() => ({})),
   workspace: jest.fn(),
 }))
 
@@ -228,10 +253,15 @@ jest.mock('socket.io-client', () => ({
 
 // Mock zustand
 jest.mock('zustand', () => ({
-  create: (createStore) => {
-    const store = createStore()
-    return () => store
-  },
+  create: jest.fn((fn) => {
+    const mockStore = {
+      getState: jest.fn(),
+      setState: jest.fn(),
+      subscribe: jest.fn(),
+      destroy: jest.fn(),
+    }
+    return () => mockStore
+  }),
 }))
 
 // Mock react-toastify
@@ -243,7 +273,7 @@ jest.mock('react-toastify', () => ({
     warning: jest.fn(),
   },
   ToastContainer: jest.fn(),
-}))
+}));
 
 // Mock recharts
 jest.mock('recharts', () => ({

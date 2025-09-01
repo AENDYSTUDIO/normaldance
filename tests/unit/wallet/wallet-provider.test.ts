@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import * as React from 'react'
 import { WalletProviderWrapper, WalletInnerProvider, WalletStatus, WalletConnectButton, useWalletContext, withWallet } from '@/components/wallet/wallet-provider'
 import { WalletConnect } from '@/components/wallet/wallet-connect'
 import { walletEmitter } from '@/components/wallet/wallet-adapter'
@@ -50,184 +51,184 @@ describe('WalletProvider - Comprehensive Tests', () => {
     mockClusterApiUrl.mockReturnValue('https://api.devnet.solana.com')
     
     // Mock wallet emitter
-    walletEmitter.emit = jest.fn()
+    walletEmitter.emit = jest.fn();
   })
 
   describe('WalletProviderWrapper', () => {
     it('should render children with wallet providers', () => {
-      const TestComponent = () => <div>Test Content</div>
-      
+      const TestComponent = () => <div>Test Content</div>;
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
-      expect(screen.getByText('Test Content')).toBeInTheDocument()
-    })
+      );
+
+      expect(screen.getByText('Test Content')).toBeInTheDocument();
+    });
 
     it('should use correct network and endpoint', () => {
-      const TestComponent = () => <div>Test Content</div>
-      
+      const TestComponent = () => <div>Test Content</div>;
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
-      expect(mockClusterApiUrl).toHaveBeenCalledWith(WalletAdapterNetwork.Devnet)
-    })
+      );
+
+      expect(mockClusterApiUrl).toHaveBeenCalledWith(WalletAdapterNetwork.Devnet);
+    });
   })
 
   describe('WalletInnerProvider', () => {
     it('should initialize with default state', () => {
       const TestComponent = () => {
-        const context = useWalletContext()
-        return <div data-testid="context">{JSON.stringify(context)}</div>
-      }
-      
+        const context = useWalletContext();
+        return <div data-testid="context">{JSON.stringify(context)}</div>;
+      };
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
-      expect(screen.getByTestId('context')).toBeInTheDocument()
-    })
+      );
+
+      expect(screen.getByTestId('context')).toBeInTheDocument();
+    });
 
     it('should update balance when publicKey changes', async () => {
-      mockWallet.connected = true
-      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111')
-      mockConnection.getBalance.mockResolvedValue(1000000000) // 1 SOL in lamports
-      
+      mockWallet.connected = true;
+      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111');
+      mockConnection.getBalance.mockResolvedValue(1000000000); // 1 SOL in lamports
+
       const TestComponent = () => {
-        const { balance } = useWalletContext()
-        return <div data-testid="balance">{balance}</div>
-      }
-      
+        const { balance } = useWalletContext();
+        return <div data-testid="balance">{balance}</div>;
+      };
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
+      );
+
       await waitFor(() => {
-        expect(screen.getByTestId('balance')).toHaveTextContent('1')
-      })
-    })
+        expect(screen.getByTestId('balance')).toHaveTextContent('1');
+      });
+    });
 
     it('should handle balance fetch error gracefully', async () => {
-      mockWallet.connected = true
-      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111')
-      mockConnection.getBalance.mockRejectedValue(new Error('Balance fetch failed'))
-      
+      mockWallet.connected = true;
+      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111');
+      mockConnection.getBalance.mockRejectedValue(new Error('Balance fetch failed'));
+
       const TestComponent = () => {
-        const { balance } = useWalletContext()
-        return <div data-testid="balance">{balance}</div>
-      }
-      
+        const { balance } = useWalletContext();
+        return <div data-testid="balance">{balance}</div>;
+      };
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
+      );
+
       await waitFor(() => {
-        expect(screen.getByTestId('balance')).toHaveTextContent('null')
-      })
-    })
+        expect(screen.getByTestId('balance')).toHaveTextContent('null');
+      });
+    });
 
     it('should setup account change subscription', () => {
-      mockWallet.connected = true
-      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111')
-      
-      const TestComponent = () => <div>Test</div>
-      
+      mockWallet.connected = true;
+      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111');
+
+      const TestComponent = () => <div>Test</div>;
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
+      );
+
       expect(mockConnection.onAccountChange).toHaveBeenCalledWith(
         mockWallet.publicKey,
         expect.any(Function),
         'confirmed'
-      )
-    })
+      );
+    });
 
     it('should clean up account change subscription on unmount', () => {
-      mockWallet.connected = true
-      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111')
-      mockConnection.onAccountChange.mockReturnValue(123)
-      
+      mockWallet.connected = true;
+      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111');
+      mockConnection.onAccountChange.mockReturnValue(123);
+
       const { unmount } = render(
         <WalletProviderWrapper>
           <div>Test</div>
         </WalletProviderWrapper>
-      )
-      
-      unmount()
-      
-      expect(mockConnection.removeAccountChangeListener).toHaveBeenCalledWith(123)
-    })
+      );
+
+      unmount();
+
+      expect(mockConnection.removeAccountChangeListener).toHaveBeenCalledWith(123);
+    });
 
     it('should handle wallet connection events', () => {
-      mockWallet.connected = true
-      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111')
-      
-      const TestComponent = () => <div>Test</div>
-      
+      mockWallet.connected = true;
+      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111');
+
+      const TestComponent = () => <div>Test</div>;
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
+      );
+
       // Simulate wallet connect event
-      const handleConnect = mockWallet.on.mock.calls.find(call => call[0] === 'connect')[1]
-      handleConnect()
-      
-      expect(walletEmitter.emit).toHaveBeenCalledWith('connect', '1111111111111111111111111111111111111111111')
-    })
+      const handleConnect = mockWallet.on.mock.calls.find(call => call[0] === 'connect')[1];
+      handleConnect();
+
+      expect(walletEmitter.emit).toHaveBeenCalledWith('connect', '1111111111111111111111111111111111111111111');
+    });
 
     it('should handle wallet disconnection events', () => {
-      mockWallet.connected = true
-      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111')
-      
-      const TestComponent = () => <div>Test</div>
-      
+      mockWallet.connected = true;
+      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111');
+
+      const TestComponent = () => <div>Test</div>;
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
+      );
+
       // Simulate wallet disconnect event
-      const handleDisconnect = mockWallet.on.mock.calls.find(call => call[0] === 'disconnect')[1]
-      handleDisconnect()
-      
-      expect(walletEmitter.emit).toHaveBeenCalledWith('disconnect')
-    })
+      const handleDisconnect = mockWallet.on.mock.calls.find(call => call[0] === 'disconnect')[1];
+      handleDisconnect();
+
+      expect(walletEmitter.emit).toHaveBeenCalledWith('disconnect');
+    });
 
     it('should handle wallet error events', () => {
-      mockWallet.connected = true
-      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111')
-      
-      const TestComponent = () => <div>Test</div>
-      
+      mockWallet.connected = true;
+      mockWallet.publicKey = new PublicKey('1111111111111111111111111111111111111111111');
+
+      const TestComponent = () => <div>Test</div>;
+
       render(
         <WalletProviderWrapper>
           <TestComponent />
         </WalletProviderWrapper>
-      )
-      
+      );
+
       // Simulate wallet error event
-      const handleError = mockWallet.on.mock.calls.find(call => call[0] === 'error')[1]
-      handleError(new Error('Test error'))
-      
-      expect(walletEmitter.emit).toHaveBeenCalledWith('error', new Error('Test error'))
-    })
+      const handleError = mockWallet.on.mock.calls.find(call => call[0] === 'error')[1];
+      handleError(new Error('Test error'));
+
+      expect(walletEmitter.emit).toHaveBeenCalledWith('error', new Error('Test error'));
+    });
   })
 
   describe('WalletStatus', () => {

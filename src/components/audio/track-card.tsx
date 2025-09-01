@@ -50,7 +50,7 @@ export function TrackCard({ track, className }: TrackCardProps) {
       if (isPlaying) {
         pause()
       } else {
-        play()
+        playTrack(track)
       }
     } else {
       playTrack(track)

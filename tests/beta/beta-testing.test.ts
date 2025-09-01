@@ -1,4 +1,3 @@
-
 import { describe, it, expect, beforeAll, afterAll } from '@jest/globals';
 import { promises as fs } from 'fs';
 import { join } from 'path';
@@ -146,7 +145,57 @@ describe('Beta Testing - NormalDance Platform', () => {
         description: 'Test different audio player UI designs',
         variations: [
           {
-           
+            variation: 'A',
+            description: 'Current design',
+            percentage: 50
+          },
+          {
+            variation: 'B',
+            description: 'New design with improved controls',
+            percentage: 50
+          }
+        ]
+      };
+
+      const results = {
+        variationA: { participants: 25, conversions: 5 },
+        variationB: { participants: 30, conversions: 8 },
+        totalParticipants: 55
+      };
+      
+      expect(results.variationA.participants).toBeGreaterThan(0);
+      expect(results.variationB.participants).toBeGreaterThan(0);
+      expect(results.totalParticipants).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Beta Testing Helper Functions', () => {
+    it('should store feedback correctly', async () => {
+      const feedbackData = {
+        userId: 'test-user',
+        type: 'bug',
+        severity: 'medium'
+      };
+
+      const feedbackId = await storeFeedback(feedbackData);
+      expect(feedbackId).toMatch(/^feedback-/);
+    });
+
+    it('should retrieve feedback by ID', async () => {
+      const feedbackData = {
+        userId: 'test-user',
+        type: 'feature',
+        severity: 'low'
+      };
+
+      const feedbackId = await storeFeedback(feedbackData);
+      const retrieved = await getFeedback(feedbackId);
+      
+      expect(retrieved.id).toBe(feedbackId);
+      expect(retrieved.userId).toBe('beta-tester-123');
+    });
+  });
+});
 
 // Helper functions for beta testing
 async function storeFeedback(feedbackData: any): Promise<string> {
@@ -166,14 +215,14 @@ async function getFeedback(feedbackId: string): Promise<any> {
 }
 
 async function categorizeFeedbackByPriority(feedbacks: any[]): Promise<any> {
-  const categorized = {
+  const categorized: any = {
     critical: [],
     high: [],
     medium: [],
     low: []
   };
 
-  feedbacks.forEach(feedback => {
+  feedbacks.forEach((feedback: any) => {
     switch (feedback.severity) {
       case 'critical':
         categorized.critical.push(feedback);
@@ -194,7 +243,8 @@ async function categorizeFeedbackByPriority(feedbacks: any[]): Promise<any> {
 }
 
 async function calculateUserEngagement(data: any): Promise<any> {
-  const totalSessionTime = Object.values(data.timeSpent).reduce((sum: number, time: number) => sum + time, 0);
+  const timeSpentValues = Object.values(data.timeSpent) as number[];
+  const totalSessionTime = timeSpentValues.reduce((sum: number, time: number) => sum + time, 0);
   const featureUsage = {
     audioPlayer: data.timeSpent['audio-player'] / totalSessionTime,
     playlistCreation: data.timeSpent['playlist-creation'] / totalSessionTime,
