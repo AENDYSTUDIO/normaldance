@@ -1,0 +1,274 @@
+{
+  "monitoring": {
+    "enabled": true,
+    "intervalMinutes": 5,
+    "metrics": {
+      "cache_hit_rate": {
+        "enabled": true,
+        "collectionInterval": 300000,
+        "alertThreshold": 0.7,
+        "severity": "warning"
+      },
+      "cache_size": {
+        "enabled": true,
+        "collectionInterval": 300000,
+        "alertThreshold": 8,
+        "unit": "GB",
+        "severity": "warning"
+      },
+      "cache_restore_time": {
+        "enabled": true,
+        "collectionInterval": 300000,
+        "alertThreshold": 30000,
+        "unit": "ms",
+        "severity": "warning"
+      },
+      "cache_save_time": {
+        "enabled": true,
+        "collectionInterval": 300000,
+        "alertThreshold": 60000,
+        "unit": "ms",
+        "severity": "warning"
+      },
+      "cache_eviction_count": {
+        "enabled": true,
+        "collectionInterval": 300000,
+        "alertThreshold": 10,
+        "severity": "info"
+      }
+    },
+    "alerts": {
+      "enabled": true,
+      "channels": ["slack", "github"],
+      "severityLevels": ["info", "warning", "error", "critical"],
+      "alertRules": [
+        {
+          "name": "low_cache_hit_rate",
+          "condition": "cache_hit_rate < 0.7",
+          "severity": "warning",
+          "message": "Cache hit rate is below threshold",
+          "action": "Review cache key strategy"
+        },
+        {
+          "name": "high_cache_size",
+          "condition": "cache_size > 8",
+          "severity": "warning",
+          "message": "Cache size is approaching limit",
+          "action": "Run cache cleanup"
+        },
+        {
+          "name": "slow_cache_restore",
+          "condition": "cache_restore_time > 30000",
+          "severity": "warning",
+          "message": "Cache restore time is high",
+          "action": "Optimize cache key strategy"
+        },
+        {
+          "name": "slow_cache_save",
+          "condition": "cache_save_time > 60000",
+          "severity": "warning",
+          "message": "Cache save time is high",
+          "action": "Review cache size and strategy"
+        },
+        {
+          "name": "high_eviction_count",
+          "condition": "cache_eviction_count > 10",
+          "severity": "info",
+          "message": "High cache eviction count",
+          "action": "Monitor cache efficiency"
+        }
+      ]
+    },
+    "reporting": {
+      "enabled": true,
+      "format": "json",
+      "path": "./tmp/cache-monitoring-report.json",
+      "retentionDays": 30,
+      "schedule": {
+        "daily": true,
+        "weekly": true,
+        "monthly": true
+      }
+    },
+    "dashboard": {
+      "enabled": true,
+      "type": "grafana",
+      "url": "${GRAFANA_URL}",
+      "dashboardId": "cache-monitoring",
+      "refreshInterval": 300000
+    },
+    "logging": {
+      "enabled": true,
+      "level": "info",
+      "file": "./tmp/cache-monitoring.log",
+      "console": true,
+      "format": "json",
+      "maxSize": "10MB",
+      "maxFiles": 5
+    }
+  },
+  "vercel": {
+    "monitoring": {
+      "enabled": true,
+      "apiEndpoint": "https://api.vercel.com",
+      "project": "${VERCEL_PROJECT_ID}",
+      "org": "${VERCEL_ORG_ID}",
+      "metrics": [
+        "build_time",
+        "cache_hit_rate",
+        "cache_size",
+        "deployment_count"
+      ],
+      "alerts": {
+        "build_time_threshold": 300000,
+        "cache_size_threshold": 5,
+        "deployment_count_threshold": 100
+      }
+    }
+  },
+  "github": {
+    "monitoring": {
+      "enabled": true,
+      "repository": "${GITHUB_REPOSITORY}",
+      "workflow": "preview-deployments-cached",
+      "metrics": [
+        "cache_hit_rate",
+        "cache_restore_time",
+        "cache_save_time",
+        "build_time"
+      ],
+      "alerts": {
+        "cache_hit_rate_threshold": 0.7,
+        "cache_restore_time_threshold": 30000,
+        "cache_save_time_threshold": 60000,
+        "build_time_threshold": 300000
+      }
+    }
+  },
+  "notifications": {
+    "enabled": true,
+    "channels": {
+      "slack": {
+        "enabled": true,
+        "webhook": "${SLACK_WEBHOOK}",
+        "channel": "#deployments",
+        "username": "Cache Monitor",
+        "format": "json"
+      },
+      "github": {
+        "enabled": true,
+        "repository": "${GITHUB_REPOSITORY}",
+        "token": "${GITHUB_TOKEN}",
+        "issueLabels": ["cache", "monitoring"],
+        "format": "markdown"
+      },
+      "email": {
+        "enabled": false,
+        "smtp": {
+          "host": "${SMTP_HOST}",
+          "port": 587,
+          "secure": false,
+          "auth": {
+            "user": "${SMTP_USER}",
+            "pass": "${SMTP_PASS}"
+          }
+        },
+        "from": "${FROM_EMAIL}",
+        "to": ["${TO_EMAIL}"],
+        "subject": "Cache Monitoring Alert"
+      }
+    },
+    "templates": {
+      "slack": {
+        "title": "🚨 Cache Alert",
+        "color": "danger",
+        "fields": [
+          {
+            "title": "Type",
+            "value": "{{type}}",
+            "short": true
+          },
+          {
+            "title": "Severity",
+            "value": "{{severity}}",
+            "short": true
+          },
+          {
+            "title": "Message",
+            "value": "{{message}}",
+            "short": false
+          },
+          {
+            "title": "Timestamp",
+            "value": "{{timestamp}}",
+            "short": false
+          }
+        ]
+      },
+      "github": {
+        "title": "Cache Monitoring Alert",
+        "body": "**Type**: {{type}}\n**Severity**: {{severity}}\n**Message**: {{message}}\n**Timestamp**: {{timestamp}}\n\n**Recommendations**: {{recommendations}}"
+      },
+      "email": {
+        "subject": "Cache Monitoring Alert - {{type}}",
+        "body": "Type: {{type}}\nSeverity: {{severity}}\nMessage: {{message}}\nTimestamp: {{timestamp}}\n\nRecommendations: {{recommendations}}"
+      }
+    }
+  },
+  "storage": {
+    "enabled": true,
+    "type": "file",
+    "path": "./tmp/cache-monitoring-data",
+    "retentionDays": 30,
+    "compression": true,
+    "encryption": false
+  },
+  "api": {
+    "enabled": true,
+    "port": 8080,
+    "host": "0.0.0.0",
+    "endpoints": {
+      "metrics": "/api/metrics",
+      "health": "/api/health",
+      "alerts": "/api/alerts",
+      "reports": "/api/reports"
+    },
+    "auth": {
+      "enabled": false,
+      "type": "bearer",
+      "token": "${API_TOKEN}"
+    }
+  },
+  "integrations": {
+    "prometheus": {
+      "enabled": true,
+      "port": 9090,
+      "path": "/metrics",
+      "metrics": [
+        "cache_hit_rate",
+        "cache_size",
+        "cache_restore_time",
+        "cache_save_time",
+        "cache_eviction_count"
+      ]
+    },
+    "grafana": {
+      "enabled": true,
+      "url": "${GRAFANA_URL}",
+      "dashboard": "cache-monitoring",
+      "datasource": "prometheus"
+    },
+    "datadog": {
+      "enabled": false,
+      "apiKey": "${DATADOG_API_KEY}",
+      "applicationKey": "${DATADOG_APPLICATION_KEY}",
+      "metrics": [
+        "cache.hit_rate",
+        "cache.size",
+        "cache.restore_time",
+        "cache.save_time",
+        "cache.eviction_count"
+      ]
+    }
+  }
+}

@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { useWalletContext } from './wallet-provider'
 import { useTransactions } from './wallet-provider'
-import { uploadToIPFS, createIPFSUrl } from '@/lib/ipfs'
+import { uploadToIPFS } from '@/lib/ipfs'
 import { 
   Music, 
   Upload, 
@@ -125,7 +125,7 @@ export function MusicNFTManager({ className }: NFTManagerProps) {
   const loadNFTs = async () => {
     try {
       // Здесь нужно запросить NFT из смарт-контракта
-      setNFTs(MOCK_NFTS)
+      setNfts(MOCK_NFTS)
     } catch (err) {
       console.error('Error loading NFTs:', err)
     }
@@ -152,7 +152,7 @@ export function MusicNFTManager({ className }: NFTManagerProps) {
         genre: nftMetadata.genre,
         duration: 180, // Временно
         releaseDate: new Date().toISOString().split('T')[0],
-        bpm: nftMetadata.bpm || undefined,
+        bpm: nftMetadata.bpm ? parseInt(nftMetadata.bpm) : undefined,
         key: nftMetadata.key || undefined,
         description: nftMetadata.description,
         isExplicit: false,
@@ -160,20 +160,20 @@ export function MusicNFTManager({ className }: NFTManagerProps) {
         mimeType: selectedFile.type
       }
 
-      const uploadResult = await uploadToIPFS(selectedFile, metadata)
+      // const uploadResult = await uploadToIPFS(selectedFile, metadata)
       
       // Создание NFT в блокчейне
       const instructions = [
         // Здесь нужно добавить инструкции для создания NFT
       ]
 
-      const transaction = await createTransaction(
-        new (window as any).solana.Connection('https://api.devnet.solana.com'),
-        { publicKey, signTransaction: async () => new Transaction() },
-        instructions
-      )
+      // const transaction = await createTransaction(
+      //   new (window as any).solana.Connection('https://api.devnet.solana.com'),
+      //   { publicKey, signTransaction: async () => new Transaction() },
+      //   instructions
+      // )
 
-      const signature = await sendTransaction({ instructions })
+      // const signature = await sendTransaction({ instructions })
       
       // Обновляем список NFT
       await loadNFTs()
@@ -421,3 +421,4 @@ export function MusicNFTManager({ className }: NFTManagerProps) {
       </div>
     </div>
   )
+}

@@ -1,0 +1,511 @@
+{
+  "github": {
+    "enabled": true,
+    "events": {
+      "pull_request": {
+        "enabled": true,
+        "actions": ["opened", "synchronize", "reopened", "edited"],
+        "auto_deploy": true,
+        "skip_ci_on": ["hotfix/*", "bugfix/*"],
+        "force_deploy_after": 600000,
+        "max_deployments_per_pr": 3,
+        "deployment_cooldown": 300000
+      },
+      "issue_comment": {
+        "enabled": true,
+        "actions": ["created", "edited"],
+        "trigger_commands": ["/deploy", "/preview", "/deploy-preview", "/force-deploy"],
+        "require_permission": "write",
+        "auto_approve": false
+      },
+      "pull_request_review": {
+        "enabled": true,
+        "actions": ["submitted", "edited"],
+        "approve_to_deploy": false,
+        "require_changes_requested": false
+      },
+      "push": {
+        "enabled": true,
+        "branches": ["main", "develop", "release/*"],
+        "auto_deploy": true,
+        "skip_ci_on": ["dependabot/*", "renovate/*"]
+      },
+      "workflow_run": {
+        "enabled": false,
+        "events": ["completed"],
+        "filter_workflow": "auto-preview-deployments.yml",
+        "require_success": true
+      }
+    },
+    "branches": {
+      "include": [
+        "main",
+        "develop",
+        "feature/*",
+        "hotfix/*",
+        "bugfix/*",
+        "release/*",
+        "support/*"
+      ],
+      "exclude": [
+        "dependabot/*",
+        "renovate/*",
+        "gh-pages",
+        "docs",
+        "test",
+        "tmp"
+      ]
+    },
+    "environments": {
+      "preview": {
+        "name": "Preview",
+        "auto_cleanup": true,
+        "retention_period": 86400000,
+        "vercel_env": "preview",
+        "public": false,
+        "alias_pattern": "pr-{pr_number}-{sha}"
+      },
+      "development": {
+        "name": "Development",
+        "auto_deploy": true,
+        "branch": "develop",
+        "vercel_env": "development",
+        "public": false,
+        "alias_pattern": "dev-{branch}"
+      },
+      "staging": {
+        "name": "Staging",
+        "auto_deploy": true,
+        "branch": "release/*",
+        "vercel_env": "staging",
+        "public": false,
+        "alias_pattern": "staging-{branch}"
+      }
+    },
+    "deployment_rules": {
+      "feature_branches": {
+        "name": "Feature Branches",
+        "pattern": "feature/*",
+        "auto_deploy": true,
+        "skip_tests": false,
+        "skip_build": false,
+        "skip_security": false,
+        "vercel_env": "preview",
+        "notifications": {
+          "slack": true,
+          "github": true,
+          "email": false
+        }
+      },
+      "hotfix_branches": {
+        "name": "Hotfix Branches",
+        "pattern": "hotfix/*",
+        "auto_deploy": true,
+        "skip_tests": true,
+        "skip_build": false,
+        "skip_security": false,
+        "vercel_env": "preview",
+        "notifications": {
+          "slack": true,
+          "github": true,
+          "email": true
+        }
+      },
+      "bugfix_branches": {
+        "name": "Bugfix Branches",
+        "pattern": "bugfix/*",
+        "auto_deploy": true,
+        "skip_tests": true,
+        "skip_build": false,
+        "skip_security": false,
+        "vercel_env": "preview",
+        "notifications": {
+          "slack": true,
+          "github": true,
+          "email": false
+        }
+      },
+      "release_branches": {
+        "name": "Release Branches",
+        "pattern": "release/*",
+        "auto_deploy": true,
+        "skip_tests": false,
+        "skip_build": false,
+        "skip_security": true,
+        "vercel_env": "staging",
+        "notifications": {
+          "slack": true,
+          "github": true,
+          "email": true
+        }
+      },
+      "main_branch": {
+        "name": "Main Branch",
+        "pattern": "main",
+        "auto_deploy": true,
+        "skip_tests": false,
+        "skip_build": false,
+        "skip_security": false,
+        "vercel_env": "production",
+        "notifications": {
+          "slack": true,
+          "github": true,
+          "email": true
+        }
+      },
+      "develop_branch": {
+        "name": "Develop Branch",
+        "pattern": "develop",
+        "auto_deploy": true,
+        "skip_tests": false,
+        "skip_build": false,
+        "skip_security": false,
+        "vercel_env": "development",
+        "notifications": {
+          "slack": true,
+          "github": true,
+          "email": false
+        }
+      }
+    },
+    "comment_triggers": {
+      "/deploy": {
+        "description": "Trigger deployment for this PR",
+        "permission": "write",
+        "environment": "preview",
+        "force": false,
+        "skip_tests": false
+      },
+      "/preview": {
+        "description": "Trigger preview deployment",
+        "permission": "write",
+        "environment": "preview",
+        "force": false,
+        "skip_tests": false
+      },
+      "/deploy-preview": {
+        "description": "Trigger preview deployment with detailed info",
+        "permission": "write",
+        "environment": "preview",
+        "force": false,
+        "skip_tests": false,
+        "verbose": true
+      },
+      "/force-deploy": {
+        "description": "Force deployment even if duplicate",
+        "permission": "maintain",
+        "environment": "preview",
+        "force": true,
+        "skip_tests": false
+      },
+      "/deploy-staging": {
+        "description": "Trigger staging deployment",
+        "permission": "maintain",
+        "environment": "staging",
+        "force": false,
+        "skip_tests": false
+      },
+      "/deploy-production": {
+        "description": "Trigger production deployment",
+        "permission": "admin",
+        "environment": "production",
+        "force": false,
+        "skip_tests": false
+      }
+    },
+    "notifications": {
+      "slack": {
+        "enabled": true,
+        "webhook_url": "${SLACK_WEBHOOK}",
+        "channels": {
+          "deployments": "#deployments",
+          "failures": "#deployments-alerts",
+          "success": "#deployments"
+        },
+        "format": {
+          "preview": {
+            "color": "good",
+            "title": "🚀 Preview Deployment Ready",
+            "fields": [
+              {"title": "PR", "value": "{pr_number}", "short": true},
+              {"title": "Branch", "value": "{branch}", "short": true},
+              {"title": "URL", "value": "{preview_url}", "short": false}
+            ]
+          },
+          "staging": {
+            "color": "warning",
+            "title": "🎭 Staging Deployment Ready",
+            "fields": [
+              {"title": "Branch", "value": "{branch}", "short": true},
+              {"title": "URL", "value": "{staging_url}", "short": false}
+            ]
+          },
+          "production": {
+            "color": "danger",
+            "title": "🔥 Production Deployment Ready",
+            "fields": [
+              {"title": "Version", "value": "{version}", "short": true},
+              {"title": "URL", "value": "{production_url}", "short": false}
+            ]
+          },
+          "failure": {
+            "color": "danger",
+            "title": "❌ Deployment Failed",
+            "fields": [
+              {"title": "PR", "value": "{pr_number}", "short": true},
+              {"title": "Error", "value": "{error}", "short": false}
+            ]
+          }
+        }
+      },
+      "github": {
+        "enabled": true,
+        "issue_comments": true,
+        "pull_request_reviews": true,
+        "deployment_status": true,
+        "check_runs": true
+      },
+      "email": {
+        "enabled": false,
+        "smtp": {
+          "host": "${SMTP_HOST}",
+          "port": 587,
+          "secure": false,
+          "auth": {
+            "user": "${SMTP_USER}",
+            "pass": "${SMTP_PASS}"
+          }
+        },
+        "recipients": {
+          "deployments": ["devops@normaldance.com"],
+          "failures": ["devops@normaldance.com", "dev@normaldance.com"],
+          "production": ["devops@normaldance.com", "cto@normaldance.com"]
+        }
+      }
+    }
+  },
+  "gitlab": {
+    "enabled": false,
+    "events": {
+      "MergeRequestEvents": {
+        "enabled": true,
+        "actions": ["opened", "updated", "reopened", "merged"],
+        "auto_deploy": true,
+        "skip_ci_on": ["hotfix/*", "bugfix/*"]
+      },
+      "IssueEvents": {
+        "enabled": false,
+        "actions": ["opened", "updated", "closed"]
+      },
+      "NoteEvents": {
+        "enabled": true,
+        "actions": ["created", "updated"],
+        "trigger_commands": ["/deploy", "/preview", "/deploy-preview"]
+      },
+      "PipelineEvents": {
+        "enabled": false,
+        "actions": ["success", "failed", "canceled"]
+      }
+    },
+    "branches": {
+      "include": [
+        "main",
+        "develop",
+        "feature/*",
+        "hotfix/*",
+        "bugfix/*",
+        "release/*",
+        "support/*"
+      ],
+      "exclude": [
+        "dependabot/*",
+        "renovate/*",
+        "gh-pages",
+        "docs",
+        "test",
+        "tmp"
+      ]
+    },
+    "environments": {
+      "preview": {
+        "name": "Preview",
+        "auto_cleanup": true,
+        "retention_period": 86400000,
+        "kubernetes_namespace": "preview",
+        "expose_service": false
+      },
+      "development": {
+        "name": "Development",
+        "auto_deploy": true,
+        "branch": "develop",
+        "kubernetes_namespace": "development",
+        "expose_service": true
+      },
+      "staging": {
+        "name": "Staging",
+        "auto_deploy": true,
+        "branch": "release/*",
+        "kubernetes_namespace": "staging",
+        "expose_service": true
+      }
+    },
+    "deployment_rules": {
+      "feature_branches": {
+        "name": "Feature Branches",
+        "pattern": "feature/*",
+        "auto_deploy": true,
+        "skip_tests": false,
+        "skip_build": false,
+        "skip_security": false,
+        "environment": "preview"
+      },
+      "hotfix_branches": {
+        "name": "Hotfix Branches",
+        "pattern": "hotfix/*",
+        "auto_deploy": true,
+        "skip_tests": true,
+        "skip_build": false,
+        "skip_security": false,
+        "environment": "preview"
+      },
+      "bugfix_branches": {
+        "name": "Bugfix Branches",
+        "pattern": "bugfix/*",
+        "auto_deploy": true,
+        "skip_tests": true,
+        "skip_build": false,
+        "skip_security": false,
+        "environment": "preview"
+      },
+      "release_branches": {
+        "name": "Release Branches",
+        "pattern": "release/*",
+        "auto_deploy": true,
+        "skip_tests": false,
+        "skip_build": false,
+        "skip_security": true,
+        "environment": "staging"
+      }
+    },
+    "comment_triggers": {
+      "/deploy": {
+        "description": "Trigger deployment for this MR",
+        "access_level": "developer",
+        "environment": "preview",
+        "force": false
+      },
+      "/preview": {
+        "description": "Trigger preview deployment",
+        "access_level": "developer",
+        "environment": "preview",
+        "force": false
+      },
+      "/deploy-preview": {
+        "description": "Trigger preview deployment with detailed info",
+        "access_level": "developer",
+        "environment": "preview",
+        "force": false,
+        "verbose": true
+      }
+    }
+  },
+  "vercel": {
+    "org_id": "${VERCEL_ORG_ID}",
+    "project_id": "${VERCEL_PROJECT_ID}",
+    "token": "${VERCEL_TOKEN}",
+    "configs": {
+      "preview": {
+        "name": "Preview",
+        "framework": "nextjs",
+        "build_command": "npm run build",
+        "install_command": "npm ci",
+        "output_directory": ".next",
+        "dev_command": "npm run dev",
+        "public": false,
+        "alias_pattern": "pr-{pr_number}-{sha}"
+      },
+      "development": {
+        "name": "Development",
+        "framework": "nextjs",
+        "build_command": "npm run build",
+        "install_command": "npm ci",
+        "output_directory": ".next",
+        "dev_command": "npm run dev",
+        "public": false,
+        "alias_pattern": "dev-{branch}"
+      },
+      "staging": {
+        "name": "Staging",
+        "framework": "nextjs",
+        "build_command": "npm run build",
+        "install_command": "npm ci",
+        "output_directory": ".next",
+        "dev_command": "npm run dev",
+        "public": false,
+        "alias_pattern": "staging-{branch}"
+      }
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics": {
+      "deployment_count": {
+        "type": "counter",
+        "description": "Total number of deployments"
+      },
+      "deployment_duration": {
+        "type": "histogram",
+        "description": "Deployment duration in seconds"
+      },
+      "deployment_success_rate": {
+        "type": "gauge",
+        "description": "Deployment success rate percentage"
+      },
+      "active_deployments": {
+        "type": "gauge",
+        "description": "Number of active deployments"
+      }
+    },
+    "alerts": {
+      "deployment_failure": {
+        "enabled": true,
+        "threshold": 3,
+        "window": "5m",
+        "message": "Multiple deployment failures detected"
+      },
+      "deployment_timeout": {
+        "enabled": true,
+        "threshold": 1800,
+        "window": "1h",
+        "message": "Deployment timeout detected"
+      },
+      "high_error_rate": {
+        "enabled": true,
+        "threshold": 5,
+        "window": "5m",
+        "message": "High error rate in deployments"
+      }
+    }
+  },
+  "security": {
+    "enabled": true,
+    "secrets": {
+      "github_token": "${GITHUB_TOKEN}",
+      "gitlab_token": "${GITLAB_TOKEN}",
+      "vercel_token": "${VERCEL_TOKEN}",
+      "slack_webhook": "${SLACK_WEBHOOK}",
+      "smtp_host": "${SMTP_HOST}",
+      "smtp_user": "${SMTP_USER}",
+      "smtp_pass": "${SMTP_PASS}"
+    },
+    "validation": {
+      "require_https": true,
+      "require_auth": true,
+      "rate_limiting": {
+        "enabled": true,
+        "requests_per_minute": 60,
+        "burst_size": 10
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "alerts": {
+    "enabled": true,
+    "channels": [
+      "slack"
+    ],
+    "thresholds": {
+      "securityScore": 80,
+      "rotationDays": 90,
+      "errorRate": 0.05
+    }
+  },
+  "reporting": {
+    "enabled": true,
+    "formats": [
+      "json",
+      "html"
+    ],
+    "schedule": "0 6 * * *"
+  },
+  "audit": {
+    "enabled": true,
+    "retention": 365,
+    "sensitiveActions": [
+      "add",
+      "remove",
+      "rotate"
+    ]
+  }
+}

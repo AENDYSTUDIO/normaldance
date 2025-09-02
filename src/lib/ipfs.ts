@@ -321,6 +321,3 @@ export async function cleanupUnpinnedFiles(): Promise<number> {
     return 0
   }
 }
-
-// Экспорт IPFS клиента для использования в других модулях
-export { ipfsClient }

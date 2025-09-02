@@ -1,3 +1,5 @@
+'use client'
+
 import { MainLayout } from '@/components/layout/main-layout'
 import { AudioPlayer } from '@/components/audio/audio-player'
 import { Button } from '@/components/ui/button'
@@ -8,14 +10,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Upload, 
-  Music, 
-  DollarSign, 
+import {
+  Upload,
+  Music,
+  DollarSign,
   Info,
   AlertCircle,
   CheckCircle
 } from 'lucide-react'
+
 import { useState } from 'react'
 
 const genres = [

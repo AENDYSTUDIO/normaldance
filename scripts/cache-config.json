@@ -1,0 +1,194 @@
+{
+  "cache": {
+    "version": "1.0.0",
+    "enabled": true,
+    "maxSizeGB": 10,
+    "retentionDays": 7,
+    "cleanupThreshold": 0.8
+  },
+  "nodeModules": {
+    "enabled": true,
+    "path": "node_modules",
+    "cacheKey": "node-modules-{{hashFiles('**/package-lock.json')}}",
+    "restoreKeys": [
+      "node-modules-{{hashFiles('**/package-lock.json')}}",
+      "node-modules-",
+      "node-modules"
+    ],
+    "maxSizeGB": 5,
+    "excludedPaths": [
+      "**/node_modules/.cache",
+      "**/node_modules/.npm",
+      "**/node_modules/.eslintcache"
+    ]
+  },
+  "nextCache": {
+    "enabled": true,
+    "path": ".next/cache",
+    "cacheKey": "next-cache-{{hashFiles('**/*.{js,jsx,ts,tsx,json}', '**/next.config.*')}}",
+    "restoreKeys": [
+      "next-cache-{{hashFiles('**/*.{js,jsx,ts,tsx,json}', '**/next.config.*')}}",
+      "next-cache-",
+      "next-cache"
+    ],
+    "maxSizeGB": 3,
+    "excludedPaths": [
+      "**/.next/cache/.tmp",
+      "**/.next/cache/logs"
+    ]
+  },
+  "dockerLayers": {
+    "enabled": true,
+    "path": "docker-layers",
+    "cacheKey": "docker-layers-{{hashFiles('Dockerfile*', 'package.json', 'package-lock.json')}}",
+    "restoreKeys": [
+      "docker-layers-{{hashFiles('Dockerfile*', 'package.json', 'package-lock.json')}}",
+      "docker-layers-",
+      "docker-layers"
+    ],
+    "maxSizeGB": 8,
+    "excludedPaths": [
+      "**/node_modules",
+      "**/.next",
+      "**/dist",
+      "**/build"
+    ]
+  },
+  "prismaClient": {
+    "enabled": true,
+    "path": "prisma/client",
+    "cacheKey": "prisma-client-{{hashFiles('prisma/schema.prisma', 'package.json', 'package-lock.json')}}",
+    "restoreKeys": [
+      "prisma-client-{{hashFiles('prisma/schema.prisma', 'package.json', 'package-lock.json')}}",
+      "prisma-client-",
+      "prisma-client"
+    ],
+    "maxSizeGB": 1
+  },
+  "testArtifacts": {
+    "enabled": true,
+    "path": "test-artifacts",
+    "cacheKey": "test-artifacts-{{hashFiles('**/*.test.{js,jsx,ts,tsx}', '**/*.spec.{js,jsx,ts,tsx}', 'jest.config.*')}}",
+    "restoreKeys": [
+      "test-artifacts-{{hashFiles('**/*.test.{js,jsx,ts,tsx}', '**/*.spec.{js,jsx,ts,tsx}', 'jest.config.*')}}",
+      "test-artifacts-",
+      "test-artifacts"
+    ],
+    "maxSizeGB": 2,
+    "excludedPaths": [
+      "**/coverage",
+      "**/node_modules/.cache/jest"
+    ]
+  },
+  "mobileApp": {
+    "enabled": true,
+    "path": "mobile-app",
+    "cacheKey": "mobile-app-{{hashFiles('mobile-app/package.json', 'mobile-app/package-lock.json', 'mobile-app/**/*.gradle', 'mobile-app/**/*.xml')}}",
+    "restoreKeys": [
+      "mobile-app-{{hashFiles('mobile-app/package.json', 'mobile-app/package-lock.json', 'mobile-app/**/*.gradle', 'mobile-app/**/*.xml')}}",
+      "mobile-app-",
+      "mobile-app"
+    ],
+    "maxSizeGB": 3,
+    "excludedPaths": [
+      "mobile-app/node_modules",
+      "mobile-app/android/app/build",
+      "mobile-app/ios/build",
+      "mobile-app/dist"
+    ]
+  },
+  "invalidation": {
+    "dependencyChanges": [
+      "**/package.json",
+      "**/package-lock.json",
+      "**/yarn.lock",
+      "**/pnpm-lock.yaml",
+      "**/Dockerfile*",
+      "**/next.config.*",
+      "**/jest.config.*",
+      "**/tsconfig.json",
+      "**/tailwind.config.*"
+    ],
+    "sourceCodeChanges": [
+      "**/*.{js,jsx,ts,tsx}",
+      "**/*.json",
+      "**/*.md",
+      "**/*.yml",
+      "**/*.yaml",
+      "**/*.toml",
+      "**/*.lock"
+    ],
+    "prismaSchemaChanges": [
+      "prisma/schema.prisma",
+      "prisma/migrations/**"
+    ],
+    "mobileAppChanges": [
+      "mobile-app/**/*",
+      "!mobile-app/node_modules/**",
+      "!mobile-app/android/app/build/**",
+      "!mobile-app/ios/build/**"
+    ]
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics": [
+      "cache_hit_rate",
+      "cache_size",
+      "cache_restore_time",
+      "cache_save_time",
+      "cache_eviction_count"
+    ],
+    "alerts": {
+      "cache_hit_rate_threshold": 0.7,
+      "cache_size_threshold_gb": 8,
+      "cache_restore_time_threshold_ms": 30000,
+      "cache_save_time_threshold_ms": 60000
+    },
+    "reporting": {
+      "enabled": true,
+      "format": "json",
+      "path": "./tmp/cache-report.json",
+      "retentionDays": 30
+    }
+  },
+  "githubActions": {
+    "cacheType": "github",
+    "cacheName": "normaldance-preview-cache",
+    "cacheKeyStrategy": "path-dependency",
+    "cachePaths": [
+      "node_modules",
+      ".next/cache",
+      "prisma/client",
+      "test-results"
+    ],
+    "excludedPaths": [
+      "**/node_modules/.cache",
+      "**/node_modules/.npm",
+      "**/node_modules/.eslintcache",
+      "**/.next/cache/.tmp",
+      "**/.next/cache/logs",
+      "**/coverage",
+      "**/test-results/jest"
+    ]
+  },
+  "vercel": {
+    "caching": {
+      "enabled": true,
+      "type": "persistent",
+      "maxAge": 3600,
+      "staleWhileRevalidate": 1800
+    },
+    "buildCache": {
+      "enabled": true,
+      "type": "filesystem",
+      "maxSizeGB": 5,
+      "retentionDays": 7
+    }
+  },
+  "logging": {
+    "level": "info",
+    "file": "./tmp/cache.log",
+    "console": true,
+    "format": "json"
+  }
+}

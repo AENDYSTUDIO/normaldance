@@ -1,0 +1,62 @@
+{
+  "cleanup": {
+    "defaultMaxAgeDays": 7,
+    "cleanupThreshold": 7,
+    "notificationDays": 3,
+    "maxDeployments": 20,
+    "forceCleanup": false,
+    "dryRun": false
+  },
+  "protectedPatterns": [
+    "important",
+    "critical",
+    "production",
+    "staging",
+    "main",
+    "develop",
+    "release",
+    "hotfix",
+    "emergency",
+    "security",
+    "performance"
+  ],
+  "exclusions": {
+    "activeUsersThreshold": 0,
+    "requestsThreshold": 100,
+    "recentActivityDays": 1
+  },
+  "notifications": {
+    "enabled": true,
+    "channels": ["slack", "github"],
+    "slack": {
+      "webhook": "${SLACK_WEBHOOK}",
+      "channel": "#deployments",
+      "username": "Cleanup Bot"
+    },
+    "github": {
+      "repository": "${GITHUB_REPOSITORY}",
+      "token": "${GITHUB_TOKEN}"
+    }
+  },
+  "vercel": {
+    "orgId": "${VERCEL_ORG_ID}",
+    "projectId": "${VERCEL_PROJECT_ID}",
+    "token": "${VERCEL_TOKEN}"
+  },
+  "scheduling": {
+    "cron": "0 3 * * *",
+    "timezone": "UTC",
+    "enabled": true
+  },
+  "logging": {
+    "level": "info",
+    "file": "./tmp/cleanup.log",
+    "console": true
+  },
+  "reporting": {
+    "enabled": true,
+    "format": "json",
+    "path": "./tmp/cleanup-report.json",
+    "retentionDays": 30
+  }
+}

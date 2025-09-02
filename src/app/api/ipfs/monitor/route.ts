@@ -51,6 +51,7 @@ export async function GET(request: NextRequest) {
             { error: 'File not available for download' },
             { status: 404 }
           )
+        }
 
       default:
         // Базовая информация о файле

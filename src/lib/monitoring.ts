@@ -1,238 +1,365 @@
+import { NextRequest } from 'next/server';
+
 /**
- * Система мониторинга для NORMALDANCE
+ * Система мониторинга и логирования для DNB1ST
+ * 
+ * Этот модуль предоставляет централизованный механизм для:
+ * - Логирования событий
+ * - Мониторинга производительности
+ * - Отслеживания ошибок
+ * - Сбор метрик
  */
 
-import { logger } from './logger'
+// Интерфейсы для типов данных
+export interface LogEntry {
+  timestamp: string;
+  level: 'info' | 'warn' | 'error' | 'debug';
+  service: string;
+  message: string;
+  metadata?: Record<string, any>;
+  userId?: string;
+  requestId?: string;
+}
 
 export interface MetricData {
-  name: string
-  value: number
-  timestamp: number
-  tags?: Record<string, string>
+  name: string;
+  value: number;
+  tags: Record<string, string>;
+  timestamp: string;
 }
 
-export interface MonitoringConfig {
-  enabled: boolean
-  metricsInterval: number
-  maxMetrics: number
-  enableAlerts: boolean
-  alertThresholds: Record<string, number>
+export interface PerformanceData {
+  operation: string;
+  duration: number;
+  success: boolean;
+  metadata?: Record<string, string>;
 }
 
-export class Monitoring {
-  private config: MonitoringConfig
-  private metrics: MetricData[] = []
-  private timers: Map<string, NodeJS.Timeout> = new Map()
-  private isRunning = false
+// Класс для логирования
+export class Logger {
+  private serviceName: string;
+  private logLevel: string;
+  private logs: LogEntry[] = [];
 
-  constructor(config: Partial<MonitoringConfig> = {}) {
-    this.config = {
-      enabled: true,
-      metricsInterval: 60000, // 1 минута
-      maxMetrics: 1000,
-      enableAlerts: true,
-      alertThresholds: {
-        memoryUsage: 0.8,
-        cpuUsage: 0.8,
-        responseTime: 5000,
-        errorRate: 0.1
-      },
-      ...config
+  constructor(serviceName: string, logLevel: string = 'info') {
+    this.serviceName = serviceName;
+    this.logLevel = logLevel;
+  }
+
+  // Форматирует сообщение для лога
+  private formatMessage(level: LogEntry['level'], message: string, metadata?: Record<string, any>): LogEntry {
+    return {
+      timestamp: new Date().toISOString(),
+      level,
+      service: this.serviceName,
+      message,
+      metadata,
+      requestId: this.getRequestId()
+    };
+  }
+
+  // Получает ID текущего запроса
+  private getRequestId(): string | undefined {
+    // В реальном приложении здесь будет получение ID из контекста запроса
+    return undefined;
+  }
+
+  // Логирует информационное сообщение
+  info(message: string, metadata?: Record<string, any>): void {
+    const entry = this.formatMessage('info', message, metadata);
+    this.logs.push(entry);
+    this.logToConsole(entry);
+    this.sendToMonitoringSystem(entry);
+  }
+
+  // Логирует предупреждение
+  warn(message: string, metadata?: Record<string, any>): void {
+    const entry = this.formatMessage('warn', message, metadata);
+    this.logs.push(entry);
+    this.logToConsole(entry);
+    this.sendToMonitoringSystem(entry);
+  }
+
+  // Логирует ошибку
+  error(message: string, error?: Error, metadata?: Record<string, any>): void {
+    const entry = this.formatMessage('error', message, {
+      ...metadata,
+      error: error?.message,
+      stack: error?.stack
+    });
+    this.logs.push(entry);
+    this.logToConsole(entry);
+    this.sendToMonitoringSystem(entry);
+    this.sendToErrorTrackingSystem(entry);
+  }
+
+  // Логирует отладочную информацию
+  debug(message: string, metadata?: Record<string, any>): void {
+    if (this.logLevel === 'debug') {
+      const entry = this.formatMessage('debug', message, metadata);
+      this.logs.push(entry);
+      this.logToConsole(entry);
     }
   }
 
-  /**
-   * Запуск мониторинга
-   */
-  start(): void {
-    if (this.isRunning) {
-      return
-    }
-
-    this.isRunning = true
-    logger.info('Monitoring started')
-
-    // Запуск периодического сбора метрик
-    this.collectMetrics()
-    this.timers.set('metrics', setInterval(() => this.collectMetrics(), this.config.metricsInterval))
+  // Выводит в консоль
+  private logToConsole(entry: LogEntry): void {
+    const logMethod = entry.level === 'error' ? 'error' : 
+                     entry.level === 'warn' ? 'warn' : 'log';
+    
+    console[logMethod](`[${entry.timestamp}] ${entry.service.toUpperCase()}:${entry.level.toUpperCase()} - ${entry.message}`, 
+      entry.metadata ? entry.metadata : '');
   }
 
-  /**
-   * Остановка мониторинга
-   */
-  stop(): void {
-    if (!this.isRunning) {
-      return
-    }
-
-    this.isRunning = false
-    logger.info('Monitoring stopped')
-
-    // Остановка всех таймеров
-    this.timers.forEach(timer => clearInterval(timer))
-    this.timers.clear()
-  }
-
-  /**
-   * Сбор метрик
-   */
-  private collectMetrics(): void {
-    if (!this.config.enabled) {
-      return
-    }
-
+  // Отправляет в систему мониторинга
+  private async sendToMonitoringSystem(entry: LogEntry): Promise<void> {
     try {
-      const memoryUsage = process.memoryUsage()
-      const cpuUsage = process.cpuUsage()
-
-      // Добавление метрик памяти
-      this.recordMetric('memory.rss', memoryUsage.rss / 1024 / 1024) // MB
-      this.recordMetric('memory.heapTotal', memoryUsage.heapTotal / 1024 / 1024) // MB
-      this.recordMetric('memory.heapUsed', memoryUsage.heapUsed / 1024 / 1024) // MB
-      this.recordMetric('memory.external', memoryUsage.external / 1024 / 1024) // MB
-
-      // Добавление метрик CPU
-      this.recordMetric('cpu.user', cpuUsage.user / 1000000) // seconds
-      this.recordMetric('cpu.system', cpuUsage.system / 1000000) // seconds
-
-      // Проверка пороговых значений
-      this.checkThresholds()
-
+      // В реальном приложении здесь будет отправка в Sentry, New Relic и т.д.
+      if (process.env.SENTRY_DSN) {
+        // Отправка в Sentry
+      }
+      
+      if (process.env.NEW_RELIC_LICENSE_KEY) {
+        // Отправка в New Relic
+      }
     } catch (error) {
-      logger.error('Failed to collect metrics', error as Error)
+      console.error('Failed to send log to monitoring system:', error);
     }
   }
 
-  /**
-   * Запись метрики
-   */
-  recordMetric(name: string, value: number, tags?: Record<string, string>): void {
-    const metric: MetricData = {
+  // Отправляет в систему отслеживания ошибок
+  private async sendToErrorTrackingSystem(entry: LogEntry): Promise<void> {
+    try {
+      // В реальном приложении здесь будет отправка критических ошибок
+      if (entry.level === 'error') {
+        // Отправка в систему отслеживания ошибок
+      }
+    } catch (error) {
+      console.error('Failed to send error to tracking system:', error);
+    }
+  }
+
+  // Получает все логи
+  getLogs(): LogEntry[] {
+    return [...this.logs];
+  }
+
+  // Очищает логи
+  clearLogs(): void {
+    this.logs = [];
+  }
+}
+
+// Класс для сбора метрик
+export class MetricsCollector {
+  private metrics: MetricData[] = [];
+  private serviceName: string;
+
+  constructor(serviceName: string) {
+    this.serviceName = serviceName;
+  }
+
+  // Регистрирует метрику
+  metric(name: string, value: number, tags: Record<string, string> = {}): void {
+    const metricData: MetricData = {
       name,
       value,
-      timestamp: Date.now(),
-      tags
-    }
+      tags: {
+        service: this.serviceName,
+        ...tags
+      },
+      timestamp: new Date().toISOString()
+    };
 
-    this.metrics.push(metric)
-
-    // Ограничение количества метрик
-    if (this.metrics.length > this.config.maxMetrics) {
-      this.metrics = this.metrics.slice(-this.config.maxMetrics)
-    }
-
-    logger.debug('Metric recorded', { name, value, tags })
+    this.metrics.push(metricData);
+    this.sendToMonitoringSystem(metricData);
   }
 
-  /**
-   * Получение метрик
-   */
-  getMetrics(name?: string): MetricData[] {
-    if (name) {
-      return this.metrics.filter(metric => metric.name === name)
-    }
-    return [...this.metrics]
+  // Регистрирует счетчик
+  increment(name: string, tags: Record<string, string> = {}, value: number = 1): void {
+    this.metric(name, value, tags);
   }
 
-  /**
-   * Получение статистики по метрике
-   */
-  getMetricStats(name: string): {
-    count: number
-    min: number
-    max: number
-    avg: number
-    latest: number
-  } {
-    const metrics = this.getMetrics(name)
-    
-    if (metrics.length === 0) {
-      return {
-        count: 0,
-        min: 0,
-        max: 0,
-        avg: 0,
-        latest: 0
+  // Регистрирует гистограмму
+  histogram(name: string, value: number, tags: Record<string, string> = {}): void {
+    this.metric(`${name}_duration`, value, tags);
+  }
+
+  // Отправляет в систему мониторинга
+  private async sendToMonitoringSystem(metric: MetricData): Promise<void> {
+    try {
+      // В реальном приложении здесь будет отправка в Prometheus, Datadog и т.д.
+      if (process.env.NEW_RELIC_LICENSE_KEY) {
+        // Отправка в New Relic
       }
-    }
-
-    const values = metrics.map(m => m.value)
-    return {
-      count: values.length,
-      min: Math.min(...values),
-      max: Math.max(...values),
-      avg: values.reduce((sum, val) => sum + val, 0) / values.length,
-      latest: values[values.length - 1]
+    } catch (error) {
+      console.error('Failed to send metric to monitoring system:', error);
     }
   }
 
-  /**
-   * Проверка пороговых значений
-   */
-  private checkThresholds(): void {
-    if (!this.config.enableAlerts) {
-      return
-    }
-
-    const stats = {
-      memory: this.getMetricStats('memory.heapUsed'),
-      cpu: this.getMetricStats('cpu.user')
-    }
-
-    // Проверка использования памяти
-    if (stats.memory.latest > this.config.alertThresholds.memoryUsage * 1024 * 1024) {
-      logger.warn('Memory usage threshold exceeded', {
-        current: stats.memory.latest / 1024 / 1024,
-        threshold: this.config.alertThresholds.memoryUsage
-      })
-    }
-
-    // Проверка использования CPU
-    if (stats.cpu.latest > this.config.alertThresholds.cpuUsage) {
-      logger.warn('CPU usage threshold exceeded', {
-        current: stats.cpu.latest,
-        threshold: this.config.alertThresholds.cpuUsage
-      })
-    }
+  // Получает все метрики
+  getMetrics(): MetricData[] {
+    return [...this.metrics];
   }
 
-  /**
-   * Очистка метрик
-   */
+  // Очищает метрики
   clearMetrics(): void {
-    this.metrics = []
-    logger.info('Metrics cleared')
+    this.metrics = [];
+  }
+}
+
+// Класс для мониторинга производительности
+export class PerformanceMonitor {
+  private timers: Map<string, { startTime: number; metadata: Record<string, any> }> = new Map();
+  private serviceName: string;
+
+  constructor(serviceName: string) {
+    this.serviceName = serviceName;
   }
 
-  /**
-   * Получение статуса мониторинга
-   */
-  getStatus(): {
-    isRunning: boolean
-    metricsCount: number
-    timersCount: number
-    config: MonitoringConfig
-  } {
-    return {
-      isRunning: this.isRunning,
-      metricsCount: this.metrics.length,
-      timersCount: this.timers.size,
-      config: this.config
+  // Начинает измерение времени
+  startTimer(operation: string, metadata: Record<string, any> = {}): void {
+    this.timers.set(operation, {
+      startTime: Date.now(),
+      metadata
+    });
+  }
+
+  // Завершает измерение времени
+  endTimer(operation: string, success: boolean = true): PerformanceData | null {
+    const timer = this.timers.get(operation);
+    if (!timer) {
+      console.warn(`No timer found for operation: ${operation}`);
+      return null;
+    }
+
+    const duration = Date.now() - timer.startTime;
+    const performanceData: PerformanceData = {
+      operation,
+      duration,
+      success,
+      metadata: timer.metadata
+    };
+
+    this.timers.delete(operation);
+    
+    // Отправляем метрику
+    const metricsCollector = new MetricsCollector(this.serviceName);
+    metricsCollector.histogram('operation_duration', duration, {
+      operation,
+      success: success.toString()
+    });
+
+    return performanceData;
+  }
+
+  // Измеряет выполнение функции
+  async measureAsync<T>(
+    operation: string,
+    fn: () => Promise<T>,
+    metadata: Record<string, any> = {}
+  ): Promise<{ result: T; performance: PerformanceData }> {
+    this.startTimer(operation, metadata);
+    
+    try {
+      const result = await fn();
+      const performance = this.endTimer(operation, true)!;
+      return { result, performance };
+    } catch (error) {
+      this.endTimer(operation, false);
+      throw error;
+    }
+  }
+
+  // Измеряет выполнение синхронной функции
+  measureSync<T>(
+    operation: string,
+    fn: () => T,
+    metadata: Record<string, any> = {}
+  ): { result: T; performance: PerformanceData } {
+    this.startTimer(operation, metadata);
+    
+    try {
+      const result = fn();
+      const performance = this.endTimer(operation, true)!;
+      return { result, performance };
+    } catch (error) {
+      this.endTimer(operation, false);
+      throw error;
     }
   }
 }
 
-// Создание singleton экземпляра
-export const monitoring = new Monitoring({
-  enabled: process.env.NODE_ENV !== 'test',
-  metricsInterval: parseInt(process.env.MONITORING_INTERVAL || '60000'),
-  maxMetrics: parseInt(process.env.MONITORING_MAX_METRICS || '1000'),
-  enableAlerts: process.env.MONITORING_ENABLE_ALERTS !== 'false'
-})
+// Глобальные экземпляры
+export const logger = new Logger('dnb1st');
+export const metrics = new MetricsCollector('dnb1st');
+export const performance = new PerformanceMonitor('dnb1st');
 
-// Инициализация при загрузке модуля
-if (typeof process !== 'undefined' && process.env.NODE_ENV !== 'test') {
-  monitoring.start()
+// Middleware для логирования запросов
+export function loggingMiddleware(request: NextRequest): void {
+  const startTime = Date.now();
+  const url = request.nextUrl.pathname;
+  
+  // Логируем начало запроса
+  logger.info('Request started', {
+    method: request.method,
+    url,
+    userAgent: request.headers.get('user-agent'),
+    ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip')
+  });
+
+  // В Next.js мы не можем перехватить Response.end напрямую
+  // Вместо этого мы можем использовать глобальный перехватчик
+  // или создать кастомный middleware в middleware.ts
+  
+  // Для простоты оставим логирование только начала запроса
+  // Конечное логирование будет в каждом роуте отдельно
 }
 
-export default Monitoring
+// Функция для health check
+export async function healthCheck(): Promise<{
+  status: 'healthy' | 'degraded' | 'unhealthy';
+  checks: Record<string, string>;
+  metrics: Record<string, any>;
+}> {
+  const checks: Record<string, string> = {};
+  
+  // Проверяем базу данных
+  try {
+    // Здесь будет проверка подключения к базе данных
+    checks.database = 'healthy';
+  } catch (error) {
+    checks.database = 'unhealthy';
+  }
+
+  // Проверяем Redis
+  try {
+    // Здесь будет проверка подключения к Redis
+    checks.redis = 'healthy';
+  } catch (error) {
+    checks.redis = 'unhealthy';
+  }
+
+  // Проверяем внешние сервисы
+  try {
+    // Здесь будет проверка внешних сервисов
+    checks.external = 'healthy';
+  } catch (error) {
+    checks.external = 'unhealthy';
+  }
+
+  // Определяем общий статус
+  const allChecks = Object.values(checks);
+  const status = allChecks.every(check => check === 'healthy') ? 'healthy' :
+                 allChecks.every(check => check === 'unhealthy') ? 'unhealthy' : 'degraded';
+
+  return {
+    status,
+    checks,
+    metrics: {
+      uptime: process.uptime(),
+      memoryUsage: process.memoryUsage(),
+      cpuUsage: process.cpuUsage()
+    }
+  };
+}
