@@ -1,13 +1,16 @@
 # 🎵 NormalDance
 
-[![Production Ready](https://img.shields.io/badge/Production-Ready-green.svg)](https://github.com/AENDYSTUDIO/normaldance-production-ready)
+[![Production Ready](https://img.shields.io/badge/Production-Ready-green.svg)](#)
 [![Security](https://img.shields.io/badge/Security-100%25-brightgreen.svg)](./SECURITY.md)
+[![Private Repository](https://img.shields.io/badge/Repository-Private-red.svg)](#)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.0-orange.svg)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.1.0-orange.svg)](./CHANGELOG.md)
 
 **NormalDance** - это инновационная Web3 платформа для создания, распространения и монетизации музыкального контента на базе Solana блокчейна.
 
 > 🚀 **Production Ready** | 🔒 **Enterprise Security** | ⚡ **High Performance** | 🌐 **Web3 Native**
+
+> ⚠️ **ПРИВАТНЫЙ РЕПОЗИТОРИЙ** - Доступ ограничен авторизованными участниками проекта
 
 ## 🔗 Быстрые ссылки
 
@@ -71,8 +74,8 @@ src/
 ### Локальная разработка
 
 ```bash
-# 1. Клонирование репозитория
-git clone https://github.com/AENDYSTUDIO/normaldance-production-ready.git
+# 1. Клонирование приватного репозитория (требуется доступ)
+git clone git@github.com:AENDYSTUDIO/normaldance-production-ready.git
 cd normaldance-production-ready
 
 # 2. Установка зависимостей
@@ -144,10 +147,10 @@ graph TB
 
 ## 📞 Поддержка и контакты
 
-### 👥 Коммьюнити
-- 💬 **GitHub Discussions**: Обсуждения и вопросы
-- 🐛 **Issues**: Баги и предложения
-- 🔄 **Pull Requests**: Вклад в разработку
+### 👥 Команда (Приватный доступ)
+- 💬 **Внутренние обсуждения**: Только для участников проекта
+- 🐛 **Issues**: Доступно только авторизованным пользователям
+- 🔄 **Pull Requests**: Контролируемые вклады
 
 ### 📧 Контакты
 - **Общие вопросы**: info@normaldance.com
