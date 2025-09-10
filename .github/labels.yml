@@ -1,0 +1,106 @@
+# GitHub Labels Configuration
+
+# Priority Labels
+- name: "priority: critical"
+  color: "d73a4a"
+  description: "Critical priority - immediate attention required"
+
+- name: "priority: high"
+  color: "ff6b6b"
+  description: "High priority - should be addressed soon"
+
+- name: "priority: medium"
+  color: "ffa726"
+  description: "Medium priority - normal timeline"
+
+- name: "priority: low"
+  color: "4fc3f7"
+  description: "Low priority - can be addressed later"
+
+# Type Labels
+- name: "type: bug"
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: "type: feature"
+  color: "0e8a16"
+  description: "New feature or request"
+
+- name: "type: enhancement"
+  color: "a2eeef"
+  description: "Enhancement to existing feature"
+
+- name: "type: documentation"
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+- name: "type: security"
+  color: "b60205"
+  description: "Security related issue"
+
+- name: "type: performance"
+  color: "ff9500"
+  description: "Performance improvement"
+
+# Component Labels
+- name: "component: frontend"
+  color: "1d76db"
+  description: "Frontend related (Next.js, React)"
+
+- name: "component: backend"
+  color: "0e8a16"
+  description: "Backend related (Node.js, API)"
+
+- name: "component: web3"
+  color: "8b5cf6"
+  description: "Web3 related (Solana, NFT)"
+
+- name: "component: infrastructure"
+  color: "5319e7"
+  description: "Infrastructure related (K8s, AWS)"
+
+- name: "component: security"
+  color: "b60205"
+  description: "Security components"
+
+- name: "component: database"
+  color: "006b75"
+  description: "Database related (PostgreSQL, Prisma)"
+
+# Status Labels
+- name: "status: in-progress"
+  color: "fbca04"
+  description: "Currently being worked on"
+
+- name: "status: blocked"
+  color: "d73a4a"
+  description: "Blocked by external dependency"
+
+- name: "status: review-needed"
+  color: "0052cc"
+  description: "Needs review from team"
+
+- name: "status: testing"
+  color: "c5def5"
+  description: "In testing phase"
+
+# Size Labels
+- name: "size: xs"
+  color: "c2e0c6"
+  description: "Extra small task (< 1 day)"
+
+- name: "size: s"
+  color: "7057ff"
+  description: "Small task (1-2 days)"
+
+- name: "size: m"
+  color: "008672"
+  description: "Medium task (3-5 days)"
+
+- name: "size: l"
+  color: "e99695"
+  description: "Large task (1-2 weeks)"
+
+- name: "size: xl"
+  color: "b60205"
+  description: "Extra large task (> 2 weeks)"

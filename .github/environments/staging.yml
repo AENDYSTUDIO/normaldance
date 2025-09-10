@@ -1,0 +1,8 @@
+name: staging
+url: https://staging.normaldance.com
+protection_rules:
+  required_reviewers:
+    - AENDYSTUDIO
+deployment_branch_policy:
+  protected_branches: false
+  custom_branch_policies: true

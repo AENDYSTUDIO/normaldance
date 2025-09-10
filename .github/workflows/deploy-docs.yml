@@ -1,0 +1,33 @@
+name: 📚 Deploy Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'docs/**' ]
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+
+    - name: Build docs
+      run: |
+        mkdir -p _site
+        cp -r docs/* _site/
+        
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

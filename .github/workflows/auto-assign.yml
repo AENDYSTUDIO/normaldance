@@ -1,0 +1,36 @@
+name: 🤖 Auto Assign
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto-assign:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Auto assign issues and PRs
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { owner, repo } = context.repo;
+          const assignees = ['AENDYSTUDIO'];
+          
+          if (context.eventName === 'issues') {
+            await github.rest.issues.addAssignees({
+              owner,
+              repo,
+              issue_number: context.issue.number,
+              assignees
+            });
+          }
+          
+          if (context.eventName === 'pull_request') {
+            await github.rest.pulls.requestReviewers({
+              owner,
+              repo,
+              pull_number: context.payload.pull_request.number,
+              reviewers: assignees
+            });
+          }

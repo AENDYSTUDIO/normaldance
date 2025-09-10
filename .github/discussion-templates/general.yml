@@ -1,0 +1,22 @@
+title: "💬 General Discussion"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Добро пожаловать в обсуждения NormalDance!
+
+  - type: input
+    id: topic
+    attributes:
+      label: "Тема обсуждения"
+      placeholder: "Например: Идеи для новых функций"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Описание"
+      placeholder: "Расскажите подробнее..."
+    validations:
+      required: true

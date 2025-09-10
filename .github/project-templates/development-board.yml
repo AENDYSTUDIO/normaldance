@@ -1,0 +1,9 @@
+name: "NormalDance Development Board"
+description: "Main development project board"
+
+columns:
+  - name: "📋 Backlog"
+  - name: "🔄 In Progress"  
+  - name: "👀 Review"
+  - name: "🧪 Testing"
+  - name: "✅ Done"

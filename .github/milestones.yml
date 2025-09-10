@@ -1,0 +1,22 @@
+# GitHub Milestones Configuration
+
+milestones:
+  - title: "v2.3.0 - Advanced Security"
+    description: "Enhanced security features and monitoring"
+    due_date: "2025-01-31"
+    state: "open"
+
+  - title: "v2.4.0 - Performance Optimization"
+    description: "Database optimization and caching improvements"
+    due_date: "2025-02-28"
+    state: "open"
+
+  - title: "v2.5.0 - Mobile App Release"
+    description: "React Native mobile application launch"
+    due_date: "2025-03-31"
+    state: "open"
+
+  - title: "v3.0.0 - Major Release"
+    description: "Major platform upgrade with new features"
+    due_date: "2025-06-30"
+    state: "open"

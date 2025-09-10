@@ -1,0 +1,8 @@
+name: production
+url: https://normaldance.com
+protection_rules:
+  required_reviewers:
+    - AENDYSTUDIO
+  wait_timer: 5
+deployment_branch_policy:
+  protected_branches: true

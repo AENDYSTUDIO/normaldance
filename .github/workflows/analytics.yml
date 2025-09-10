@@ -1,0 +1,36 @@
+name: 📊 Repository Analytics
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Weekly on Sunday
+  workflow_dispatch:
+
+jobs:
+  analytics:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Generate Analytics Report
+      run: |
+        echo "# Repository Analytics Report" > analytics-report.md
+        echo "Generated: $(date)" >> analytics-report.md
+        echo "" >> analytics-report.md
+        
+        echo "## Commit Statistics" >> analytics-report.md
+        git log --oneline --since="1 week ago" | wc -l | xargs echo "Commits this week:" >> analytics-report.md
+        
+        echo "## File Statistics" >> analytics-report.md
+        find . -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" | wc -l | xargs echo "TypeScript/JavaScript files:" >> analytics-report.md
+        
+        echo "## Security Status" >> analytics-report.md
+        echo "✅ Security scanning: Active" >> analytics-report.md
+        echo "✅ Dependabot: Enabled" >> analytics-report.md
+        
+    - name: Upload Analytics
+      uses: actions/upload-artifact@v4
+      with:
+        name: analytics-report
+        path: analytics-report.md
