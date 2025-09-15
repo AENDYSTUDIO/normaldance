@@ -92,3 +92,27 @@ logs/
 test-results/
 test-results/
 .vercel
+
+# Large archives and binaries (prevent accidental commits)
+grafana.zip
+prometheus.zip
+prometheus-*/
+grafana/
+monitoring/grafana/
+monitoring/prometheus/
+*.exe
+*.tar
+*.tar.gz
+*.7z
+*.rar
+*.iso
+
+# Local keys and temp
+/tmp/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+/keys/
+reports/security-audit.json
