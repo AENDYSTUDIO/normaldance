@@ -23,6 +23,10 @@
 SECURITY.md @AENDYSTUDIO
 PRIVACY.md @AENDYSTUDIO
 
+# Additional security ownership
+*.sol @blockchain-leads
+/keys/ @security-leads
+
 # Documentation
 /docs/ @AENDYSTUDIO
 README.md @AENDYSTUDIO
