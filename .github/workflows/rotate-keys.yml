@@ -1,0 +1,21 @@
+name: rotate-keys
+
+on:
+  schedule:
+    - cron: '0 6 * * 5'
+  workflow_dispatch: {}
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rotate keys (Vault placeholder)
+        env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+          VAULT_PATH: secret/normaldance/keys/app
+        run: |
+          echo "Rotating keys in Vault at $VAULT_ADDR/$VAULT_PATH"
+          echo "Rotation complete"
+
