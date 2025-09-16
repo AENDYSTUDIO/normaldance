@@ -120,7 +120,7 @@ export default function ATRDemoPage() {
 
         {/* Main Demo Tabs */}
         <Tabs defaultValue="language" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-white/10 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-6 bg-white/10 backdrop-blur-sm">
             <TabsTrigger value="language" className="data-[state=active]:bg-blue-600">
               <Globe className="h-4 w-4 mr-2" />
               Языки
@@ -133,12 +133,16 @@ export default function ATRDemoPage() {
               <Music className="h-4 w-4 mr-2" />
               Контент
             </TabsTrigger>
+            <TabsTrigger value="compliance" className="data-[state=active]:bg-blue-600">
+              <Shield className="h-4 w-4 mr-2" />
+              Соответствие
+            </TabsTrigger>
             <TabsTrigger value="strategy" className="data-[state=active]:bg-blue-600">
               <Target className="h-4 w-4 mr-2" />
               Стратегия
             </TabsTrigger>
             <TabsTrigger value="implementation" className="data-[state=active]:bg-blue-600">
-              <Shield className="h-4 w-4 mr-2" />
+              <Users className="h-4 w-4 mr-2" />
               Внедрение
             </TabsTrigger>
           </TabsList>
@@ -204,6 +208,11 @@ export default function ATRDemoPage() {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+
+          {/* Regulatory Compliance Tab */}
+          <TabsContent value="compliance">
+            <ATRRegulatoryCompliance />
           </TabsContent>
 
           {/* Strategy Tab */}
