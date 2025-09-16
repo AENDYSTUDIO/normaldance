@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import LanguageSelector from '@/components/atr/LanguageSelector';
 import ATRPaymentMethods from '@/components/atr/ATRPaymentMethods';
+import ATRContentStrategy from '@/components/atr/ATRContentStrategy';
 import { ATRLanguageCode } from '@/lib/i18n/atr-languages';
 import { ATRPaymentMethod } from '@/lib/i18n/atr-payment-integration';
 
@@ -118,7 +119,7 @@ export default function ATRDemoPage() {
 
         {/* Main Demo Tabs */}
         <Tabs defaultValue="language" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-white/10 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-5 bg-white/10 backdrop-blur-sm">
             <TabsTrigger value="language" className="data-[state=active]:bg-blue-600">
               <Globe className="h-4 w-4 mr-2" />
               Языки
@@ -126,6 +127,10 @@ export default function ATRDemoPage() {
             <TabsTrigger value="payments" className="data-[state=active]:bg-blue-600">
               <CreditCard className="h-4 w-4 mr-2" />
               Платежи
+            </TabsTrigger>
+            <TabsTrigger value="content" className="data-[state=active]:bg-blue-600">
+              <Music className="h-4 w-4 mr-2" />
+              Контент
             </TabsTrigger>
             <TabsTrigger value="strategy" className="data-[state=active]:bg-blue-600">
               <Target className="h-4 w-4 mr-2" />
@@ -161,6 +166,33 @@ export default function ATRDemoPage() {
                   </h3>
                   <p className="text-gray-300 mb-4">
                     Перейдите на вкладку "Языки" и выберите язык для просмотра доступных платежных систем
+                  </p>
+                  <Button 
+                    onClick={() => document.querySelector('[value="language"]')?.click()}
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Выбрать язык
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          {/* Content Strategy Tab */}
+          <TabsContent value="content">
+            {selectedLanguage ? (
+              <ATRContentStrategy 
+                language={selectedLanguage}
+              />
+            ) : (
+              <Card className="bg-white/10 backdrop-blur-sm border-white/20">
+                <CardContent className="p-8 text-center">
+                  <Music className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-white text-xl font-semibold mb-2">
+                    Выберите язык для просмотра контентной стратегии
+                  </h3>
+                  <p className="text-gray-300 mb-4">
+                    Перейдите на вкладку "Языки" и выберите язык для просмотра контентных рекомендаций
                   </p>
                   <Button 
                     onClick={() => document.querySelector('[value="language"]')?.click()}
