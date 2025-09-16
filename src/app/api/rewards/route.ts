@@ -71,6 +71,14 @@ export async function GET(request: NextRequest) {
 // POST /api/rewards - Create a new reward (admin only)
 export async function POST(request: NextRequest) {
   try {
+    // Server-side RBAC: Only admins can create rewards
+    const { getServerSession } = await import('next-auth')
+    const { authOptions } = await import('@/lib/auth')
+    const session = await getServerSession(authOptions as any)
+    if (!session || (session.user as any)?.level !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const body = await request.json()
     const { userId, type, amount, reason } = body
 

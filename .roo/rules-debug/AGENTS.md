@@ -1,6 +1,7 @@
 # Project Debug Rules (Non-Obvious Only)
 
 - **Custom server setup**: Debug via `server.ts` not Next.js, Socket.IO on `/api/socketio` path
+- **Socket.IO debugging**: Custom path `/api/socketio`, not standard `/socket.io`
 - **Wallet debugging**: Use custom event emitter in `wallet-adapter.tsx`, not standard wallet-adapter-react patterns
 - **Database**: Global Prisma instance in `src/lib/db.ts`, never create new instances
 - **TypeScript**: Web3 code has relaxed types (`noImplicitAny: false`, `no-non-null-assertion: off`)
@@ -9,4 +10,15 @@
 - **Build process**: Use `tsx` directly, Next.js build disabled
 - **File uploads**: Custom IPFS/Filecoin redundancy system in `src/lib/ipfs-enhanced.ts`
 - **Testing**: Mobile tests require 30-second timeout due to extensive mocking
-- **Socket.IO**: Custom setup in `server.ts`, not standard Next.js configuration
+- **MCP server**: Debug via `npm run mcp:dev` with hot reload
+- **Solana programs**: Fixed program IDs - debugging requires matching these exactly
+- **IPFS debugging**: Multiple gateway fallback system - check all gateways if one fails
+- **Deflationary model**: 2% burn happens automatically - verify burn events in transactions
+- **Fixed program IDs**: NDT_PROGRAM_ID, TRACKNFT_PROGRAM_ID, STAKING_PROGRAM_ID are hardcoded - must match exactly
+- **IPFS chunking**: Large files chunked with manifest - check manifest integrity during debugging
+- **Wallet emitter**: Custom event system in `wallet-adapter.tsx` - debug events via `walletEmitter`
+- **Deflationary economics**: 2% burn with 20% staking, 30% treasury - verify distribution in transactions
+- **Socket.IO server**: Custom `server.ts` handles both Next.js and Socket.IO - debug port conflicts
+- **ESLint disabled**: All rules off for faster builds - no linting errors during debugging
+- **Jest timeout**: 30-second timeout for async operations - adjust for debugging slow operations
+- **Mobile mocking**: All React Native modules mocked - real functionality unavailable in debug mode

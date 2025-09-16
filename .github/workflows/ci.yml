@@ -167,11 +167,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Prisma migrate deploy
+      run: npx prisma migrate deploy
+
     - name: Deploy to production
       run: |
         echo "Deploying to production..."
-        # Add deployment commands here
-        # For example: kubectl apply -f k8s/production/
+        # Using Vercel deploy or Render deploy
+        # vercel deploy --prod
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -190,11 +193,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Prisma migrate deploy (staging)
+      run: npx prisma migrate deploy
+
     - name: Deploy to staging
       run: |
         echo "Deploying to staging..."
-        # Add deployment commands here
-        # For example: kubectl apply -f k8s/staging/
+        # vercel deploy --prebuilt
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_STAGING }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

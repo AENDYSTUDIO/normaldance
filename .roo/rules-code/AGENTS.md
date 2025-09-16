@@ -1,6 +1,7 @@
 # Project Coding Rules (Non-Obvious Only)
 
 - **Custom server setup**: Always use `server.ts` with Socket.IO instead of standard Next.js server
+- **Socket.IO path**: Custom `/api/socketio` path, not standard `/socket.io`
 - **Wallet integration**: Use custom event emitter system in `src/components/wallet/wallet-adapter.tsx`, not standard wallet-adapter-react patterns
 - **Deflationary model**: All token transactions must use `DeflationaryModel` class for automatic 2% burn calculation
 - **Database**: Use global Prisma instance from `src/lib/db.ts`, never create new instances
@@ -8,5 +9,16 @@
 - **Error handling**: Wallet operations return 0 on error instead of throwing (silent failures)
 - **Testing**: Mobile app tests require extensive mocking of React Native modules in `mobile-app/jest.setup.js`
 - **Build process**: Use `tsx` directly for production builds, Next.js build is disabled
-- **Socket.IO**: Custom setup in `server.ts` with path `/api/socketio`, not standard configuration
 - **File uploads**: Use custom IPFS/Filecoin redundancy system in `src/lib/ipfs-enhanced.ts`
+- **MCP server**: Use `tsx watch` for development, standard Node.js for production
+- **Solana programs**: Fixed program IDs in `programs/tracknft/src/lib.rs` - never change these
+- **Transaction handling**: Custom transaction creation in `wallet-adapter.tsx`, not standard Solana patterns
+- **Token formatting**: Always use Russian locale formatting for SOL amounts in `formatSol()`
+- **Fixed program IDs**: NDT_PROGRAM_ID, TRACKNFT_PROGRAM_ID, STAKING_PROGRAM_ID are hardcoded in `wallet-adapter.tsx` - never change
+- **IPFS chunking**: Files >10MB automatically chunked in `ipfs-enhanced.ts` with manifest-based reconstruction
+- **Global wallet emitter**: Use `walletEmitter` from `wallet-adapter.tsx` for custom event system
+- **Deflationary economics**: 2% burn with 20% to staking rewards, 30% to treasury - configured in `deflationary-model.ts`
+- **Socket.IO setup**: Custom server in `server.ts` handles both Next.js and Socket.IO on same port
+- **ESLint configuration**: All rules intentionally disabled in `eslint.config.mjs` for faster builds
+- **Jest timeout**: 30-second timeout for async operations in `jest.config.js`
+- **Mobile app mocking**: Extensive mocking of expo-av, react-native-track-player, and all React Native modules

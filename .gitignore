@@ -116,3 +116,6 @@ monitoring/prometheus/
 *.jks
 /keys/
 reports/security-audit.json
+ 
+# legal signed docs
+legal/IP-Assignment-SIGNED.pdf

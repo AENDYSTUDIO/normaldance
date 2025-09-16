@@ -53,10 +53,13 @@ ingress:
     nginx.ingress.kubernetes.io/rate-limit-window: "1m"
     nginx.ingress.kubernetes.io/limit-rps: "10"
     nginx.ingress.kubernetes.io/limit-connections: "100"
+    nginx.ingress.kubernetes.io/websocket-services: normaldance
   hosts:
     - host: normaldance.app
       paths:
         - path: /
+          pathType: Prefix
+        - path: /api/socketio
           pathType: Prefix
   tls:
     - secretName: normaldance-tls

@@ -50,6 +50,9 @@
       "eas": {
         "projectId": "normaldance-mobile"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }

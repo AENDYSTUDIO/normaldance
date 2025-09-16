@@ -40,6 +40,20 @@ async function createCustomServer() {
       }
     });
 
+    // Optional Redis adapter for multi-replica setups
+    try {
+      // Lazy import to avoid hard dependency in local dev
+      const { createAdapter } = await import('@socket.io/redis-adapter') as any
+      const Redis = (await import('ioredis')).default
+      const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379'
+      const pubClient = new Redis(redisUrl)
+      const subClient = pubClient.duplicate()
+      io.adapter(createAdapter(pubClient, subClient))
+      console.log('Socket.IO Redis adapter enabled')
+    } catch (e) {
+      console.warn('Socket.IO Redis adapter not enabled:', e?.message || e)
+    }
+
     setupSocket(io);
 
     // Start the server

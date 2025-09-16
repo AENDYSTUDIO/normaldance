@@ -3,6 +3,7 @@ import { PhantomWalletAdapter } from '@solana/wallet-adapter-phantom'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base'
 import { useWallet, useConnection } from '@solana/wallet-adapter-react'
+import * as Sentry from '@sentry/nextjs'
 
 // Конфигурация сети
 const NETWORK = WalletAdapterNetwork.Devnet
@@ -20,7 +21,13 @@ export interface WalletAdapter {
 
 // Создание подключения к Solana
 export function createConnection(): Connection {
-  return new Connection(RPC_URL, 'confirmed')
+  const timeoutMs = Number(process.env.SOLANA_RPC_TIMEOUT || '8000')
+  return new Connection(RPC_URL, {
+    commitment: 'confirmed',
+    // Use a fetch with AbortSignal timeout to avoid hanging requests
+    // @ts-ignore - web3.js supports custom fetch
+    fetch: (url: string, options?: any) => fetch(url, { ...options, signal: AbortSignal.timeout(timeoutMs) as any })
+  } as any)
 }
 
 // Инициализация кошелька Phantom
@@ -55,6 +62,7 @@ export function useSolanaWallet() {
       return await wallet.signMessage(message)
     } catch (error) {
       console.error('Error signing message:', error)
+      Sentry.captureException(error)
       throw error
     }
   }
@@ -68,6 +76,7 @@ export function useSolanaWallet() {
       return signature
     } catch (error) {
       console.error('Error sending transaction:', error)
+      Sentry.captureException(error)
       throw error
     }
   }
@@ -80,6 +89,7 @@ export function useSolanaWallet() {
       return balance / LAMPORTS_PER_SOL
     } catch (error) {
       console.error('Error getting balance:', error)
+      Sentry.captureException(error)
       return 0
     }
   }
@@ -94,6 +104,7 @@ export function useSolanaWallet() {
       return 0
     } catch (error) {
       console.error('Error getting token balance:', error)
+      Sentry.captureException(error)
       return 0
     }
   }

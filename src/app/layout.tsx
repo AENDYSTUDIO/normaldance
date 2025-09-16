@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { initMixpanel, trackPageView } from "@/lib/mixpanel";
+import { useEffect } from "react";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -37,6 +39,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Client-only init is guarded in mixpanel util
+  useEffect(() => {
+    initMixpanel()
+    if (typeof window !== 'undefined') {
+      trackPageView(window.location.pathname)
+    }
+  }, [])
+
   return (
     <html lang="ru" suppressHydrationWarning>
       <body

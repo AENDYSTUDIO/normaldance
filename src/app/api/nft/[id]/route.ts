@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { isAdmin } from '@/lib/rbac'
 
 // GET /api/nft/[id] - Get a specific NFT
 export async function GET(
@@ -51,6 +52,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!(await isAdmin())) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     const body = await request.json()
     
     // Only allow updating certain fields
@@ -100,6 +104,9 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    if (!(await isAdmin())) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     await db.nft.delete({
       where: { id: params.id }
     })

@@ -8,10 +8,12 @@ This file provides guidance to agents when working with code in this repository.
 - **Mobile app tests**: `cd mobile-app && npm test` (Separate test environment with extensive mocking)
 - **Development server**: `npm run dev` (Uses nodemon + tsx, not standard Next.js dev server)
 - **Production build**: `npm run build` (Next.js build disabled, uses tsx directly)
+- **MCP server**: `npm run mcp:dev` (Uses tsx watch for hot reload)
 
 ## Critical Architecture Patterns
 
 - **Custom server setup**: Uses `server.ts` with Socket.IO integration, not standard Next.js server
+- **Socket.IO path**: Custom `/api/socketio` path, not standard `/socket.io`
 - **Wallet integration**: Phantom wallet only, custom event emitter system in `src/components/wallet/wallet-adapter.tsx`
 - **Deflationary model**: 2% burn on all transactions, implemented in `src/lib/deflationary-model.ts`
 - **Database**: Prisma with SQLite, global instance pattern in `src/lib/db.ts`
@@ -43,3 +45,37 @@ This file provides guidance to agents when working with code in this repository.
 - **Expo setup**: Custom service layer in `mobile-app/src/services/mobileService.ts`
 - **Audio handling**: Extensive mocking of expo-av for testing
 - **Wallet integration**: Separate from main app, custom mobile wallet service
+
+## File Storage & CDN
+
+- **IPFS/Filecoin redundancy**: Custom system in `src/lib/ipfs-enhanced.ts` with multiple gateway replication
+- **CDN integration**: Automatic fallback to multiple gateways (ipfs.io, pinata.cloud, cloudflare-ipfs.com)
+- **File chunking**: Large files automatically chunked for IPFS upload
+- **Health monitoring**: Automated file availability checking across multiple gateways
+
+## Инвесторская страница
+
+- **Роут**: `/invest`
+- **Файл**: `src/app/invest/page.tsx`
+- **Обновляется вручную** при смене метрик или условий сделки.
+
+## TON Foundation Grant
+
+- **Роут**: `/ton-grant`
+- **Файл**: `src/app/ton-grant/page.tsx`
+- **Цель**: Получение гранта $50,000 + аудит + трафик от TON Foundation
+- **Статус**: Готов к подаче заявки
+
+## Telegram Partnership
+
+- **Роут**: `/telegram-partnership`
+- **Файл**: `src/app/telegram-partnership/page.tsx`
+- **Цель**: Verified Mini-App + Stars revenue share + App Directory
+- **Статус**: Готов к подаче заявки
+
+## Risk Management
+
+- **Роут**: `/risk-management`
+- **Файл**: `src/app/risk-management/page.tsx`
+- **Цель**: 4-ступенчатая модель страховки, анти-хрупкая архитектура
+- **Статус**: Активная стратегия минимизации рисков

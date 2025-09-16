@@ -12,6 +12,17 @@
       "dest": "/$1"
     }
   ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; img-src 'self' https://ipfs.io https://cloudflare-ipfs.com https://gateway.pinata.cloud data:; connect-src 'self' https://ipfs.io https://cloudflare-ipfs.com https://gateway.pinata.cloud https://o450000000000000.ingest.sentry.io https://api.mixpanel.com https://api.stripe.com; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'"
+        }
+      ]
+    }
+  ],
   "env": {
     "NODE_ENV": "production",
     "NEXT_TELEMETRY_DISABLED": "1"

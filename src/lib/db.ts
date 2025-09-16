@@ -7,7 +7,14 @@ const globalForPrisma = globalThis as unknown as {
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: ['query'],
+    log: ['error'],
+    datasources: { db: { url: process.env.DATABASE_URL } },
+    errorFormat: 'minimal',
+    // Non-public option used by Prisma to control connection timeout.
+    // Accepted in practice though marked internal.
+    // Keeps container startup from hanging forever on DB unavailability.
+    // @ts-ignore
+    __internal: { connectTimeout: 10000 }
   })
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db

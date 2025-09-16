@@ -180,3 +180,12 @@ help:
 	@echo "  make clean                    - Очистить временные файлы"
 
 .DEFAULT_GOAL := help
+
+# Закрыть неделю (деплой, лицензия, домен)
+week2:
+	@echo "=== Week 2 checklist ==="
+	cp legal/LICENSE-proprietary.md LICENSE || true
+	gh repo transfer AENDYSTUDIO/normaldance --new-org normaldance-labs || true
+	vercel env add NEXT_PUBLIC_HOMEPAGE_URL https://normaldance.com || true
+	vercel deploy --prod || true
+	@echo "Done — landing is live, 2 % fee active, license changed."

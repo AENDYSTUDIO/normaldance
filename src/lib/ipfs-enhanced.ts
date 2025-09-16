@@ -179,7 +179,7 @@ async function replicateToMultipleGateways(
   for (const gateway of gateways) {
     try {
       const url = `${gateway}/ipfs/${cid}`
-      const response = await fetch(url, { method: 'HEAD' })
+      const response = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000) as any })
       
       if (response.ok) {
         successNodes.push(gateway)
@@ -234,7 +234,7 @@ export async function checkFileAvailabilityOnMultipleGateways(
   for (const gateway of GATEWAYS) {
     try {
       const url = `${gateway}/ipfs/${cid}`
-      const response = await fetch(url, { method: 'HEAD' })
+      const response = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000) as any })
       
       if (response.ok) {
         availableGateways.push(gateway)
@@ -262,12 +262,22 @@ export async function getFileFromBestGateway(cid: string): Promise<Response> {
     throw new Error('File not available on any gateway')
   }
 
-  // Пробуем шлюзы в порядке приоритета
+  // Пробуем шлюзы в порядке приоритета с ограничением числа попыток
+  const fetchWithRetry = async (url: string, tries = 3): Promise<Response> => {
+    for (let i = 0; i < tries; i++) {
+      try {
+        return await fetch(url, { signal: AbortSignal.timeout(8000) as any })
+      } catch (e) {
+        if (i === tries - 1) throw e
+      }
+    }
+    throw new Error('IPFS gateways exhausted')
+  }
+
   for (const gateway of GATEWAYS) {
     try {
       const url = `${gateway}/ipfs/${cid}`
-      const response = await fetch(url)
-      
+      const response = await fetchWithRetry(url, 3)
       if (response.ok) {
         console.log(`File retrieved from ${gateway}`)
         return response

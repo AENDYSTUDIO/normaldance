@@ -1,0 +1,15 @@
+Unused dependencies
+* @types/jsonwebtoken
+* ai
+* jsonwebtoken
+* prisma
+* react-dom
+* redis
+* typescript
+Unused devDependencies
+* @types/jest
+* @types/react-dom
+* eslint
+* eslint-config-next
+* jest
+* tsx

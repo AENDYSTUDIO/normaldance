@@ -34,6 +34,20 @@ export interface TreasuryData {
   lastDistribution: number
 }
 
+// Константы комиссий (basis points)
+export const FEE_BPS = 200 // 2 %
+export const TREASURY_BPS = 600 // 6 % (пример)
+export const STAKING_BPS = 200 // 2 %
+
+export function calcDistribution(amount: number) {
+  const fee = Math.floor((amount * FEE_BPS) / 10_000)
+  const treasury = Math.floor((amount * TREASURY_BPS) / 10_000)
+  const staking = Math.floor((amount * STAKING_BPS) / 10_000)
+  const burn = fee // 2 % burn
+  const net = amount - fee - treasury - staking
+  return { burn, treasury, staking, net }
+}
+
 // Конфигурация дефляционной модели
 export const DEFALATIONARY_CONFIG: DeflationaryConfig = {
   totalSupply: 1000000000, // 1,000,000,000 NDT
@@ -78,14 +92,15 @@ export class DeflationaryModel {
     to: PublicKey,
     reason: string = 'transaction'
   ): Promise<{ transaction: Transaction; burnEvent: BurnEvent }> {
-    const burnAmount = this.calculateBurnAmount(amount)
-    const stakingRewards = this.calculateStakingRewards(burnAmount)
-    const treasuryAmount = this.calculateTreasuryAmount(burnAmount)
+    if (amount <= 0) {
+      throw new Error('Amount must be positive')
+    }
+    const { burn: burnAmount, staking: stakingRewards, treasury: treasuryAmount, net } = calcDistribution(amount)
 
     const transaction = new Transaction()
 
     // 1. Перевод токенов (основная сумма минус burn)
-    const transferAmount = amount - burnAmount
+    const transferAmount = net
     if (transferAmount > 0) {
       // Добавляем инструкцию перевода
       // Здесь нужно использовать SPL Token program
