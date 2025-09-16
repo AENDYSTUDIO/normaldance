@@ -19,6 +19,7 @@ import {
 import LanguageSelector from '@/components/atr/LanguageSelector';
 import ATRPaymentMethods from '@/components/atr/ATRPaymentMethods';
 import ATRContentStrategy from '@/components/atr/ATRContentStrategy';
+import ATRRegulatoryCompliance from '@/components/atr/ATRRegulatoryCompliance';
 import { ATRLanguageCode } from '@/lib/i18n/atr-languages';
 import { ATRPaymentMethod } from '@/lib/i18n/atr-payment-integration';
 
