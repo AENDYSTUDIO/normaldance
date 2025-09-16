@@ -388,7 +388,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// Import all TIER 1 components
+// Import all components
 import { SecretProgressBar } from '@/components/gamification/secret-progress-bar'
 import { ClubNFTSystem } from '@/components/clubs/club-nft-system'
 import { ChatMatrix } from '@/components/chat/chat-matrix'
@@ -773,7 +773,7 @@ export function UnifiedSystem({ className }: UnifiedSystemProps) {
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
                 <Music className="h-5 w-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">TIER 1</span>
+              <span className="text-xl font-bold text-white">NormalDance</span>
             </div>
           </div>
 

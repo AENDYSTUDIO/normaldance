@@ -58,7 +58,7 @@ export default function ChatMatrixDemo() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            🏁 TIER 1: Чат-матрица
+            🏁 Чат-матрица
           </h1>
           <p className="text-xl text-gray-300 mb-6">
             Каждый пользователь одновременно находится в трёх пересекающихся чатах – жанровом, клубном и страновом.
@@ -496,7 +496,7 @@ export default function ChatMatrixDemo() {
                     Жанр, клуб, страна – три кольца, но одна олимпийская логика: <strong>A = A.</strong>
                   </p>
                   <footer className="text-gray-400">
-                    — TIER 1: Чат-матрица Философия
+                    — Чат-матрица Философия
                   </footer>
                 </blockquote>
               </CardContent>

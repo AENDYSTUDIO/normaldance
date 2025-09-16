@@ -72,7 +72,7 @@ export default function AntiPirateDemo() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            🛡️ TIER 1: Anti-Pirate 2.0
+            🛡️ Anti-Pirate 2.0
           </h1>
           <p className="text-xl text-gray-300 mb-6">
             «Бесплатно» = «в поле зрения». Хочешь фоном – плати 1 сат.
@@ -484,7 +484,7 @@ export default function AntiPirateDemo() {
                     Пиратство остаётся, но без удобства – значит без смысла.
                   </p>
                   <footer className="text-gray-400">
-                    — TIER 1: Anti-Pirate 2.0 Философия
+                    — Anti-Pirate 2.0 Философия
                   </footer>
                 </blockquote>
               </CardContent>
