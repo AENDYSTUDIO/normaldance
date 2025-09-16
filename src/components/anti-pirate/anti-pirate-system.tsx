@@ -383,7 +383,7 @@ export function AntiPirateSystem({ className }: AntiPirateSystemProps) {
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white mb-4">
-          🛡️ TIER 1: Anti-Pirate 2.0
+          🛡️ Anti-Pirate 2.0
         </h1>
         <p className="text-lg text-gray-300 mb-6">
           «Бесплатно» = «в поле зрения». Хочешь фоном – плати 1 сат.
@@ -695,7 +695,7 @@ export function AntiPirateSystem({ className }: AntiPirateSystemProps) {
               Пиратство остаётся, но без удобства – значит без смысла.
             </p>
             <footer className="text-gray-400">
-              — TIER 1: Anti-Pirate 2.0 Философия
+              — Anti-Pirate 2.0 Философия
             </footer>
           </blockquote>
         </CardContent>

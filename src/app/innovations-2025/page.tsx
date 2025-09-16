@@ -1,7 +1,7 @@
 /**
  * 🚀 Innovations 2025 - Demo Page
  * 
- * Демонстрация всех инноваций TIER 1 Dual-Currency System 2025
+ * Демонстрация всех инноваций Dual-Currency System 2025
  */
 
 'use client'
@@ -190,7 +190,7 @@ export default function Innovations2025Page() {
             </Badge>
             <Badge variant="outline" className="text-blue-400 border-blue-400 px-4 py-2">
               <Star className="h-4 w-4 mr-2" />
-              TIER 1 Ready
+              Production Ready
             </Badge>
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function Innovations2025Page() {
             <Card className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 border-gray-600">
               <CardHeader>
                 <CardTitle className="text-white text-center">
-                  🎯 Ключевые Преимущества TIER 1 2025
+                  🎯 Ключевые Преимущества 2025
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -367,7 +367,7 @@ export default function Innovations2025Page() {
                     <thead>
                       <tr className="border-b border-gray-600">
                         <th className="text-left py-3 px-4 text-white">Характеристика</th>
-                        <th className="text-center py-3 px-4 text-blue-400 font-bold">TIER 1</th>
+                        <th className="text-center py-3 px-4 text-blue-400 font-bold">NormalDance</th>
                         <th className="text-center py-3 px-4 text-gray-300">Uniswap V4</th>
                         <th className="text-center py-3 px-4 text-gray-300">STON.fi</th>
                         <th className="text-center py-3 px-4 text-gray-300">PancakeSwap</th>
@@ -398,7 +398,7 @@ export default function Innovations2025Page() {
                   🎮 Интерактивная Демонстрация
                 </CardTitle>
                 <p className="text-gray-300 text-center">
-                  Протестируйте все инновации TIER 1 в реальном времени
+                  Протестируйте все инновации в реальном времени
                 </p>
               </CardHeader>
               <CardContent>

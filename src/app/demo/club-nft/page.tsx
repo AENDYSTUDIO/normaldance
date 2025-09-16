@@ -47,7 +47,7 @@ export default function ClubNFTDemo() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            🏛️ TIER 1: Клуб-арист Система
+            🏛️ Клуб-арист Система
           </h1>
           <p className="text-xl text-gray-300 mb-6">
             Лейблы = Спортивные клубы. NFT-членство, прозрачная экономика, децентрализованное управление.
@@ -445,7 +445,7 @@ export default function ClubNFTDemo() {
                     <strong> просто продать Club-NFT.</strong>»
                   </p>
                   <footer className="text-gray-400">
-                    — TIER 1: Клуб-арист Философия
+                    — Клуб-арист Философия
                   </footer>
                 </blockquote>
               </CardContent>

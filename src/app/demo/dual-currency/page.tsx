@@ -59,7 +59,7 @@ export default function DualCurrencyDemo() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            💎 TIER 1: Двойная валютная пара
+            💎 Двойная валютная пара
           </h1>
           <p className="text-xl text-gray-300 mb-6">
             Внутри экосистемы только два актива — TON и NDT. Всё остальное = внешний мост.
@@ -217,7 +217,7 @@ export default function DualCurrencyDemo() {
                           <span className="text-green-400 text-sm">1</span>
                         </div>
                         <div>
-                          <div className="text-white font-semibold">Внешний TON → кошелёк TIER 1</div>
+                          <div className="text-white font-semibold">Внешний TON → кошелёк NormalDance</div>
                           <div className="text-sm text-gray-400">Адрес = ваш username.ton</div>
                         </div>
                       </div>
@@ -432,7 +432,7 @@ export default function DualCurrencyDemo() {
                     <Key className="h-8 w-8 text-blue-400 mx-auto mb-4" />
                     <h3 className="font-semibold text-white mb-2">Ключи</h3>
                     <p className="text-sm text-gray-400">
-                      Пользователь держит seed, TIER 1 шифрует локально
+                      Пользователь держит seed, NormalDance шифрует локально
                     </p>
                   </div>
                   <div className="text-center p-6 bg-green-900/20 rounded-lg">
@@ -508,7 +508,7 @@ export default function DualCurrencyDemo() {
                     Больше никаких BTC, ETH и прочей суеты — только чистая логика двух монет.
                   </p>
                   <footer className="text-gray-400">
-                    — TIER 1: Двойная валютная пара Философия
+                    — Двойная валютная пара Философия
                   </footer>
                 </blockquote>
               </CardContent>

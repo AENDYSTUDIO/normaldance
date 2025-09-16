@@ -225,7 +225,7 @@ export function ClubNFTSystem({ className }: ClubNFTSystemProps) {
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-white mb-4">
-          🏛️ TIER 1: Клуб-арист Система
+          🏛️ Клуб-арист Система
         </h1>
         <p className="text-lg text-gray-300 mb-6">
           Лейблы = Спортивные клубы. NFT-членство, прозрачная экономика, децентрализованное управление.

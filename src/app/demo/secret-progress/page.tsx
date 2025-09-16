@@ -60,7 +60,7 @@ export default function SecretProgressDemo() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-4">
-            🔥 TIER 1: Secret Progress Bar
+            🔥 Secret Progress Bar
           </h1>
           <p className="text-xl text-gray-300 mb-6">
             Фанаты видят движение — но не знают цену. Это создаёт адреналин и вирусность.
