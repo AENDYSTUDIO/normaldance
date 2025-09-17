@@ -1,0 +1,48 @@
+---
+description: Development workflow, build commands, and deployment patterns
+---
+
+# Development Workflow & Commands
+
+## Build & Development Commands
+- **Development**: `npm run dev` (Next.js dev server)
+- **Production build**: `npm run build` (Next.js build disabled, uses tsx directly)
+- **MCP server**: `npm run mcp:dev` (Uses tsx watch for hot reload)
+- **Database**: `npm run db:generate`, `npm run db:migrate`, `npm run db:studio`
+
+## Code Quality & Utilities
+- **Import checking**: `npm run check:imports` (Validates import paths using tsx)
+- **Auto-fix utilities**: `npm run check:detect` (Detects and fixes common issues)
+- **Icon auto-fix**: `npm run check:detect:fix-icons` (Automatically fixes icon-related issues)
+- **Linting**: ESLint intentionally disabled for faster builds
+
+## Testing Workflow
+- **Single test**: `npm test -- --testPathPattern="filename.test.ts"`
+- **Watch mode**: `npm run test:watch`
+- **Coverage**: `npm run test:coverage`
+- **Mobile tests**: `cd mobile-app && npm test`
+
+## Deployment Patterns
+- **Docker**: Multiple Docker configurations for different environments
+- **Kubernetes**: Helm charts in [helm/](mdc:helm/) directory
+- **Environment configs**: Multiple environment configurations
+- **CI/CD**: GitHub Actions and GitLab CI configurations
+
+## Special Routes & Features
+- **Investor page**: `/invest` - manually updated when metrics change
+- **TON Foundation Grant**: `/ton-grant` - ready for $50,000 grant application
+- **Telegram Partnership**: `/telegram-partnership` - ready for Mini-App + Stars revenue share
+- **Risk Management**: `/risk-management` - active 4-step insurance model
+
+## Development Environment
+- **TypeScript**: Relaxed types for Web3 development
+- **Hot reload**: tsx watch for MCP server development
+- **Database**: Prisma with SQLite for development
+- **Redis**: Required for session management and caching
+
+## Project Structure Guidelines
+- **Source code**: All source code in [src/](mdc:src/) directory
+- **Components**: Organized by feature in [src/components/](mdc:src/components/)
+- **Utilities**: Shared utilities in [src/lib/](mdc:src/lib/)
+- **Types**: Type definitions in [types/](mdc:types/) directory
+- **Tests**: Test files in [tests/](mdc:tests/) and component `__tests__` directories

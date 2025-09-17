@@ -17,5 +17,3 @@
 - **ESLint configuration**: All rules intentionally disabled for build performance optimization
 - **Error handling**: Silent failures in wallet operations return 0 instead of throwing exceptions
 - **Transaction flow**: Custom Solana transaction creation not following standard patterns
-- **Deflationary model**: Complex burn calculations with automatic distribution to staking and treasury
-- **Mobile mocking**: Extensive mocking of expo-av, react-native-track-player, and all React Native modules

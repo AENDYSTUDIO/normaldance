@@ -1,0 +1,43 @@
+---
+globs: docs/**/*.md,README*.md,*.md
+description: Documentation standards and markdown guidelines
+---
+
+# Documentation Rules
+
+## Markdown Standards
+- **Structure**: Use proper heading hierarchy (H1 → H2 → H3)
+- **Code blocks**: Use proper language tags for syntax highlighting
+- **Links**: Use relative links for internal documentation
+- **Images**: Store images in appropriate directories with descriptive names
+
+## Documentation Types
+- **API docs**: Document all API endpoints with examples
+- **Component docs**: Document React components with props and usage
+- **Architecture docs**: Document system architecture and design decisions
+- **Deployment docs**: Document deployment procedures and requirements
+
+## Code Documentation
+- **JSDoc**: Use JSDoc for function and class documentation
+- **TypeScript**: Leverage TypeScript types for self-documenting code
+- **Comments**: Write meaningful comments for complex logic
+- **README files**: Maintain up-to-date README files for each module
+
+## Project Documentation
+- **Main README**: Keep [README.md](mdc:README.md) updated with project overview
+- **Contributing**: Maintain [CONTRIBUTING.md](mdc:CONTRIBUTING.md) for contributors
+- **Changelog**: Keep [CHANGELOG.md](mdc:CHANGELOG.md) updated with version changes
+- **Security**: Document security policies in [SECURITY.md](mdc:SECURITY.md)
+
+## Documentation Structure
+- **docs/**: Main documentation directory
+- **API documentation**: Document all API endpoints
+- **Component library**: Document UI components and their usage
+- **Architecture guides**: Document system architecture and patterns
+- **Deployment guides**: Document deployment and infrastructure setup
+
+## Writing Guidelines
+- **Clarity**: Write clear, concise documentation
+- **Examples**: Provide code examples and use cases
+- **Updates**: Keep documentation synchronized with code changes
+- **Accessibility**: Write documentation that's accessible to all skill levels

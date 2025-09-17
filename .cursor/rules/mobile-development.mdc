@@ -1,0 +1,47 @@
+---
+globs: mobile-app/**/*
+description: Mobile app development patterns and React Native guidelines
+---
+
+# Mobile App Development Rules
+
+## React Native & Expo Setup
+- **Framework**: Expo SDK ~50.0.11 with React Native
+- **Navigation**: React Navigation v6 with bottom tabs and native stack
+- **State management**: Zustand for global state
+- **Testing**: Jest with extensive React Native mocking
+
+## Mobile-Specific Dependencies
+- **Audio**: expo-av for audio playback
+- **UI**: React Native components with Expo vector icons
+- **Navigation**: @react-navigation packages
+- **Storage**: AsyncStorage for local data persistence
+
+## Mobile App Structure
+- **Entry point**: [mobile-app/App.tsx](mdc:mobile-app/App.tsx)
+- **Configuration**: [mobile-app/app.json](mdc:mobile-app/app.json)
+- **Package management**: Separate [mobile-app/package.json](mdc:mobile-app/package.json)
+
+## Development Commands
+- **Start**: `cd mobile-app && npm start`
+- **Android**: `cd mobile-app && npm run android`
+- **iOS**: `cd mobile-app && npm run ios`
+- **Build**: `cd mobile-app && npm run build:android/ios`
+
+## Mobile Testing Patterns
+- **Extensive mocking**: All React Native modules mocked in [mobile-app/jest.setup.js](mdc:mobile-app/jest.setup.js)
+- **Expo mocking**: expo-av, expo-constants, expo-font mocked
+- **Navigation mocking**: React Navigation components mocked
+- **Platform mocking**: Platform-specific code mocked
+
+## Mobile UI Guidelines
+- **Responsive design**: Use Flexbox and responsive dimensions
+- **Platform differences**: Handle iOS/Android differences appropriately
+- **Performance**: Optimize for mobile performance and memory usage
+- **Accessibility**: Implement proper accessibility features
+
+## Mobile-Specific Features
+- **Audio playback**: Use expo-av for background audio
+- **Deep linking**: Implement proper deep linking with expo-linking
+- **Push notifications**: Use Expo notifications for mobile alerts
+- **Offline support**: Implement offline-first data strategies

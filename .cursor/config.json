@@ -1,0 +1,54 @@
+{
+  "rules": [
+    {
+      "name": "project-architecture",
+      "description": "Основная архитектура проекта NORMALDANCE",
+      "alwaysApply": true
+    },
+    {
+      "name": "typescript-style", 
+      "description": "Стандарты TypeScript и стиль кода",
+      "globs": ["*.ts", "*.tsx"]
+    },
+    {
+      "name": "web3-solana",
+      "description": "Web3 и блокчейн Solana разработка",
+      "globs": ["src/components/wallet/*", "src/lib/deflationary-model.ts", "programs/**/*"]
+    },
+    {
+      "name": "mobile-development",
+      "description": "Разработка мобильных приложений React Native",
+      "globs": ["mobile-app/**/*"]
+    },
+    {
+      "name": "testing-patterns",
+      "description": "Паттерны тестирования и Jest конфигурация",
+      "globs": ["*.test.ts", "*.test.tsx", "*.spec.ts", "*.spec.tsx"]
+    },
+    {
+      "name": "security-validation",
+      "description": "Паттерны безопасности и валидации",
+      "globs": ["src/api/**", "src/lib/auth.ts", "src/lib/validation.ts", "src/middleware/**"]
+    },
+    {
+      "name": "deployment-infrastructure",
+      "description": "Развертывание, CI/CD и инфраструктура",
+      "globs": ["docker-compose*.yml", "Dockerfile*", "deploy-*.js", "scripts/deploy-*", "helm/**/*", "k8s/**/*"]
+    },
+    {
+      "name": "audio-processing",
+      "description": "Обработка аудио, воспроизведение и Web Audio API",
+      "globs": ["src/components/audio/**", "src/lib/audio-*", "src/hooks/useAudio*"]
+    },
+    {
+      "name": "state-management",
+      "description": "Паттерны управления состоянием с Zustand и React хуками",
+      "globs": ["src/store/**", "src/lib/store-*", "src/hooks/useStore*"]
+    }
+  ],
+  "settings": {
+    "autoApplyRules": true,
+    "suggestRules": true,
+    "ruleDescriptions": true
+  }
+}

@@ -1,0 +1,42 @@
+---
+globs: src/store/**,src/lib/store-*,src/hooks/useStore*
+description: State management patterns with Zustand and React hooks
+---
+
+# State Management Rules
+
+## Zustand Store Patterns
+- **Global state**: Use Zustand for global application state
+- **Store structure**: Organize stores by feature/domain
+- **Actions**: Define clear actions for state mutations
+- **Selectors**: Use selectors for computed state values
+
+## Store Organization
+- **Feature stores**: Create separate stores for different features
+- **Shared stores**: Use shared stores for common state (user, auth)
+- **Local state**: Use React state for component-specific state
+- **Server state**: Use React Query for server state management
+
+## State Patterns
+- **Immutable updates**: Always use immutable state updates
+- **Normalization**: Normalize nested data structures
+- **Optimistic updates**: Implement optimistic updates for better UX
+- **Error handling**: Handle state errors gracefully
+
+## React Hooks Integration
+- **Custom hooks**: Create custom hooks for store interactions
+- **useEffect**: Use useEffect for side effects with store state
+- **Dependencies**: Properly manage dependencies in hooks
+- **Cleanup**: Implement proper cleanup in custom hooks
+
+## Performance Optimization
+- **Memoization**: Use React.memo and useMemo for performance
+- **Selective updates**: Use selectors to prevent unnecessary re-renders
+- **Batch updates**: Batch multiple state updates together
+- **Lazy initialization**: Use lazy initialization for expensive stores
+
+## State Persistence
+- **Local storage**: Persist important state to localStorage
+- **Session storage**: Use sessionStorage for temporary state
+- **Hydration**: Properly hydrate state from storage
+- **Serialization**: Handle state serialization/deserialization

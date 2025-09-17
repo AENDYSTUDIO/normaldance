@@ -17,4 +17,3 @@
 - **ESLint disabled**: All rules intentionally off for build speed - linting errors are expected
 - **Jest timeout**: 30-second timeout for async operations - increase timeout for slow tests
 - **IPFS gateways**: Multiple fallback gateways (ipfs.io, pinata.cloud, cloudflare-ipfs.com) - check gateway availability
-- **Test environment**: Separate Jest configs for main app and mobile - verify test setup for each environment

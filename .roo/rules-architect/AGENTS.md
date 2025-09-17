@@ -20,4 +20,3 @@
 - **File handling**: Large files automatically chunked with manifest-based reconstruction
 - **Event system**: Global wallet emitter for custom event handling across application
 - **Mocking strategy**: Extensive React Native module mocking for mobile app testing
-- **Error recovery**: Automatic fallback to multiple IPFS gateways for file availability

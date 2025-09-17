@@ -1,0 +1,36 @@
+---
+globs: src/api/**,src/lib/auth.ts,src/lib/validation.ts,src/middleware/**
+description: Security patterns, validation, and authentication rules
+---
+
+# Security & Validation Rules
+
+## Authentication & Authorization
+- **Session management**: Use Redis for session storage and validation
+- **JWT tokens**: Implement proper JWT token validation and refresh
+- **API protection**: All API routes must have proper authentication middleware
+- **Role-based access**: Implement RBAC for different user types (artist, listener, admin)
+
+## Input Validation
+- **Schema validation**: Use Zod for all input validation schemas
+- **Sanitization**: Sanitize all user inputs before database operations
+- **File uploads**: Validate file types, sizes, and content before processing
+- **SQL injection**: Use Prisma ORM to prevent SQL injection attacks
+
+## Web3 Security
+- **Wallet validation**: Always validate wallet signatures and addresses
+- **Transaction verification**: Verify transaction signatures before processing
+- **Program ID validation**: Never trust user-provided program IDs
+- **Rate limiting**: Implement rate limiting for Web3 operations
+
+## Data Protection
+- **Encryption**: Encrypt sensitive data at rest and in transit
+- **PII handling**: Properly handle personally identifiable information
+- **GDPR compliance**: Implement data deletion and export functionality
+- **Audit logging**: Log all security-relevant operations
+
+## Error Handling Security
+- **Information disclosure**: Don't expose sensitive information in error messages
+- **Logging**: Log security events without exposing sensitive data
+- **Error boundaries**: Implement proper error boundaries for security
+- **Graceful degradation**: Handle security failures gracefully

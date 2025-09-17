@@ -1,0 +1,49 @@
+---
+globs: src/mcp/**/*,src/lib/socket.ts,server.ts
+description: MCP server, Socket.IO, and real-time communication patterns
+---
+
+# MCP Server & Real-time Communication
+
+## MCP (Model Context Protocol) Server
+- **Server location**: [src/mcp/server.ts](mdc:src/mcp/server.ts)
+- **Development**: Use `npm run mcp:dev` (tsx watch for hot reload)
+- **Production**: Use `npm run mcp:start` (standard Node.js)
+- **Providers**: Music, User, NFT, and Staking context providers
+
+## Custom Protocol System
+- **URI schemes**: Custom `protocol://` URI system
+  - `track://` - Music track references
+  - `user://` - User profile references  
+  - `nft://` - NFT token references
+  - `staking://` - Staking pool references
+
+## Socket.IO Integration
+- **Custom server**: [server.ts](mdc:server.ts) with Socket.IO instead of standard Next.js
+- **Custom path**: `/api/socketio` instead of standard `/socket.io`
+- **Redis adapter**: Use Redis for Socket.IO scaling
+- **Event handling**: Custom event system for real-time features
+
+## Real-time Features
+- **Music streaming**: Real-time audio streaming and synchronization
+- **Chat system**: Matrix-based chat integration
+- **Notifications**: Real-time notification system
+- **Live updates**: Real-time updates for staking, trading, and NFT events
+
+## Server Architecture
+- **HTTP server**: Custom HTTP server handling both Next.js and Socket.IO
+- **Request routing**: Skip socket.io requests from Next.js handler
+- **Port configuration**: Configurable port with environment variables
+- **Error handling**: Proper error handling and logging
+
+## Development Patterns
+- **Hot reload**: tsx watch for development server
+- **Environment detection**: Proper dev/production environment handling
+- **Logging**: Winston logger for server-side logging
+- **Monitoring**: Sentry integration for error tracking
+
+## Communication Protocols
+- **WebSocket**: Socket.IO for bidirectional communication
+- **REST API**: Next.js API routes for HTTP requests
+- **MCP Protocol**: Custom protocol for AI model context
+- **Event system**: Custom event emitter for wallet and Web3 operations

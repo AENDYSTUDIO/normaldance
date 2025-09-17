@@ -1,0 +1,39 @@
+---
+globs: *.test.ts,*.test.tsx,*.spec.ts,*.spec.tsx
+description: Testing patterns and Jest configuration
+---
+
+# Testing Rules & Patterns
+
+## Test Environment Setup
+- **Dual test environments**: Separate Jest configs for main app ([jest.config.js](mdc:jest.config.js)) and mobile app ([mobile-app/jest.setup.js](mdc:mobile-app/jest.setup.js))
+- **Test timeout**: 30-second timeout for async operations
+- **Coverage**: Excludes `__tests__` directories from coverage reports
+
+## Test Commands
+- **Single test execution**: `npm test -- --testPathPattern="filename.test.ts"`
+- **Mobile app tests**: `cd mobile-app && npm test`
+- **Watch mode**: `npm run test:watch`
+- **Coverage**: `npm run test:coverage`
+
+## Mobile App Testing
+- **Extensive mocking**: Mobile app mocks all React Native modules, expo libraries, and WebSocket
+- **Mocked modules**: expo-av, react-native-track-player, and all React Native modules
+- **Test environment**: Uses jsdom environment with custom setup
+
+## Testing Patterns
+- **Wallet testing**: Mock Solana wallet operations and return expected values
+- **Database testing**: Use test database instances, not production
+- **API testing**: Mock external API calls and WebSocket connections
+- **Component testing**: Use React Testing Library with proper mocking
+
+## Test File Organization
+- **Unit tests**: Place in `__tests__` directories within component folders
+- **Integration tests**: Use `tests/` directory at project root
+- **Mobile tests**: Place in `mobile-app/src/__tests__/`
+
+## Mocking Guidelines
+- **Web3 operations**: Mock all Solana wallet and transaction operations
+- **External APIs**: Mock IPFS, CDN, and external service calls
+- **Database**: Use in-memory or test database instances
+- **File operations**: Mock file upload and IPFS operations
