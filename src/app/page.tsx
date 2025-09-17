@@ -232,19 +232,19 @@ export default function Home() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Активных слушателей</span>
-                  <span className="font-bold">2,847</span>
+                  <span className="font-bold">0</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Треков сегодня</span>
-                  <span className="font-bold">156</span>
+                  <span className="font-bold">0</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Новых артистов</span>
-                  <span className="font-bold">23</span>
+                  <span className="font-bold">0</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Воспроизведений</span>
-                  <span className="font-bold">45.2K</span>
+                  <span className="font-bold">0</span>
                 </div>
               </CardContent>
             </Card>
