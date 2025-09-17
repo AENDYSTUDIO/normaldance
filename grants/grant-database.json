@@ -1,0 +1,353 @@
+{
+  "grants": [
+    {
+      "id": "ton-foundation-2025",
+      "name": "TON Foundation Grants Program",
+      "organization": "TON Foundation",
+      "amount": {
+        "min": 50000,
+        "max": 200000,
+        "currency": "USD"
+      },
+      "category": "blockchain",
+      "subcategory": "Web3",
+      "description": "Grants for blockchain projects building on TON ecosystem, especially music and NFT platforms",
+      "eligibility": {
+        "individuals": true,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "blockchain development",
+        "project_stage": "MVP or early stage"
+      },
+      "requirements": [
+        "Project must use TON blockchain",
+        "Open source code",
+        "Technical documentation",
+        "Community impact",
+        "Innovation in music/entertainment"
+      ],
+      "deadline": "2025-03-31",
+      "application_url": "https://ton.org/grants",
+      "contact": "grants@ton.org",
+      "priority": "high",
+      "success_rate": 0.15,
+      "notes": "Perfect fit for NormalDance - music NFT platform on TON"
+    },
+    {
+      "id": "telegram-stars-2025",
+      "name": "Telegram Stars Revenue Share Program",
+      "organization": "Telegram",
+      "amount": {
+        "min": 10000,
+        "max": 100000,
+        "currency": "USD"
+      },
+      "category": "platform",
+      "subcategory": "Mini Apps",
+      "description": "Revenue sharing program for verified Telegram Mini Apps with Stars integration",
+      "eligibility": {
+        "individuals": true,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "Telegram Bot API",
+        "project_stage": "working prototype"
+      },
+      "requirements": [
+        "Telegram Mini App",
+        "Stars payment integration",
+        "Verified developer account",
+        "Active user base",
+        "Compliance with Telegram ToS"
+      ],
+      "deadline": "2025-06-30",
+      "application_url": "https://core.telegram.org/bots/stars",
+      "contact": "stars@telegram.org",
+      "priority": "high",
+      "success_rate": 0.25,
+      "notes": "NormalDance can integrate as Telegram Mini App"
+    },
+    {
+      "id": "ethereum-foundation-2025",
+      "name": "Ethereum Foundation Grants",
+      "organization": "Ethereum Foundation",
+      "amount": {
+        "min": 25000,
+        "max": 150000,
+        "currency": "USD"
+      },
+      "category": "blockchain",
+      "subcategory": "Ethereum",
+      "description": "Grants for projects building on Ethereum ecosystem, including music and NFT platforms",
+      "eligibility": {
+        "individuals": true,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "Ethereum development",
+        "project_stage": "any"
+      },
+      "requirements": [
+        "Ethereum-based project",
+        "Open source",
+        "Technical innovation",
+        "Community benefit",
+        "Documentation"
+      ],
+      "deadline": "2025-04-15",
+      "application_url": "https://ethereum.org/en/community/grants/",
+      "contact": "grants@ethereum.org",
+      "priority": "medium",
+      "success_rate": 0.12,
+      "notes": "Good for cross-chain integration"
+    },
+    {
+      "id": "solana-foundation-2025",
+      "name": "Solana Foundation Grants",
+      "organization": "Solana Foundation",
+      "amount": {
+        "min": 30000,
+        "max": 100000,
+        "currency": "USD"
+      },
+      "category": "blockchain",
+      "subcategory": "Solana",
+      "description": "Grants for projects building on Solana blockchain, including music and entertainment",
+      "eligibility": {
+        "individuals": true,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "Solana development",
+        "project_stage": "any"
+      },
+      "requirements": [
+        "Solana-based project",
+        "Technical innovation",
+        "Open source preferred",
+        "Community impact",
+        "Documentation"
+      ],
+      "deadline": "2025-05-31",
+      "application_url": "https://solana.org/grants",
+      "contact": "grants@solana.org",
+      "priority": "medium",
+      "success_rate": 0.18,
+      "notes": "Good for high-performance music streaming"
+    },
+    {
+      "id": "polygon-grants-2025",
+      "name": "Polygon Grants Program",
+      "organization": "Polygon",
+      "amount": {
+        "min": 20000,
+        "max": 80000,
+        "currency": "USD"
+      },
+      "category": "blockchain",
+      "subcategory": "Polygon",
+      "description": "Grants for projects building on Polygon ecosystem, including NFT and music platforms",
+      "eligibility": {
+        "individuals": true,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "Polygon development",
+        "project_stage": "any"
+      },
+      "requirements": [
+        "Polygon-based project",
+        "Innovation",
+        "Community benefit",
+        "Documentation",
+        "Open source preferred"
+      ],
+      "deadline": "2025-07-15",
+      "application_url": "https://polygon.technology/grants",
+      "contact": "grants@polygon.technology",
+      "priority": "medium",
+      "success_rate": 0.20,
+      "notes": "Good for low-cost NFT transactions"
+    },
+    {
+      "id": "web3-foundation-2025",
+      "name": "Web3 Foundation Grants",
+      "organization": "Web3 Foundation",
+      "amount": {
+        "min": 10000,
+        "max": 100000,
+        "currency": "USD"
+      },
+      "category": "blockchain",
+      "subcategory": "Web3",
+      "description": "Grants for Web3 infrastructure and applications, including music and entertainment",
+      "eligibility": {
+        "individuals": true,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "Web3 development",
+        "project_stage": "any"
+      },
+      "requirements": [
+        "Web3 project",
+        "Technical innovation",
+        "Open source",
+        "Community benefit",
+        "Documentation"
+      ],
+      "deadline": "2025-08-31",
+      "application_url": "https://web3.foundation/grants/",
+      "contact": "grants@web3.foundation",
+      "priority": "medium",
+      "success_rate": 0.15,
+      "notes": "Good for Web3 infrastructure"
+    },
+    {
+      "id": "music-tech-grants-2025",
+      "name": "Music Technology Innovation Grants",
+      "organization": "Music Tech Foundation",
+      "amount": {
+        "min": 15000,
+        "max": 75000,
+        "currency": "USD"
+      },
+      "category": "music",
+      "subcategory": "technology",
+      "description": "Grants for innovative music technology projects, including blockchain and NFT platforms",
+      "eligibility": {
+        "individuals": true,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "music technology",
+        "project_stage": "any"
+      },
+      "requirements": [
+        "Music technology innovation",
+        "Technical feasibility",
+        "Market potential",
+        "Documentation",
+        "Demo or prototype"
+      ],
+      "deadline": "2025-09-30",
+      "application_url": "https://musictechfoundation.org/grants",
+      "contact": "grants@musictechfoundation.org",
+      "priority": "high",
+      "success_rate": 0.22,
+      "notes": "Perfect fit for music NFT platform"
+    },
+    {
+      "id": "startup-accelerator-2025",
+      "name": "Techstars Music Accelerator",
+      "organization": "Techstars",
+      "amount": {
+        "min": 120000,
+        "max": 120000,
+        "currency": "USD"
+      },
+      "category": "accelerator",
+      "subcategory": "music",
+      "description": "3-month accelerator program for music technology startups with funding and mentorship",
+      "eligibility": {
+        "individuals": false,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "startup experience",
+        "project_stage": "early stage"
+      },
+      "requirements": [
+        "Music technology startup",
+        "Working prototype",
+        "Team of 2+ people",
+        "Market validation",
+        "Commitment to program"
+      ],
+      "deadline": "2025-02-28",
+      "application_url": "https://www.techstars.com/accelerators/music",
+      "contact": "music@techstars.com",
+      "priority": "high",
+      "success_rate": 0.08,
+      "notes": "Need to incorporate company first"
+    },
+    {
+      "id": "y-combinator-2025",
+      "name": "Y Combinator",
+      "organization": "Y Combinator",
+      "amount": {
+        "min": 500000,
+        "max": 500000,
+        "currency": "USD"
+      },
+      "category": "accelerator",
+      "subcategory": "general",
+      "description": "3-month accelerator program for startups with funding and mentorship",
+      "eligibility": {
+        "individuals": false,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "startup experience",
+        "project_stage": "any"
+      },
+      "requirements": [
+        "Startup company",
+        "Working prototype",
+        "Team of 2+ people",
+        "Market potential",
+        "Commitment to program"
+      ],
+      "deadline": "2025-01-15",
+      "application_url": "https://www.ycombinator.com/apply",
+      "contact": "apply@ycombinator.com",
+      "priority": "high",
+      "success_rate": 0.03,
+      "notes": "Most competitive, need company incorporation"
+    },
+    {
+      "id": "google-startup-2025",
+      "name": "Google for Startups",
+      "organization": "Google",
+      "amount": {
+        "min": 100000,
+        "max": 100000,
+        "currency": "USD"
+      },
+      "category": "accelerator",
+      "subcategory": "tech",
+      "description": "Accelerator program for tech startups with Google Cloud credits and mentorship",
+      "eligibility": {
+        "individuals": false,
+        "companies": true,
+        "age_restriction": null,
+        "location_restriction": "global",
+        "experience_required": "tech startup",
+        "project_stage": "early stage"
+      },
+      "requirements": [
+        "Tech startup",
+        "Working prototype",
+        "Team of 2+ people",
+        "Google Cloud usage",
+        "Commitment to program"
+      ],
+      "deadline": "2025-03-31",
+      "application_url": "https://startup.google.com/",
+      "contact": "startups@google.com",
+      "priority": "medium",
+      "success_rate": 0.12,
+      "notes": "Good for cloud infrastructure"
+    }
+  ],
+  "categories": [
+    "blockchain",
+    "music",
+    "accelerator",
+    "platform",
+    "technology"
+  ],
+  "total_available_funding": 1500000,
+  "last_updated": "2025-01-17"
+}
