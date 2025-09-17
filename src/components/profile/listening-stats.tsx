@@ -74,80 +74,80 @@ export function ListeningStats({ className }: ListeningStatsProps) {
   // Mock data - в реальном приложении это будет загружаться из API
   useEffect(() => {
     const mockStats: ListeningStats = {
-      totalPlayTime: 12450, // minutes
-      totalTracksPlayed: 3420,
-      uniqueArtists: 156,
-      uniqueGenres: 23,
+      totalPlayTime: 0, // minutes
+      totalTracksPlayed: 0,
+      uniqueArtists: 0,
+      uniqueGenres: 0,
       favoriteGenres: [
-        { genre: 'Electronic', playCount: 4520, percentage: 36 },
-        { genre: 'Hip-Hop', playCount: 3120, percentage: 25 },
-        { genre: 'Pop', playCount: 2180, percentage: 17 },
-        { genre: 'Rock', playCount: 1560, percentage: 13 },
-        { genre: 'Jazz', playCount: 670, percentage: 5 },
-        { genre: 'Classical', playCount: 400, percentage: 3 }
+        { genre: 'Electronic', playCount: 0, percentage: 0 },
+        { genre: 'Hip-Hop', playCount: 0, percentage: 0 },
+        { genre: 'Pop', playCount: 0, percentage: 0 },
+        { genre: 'Rock', playCount: 0, percentage: 0 },
+        { genre: 'Jazz', playCount: 0, percentage: 0 },
+        { genre: 'Classical', playCount: 0, percentage: 0 }
       ],
       listeningPatterns: {
         byDayOfWeek: [
-          { day: 'Пн', minutes: 180 },
-          { day: 'Вт', minutes: 220 },
-          { day: 'Ср', minutes: 160 },
-          { day: 'Чт', minutes: 240 },
-          { day: 'Пт', minutes: 320 },
-          { day: 'Сб', minutes: 450 },
-          { day: 'Вс', minutes: 380 }
+          { day: 'Пн', minutes: 0 },
+          { day: 'Вт', minutes: 0 },
+          { day: 'Ср', minutes: 0 },
+          { day: 'Чт', minutes: 0 },
+          { day: 'Пт', minutes: 0 },
+          { day: 'Сб', minutes: 0 },
+          { day: 'Вс', minutes: 0 }
         ],
         byTimeOfDay: [
-          { hour: 0, minutes: 20 },
-          { hour: 1, minutes: 15 },
-          { hour: 2, minutes: 10 },
-          { hour: 3, minutes: 5 },
-          { hour: 4, minutes: 5 },
-          { hour: 5, minutes: 10 },
-          { hour: 6, minutes: 30 },
-          { hour: 7, minutes: 80 },
-          { hour: 8, minutes: 120 },
-          { hour: 9, minutes: 90 },
-          { hour: 10, minutes: 60 },
-          { hour: 11, minutes: 70 },
-          { hour: 12, minutes: 110 },
-          { hour: 13, minutes: 100 },
-          { hour: 14, minutes: 90 },
-          { hour: 15, minutes: 85 },
-          { hour: 16, minutes: 95 },
-          { hour: 17, minutes: 120 },
-          { hour: 18, minutes: 140 },
-          { hour: 19, minutes: 160 },
-          { hour: 20, minutes: 180 },
-          { hour: 21, minutes: 200 },
-          { hour: 22, minutes: 150 },
-          { hour: 23, minutes: 100 }
+          { hour: 0, minutes: 0 },
+          { hour: 1, minutes: 0 },
+          { hour: 2, minutes: 0 },
+          { hour: 3, minutes: 0 },
+          { hour: 4, minutes: 0 },
+          { hour: 5, minutes: 0 },
+          { hour: 6, minutes: 0 },
+          { hour: 7, minutes: 0 },
+          { hour: 8, minutes: 0 },
+          { hour: 9, minutes: 0 },
+          { hour: 10, minutes: 0 },
+          { hour: 11, minutes: 0 },
+          { hour: 12, minutes: 0 },
+          { hour: 13, minutes: 0 },
+          { hour: 14, minutes: 0 },
+          { hour: 15, minutes: 0 },
+          { hour: 16, minutes: 0 },
+          { hour: 17, minutes: 0 },
+          { hour: 18, minutes: 0 },
+          { hour: 19, minutes: 0 },
+          { hour: 20, minutes: 0 },
+          { hour: 21, minutes: 0 },
+          { hour: 22, minutes: 0 },
+          { hour: 23, minutes: 0 }
         ]
       },
       topArtists: [
-        { artistName: 'DJ Martin', playCount: 320 },
-        { artistName: 'Luna Beats', playCount: 280 },
-        { artistName: 'Electronic Masters', playCount: 240 },
-        { artistName: 'Sound Wave', playCount: 200 },
-        { artistName: 'Night Rider', playCount: 180 }
+        { artistName: 'No Artists', playCount: 0 },
+        { artistName: 'No Artists', playCount: 0 },
+        { artistName: 'No Artists', playCount: 0 },
+        { artistName: 'No Artists', playCount: 0 },
+        { artistName: 'No Artists', playCount: 0 }
       ],
       topTracks: [
-        { title: 'Summer Vibes', artistName: 'DJ Martin', playCount: 156 },
-        { title: 'Midnight Dreams', artistName: 'Luna Beats', playCount: 142 },
-        { title: 'Electric Pulse', artistName: 'Electronic Masters', playCount: 128 },
-        { title: 'Urban Flow', artistName: 'Sound Wave', playCount: 115 },
-        { title: 'Night Drive', artistName: 'Night Rider', playCount: 98 }
+        { title: 'No Tracks', artistName: 'No Artists', playCount: 0 },
+        { title: 'No Tracks', artistName: 'No Artists', playCount: 0 },
+        { title: 'No Tracks', artistName: 'No Artists', playCount: 0 },
+        { title: 'No Tracks', artistName: 'No Artists', playCount: 0 },
+        { title: 'No Tracks', artistName: 'No Artists', playCount: 0 }
       ],
       achievements: [
-        { name: 'Меломан', description: 'Прослушано 100+ часов', icon: '🎧', unlocked: true },
-        { name: 'Эксперт', description: 'Открыто 50+ артистов', icon: '🎵', unlocked: true },
-        { name: 'Разнообразие', description: 'Прослушано 20+ жанров', icon: '🎼', unlocked: false },
-        { name: 'Ночной сова', description: 'Прослушано 50+ часов ночью', icon: '🦉', unlocked: false }
+        { name: 'Нет достижений', description: 'Пока нет активности', icon: '🎧', unlocked: false },
+        { name: 'Нет достижений', description: 'Пока нет активности', icon: '🎵', unlocked: false },
+        { name: 'Нет достижений', description: 'Пока нет активности', icon: '🎼', unlocked: false },
+        { name: 'Нет достижений', description: 'Пока нет активности', icon: '🦉', unlocked: false }
       ],
       monthlyProgress: [
-        { month: 'Янв', minutes: 2800 },
-        { month: 'Фев', minutes: 3200 },
-        { month: 'Мар', minutes: 2950 },
-        { month: 'Апр', minutes: 3500 }
+        { month: 'Янв', minutes: 0 },
+        { month: 'Фев', minutes: 0 },
+        { month: 'Мар', minutes: 0 },
+        { month: 'Апр', minutes: 0 }
       ]
     }
 

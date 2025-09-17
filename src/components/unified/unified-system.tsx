@@ -436,31 +436,31 @@ export function UnifiedSystem({ className }: UnifiedSystemProps) {
   // Mock data - в реальном приложении будет загружаться из API
   const mockUserProfile: UserProfile = {
     id: 'user-123',
-    name: 'Luna Nova',
-    avatar: '/avatars/luna.jpg',
-    level: 'Gold',
-    balance: 1250.5,
-    tonBalance: 45.2,
-    clubMemberships: 2,
-    activePasses: 3,
-    totalEarnings: 567.8,
-    achievements: 15,
+    name: 'Solo Developer',
+    avatar: '/avatars/developer.jpg',
+    level: 'Developer',
+    balance: 0,
+    tonBalance: 0,
+    clubMemberships: 0,
+    activePasses: 0,
+    totalEarnings: 0,
+    achievements: 0,
     isOnline: true,
     lastActive: Date.now() - 300000
   }
 
   const mockSystemStats: SystemStats = {
-    totalUsers: 12547,
-    activeUsers: 8923,
-    totalTracks: 45678,
-    totalClubs: 127,
-    totalRevenue: 125000.5,
-    totalNDT: 9876543.2,
-    totalTON: 45678.9,
-    activeSessions: 2345,
-    chatMessages: 56789,
-    votes: 12345,
-    passes: 2345
+    totalUsers: 0,
+    activeUsers: 0,
+    totalTracks: 0,
+    totalClubs: 0,
+    totalRevenue: 0,
+    totalNDT: 0,
+    totalTON: 0,
+    activeSessions: 0,
+    chatMessages: 0,
+    votes: 0,
+    passes: 0
   }
 
   const mockNotifications = [

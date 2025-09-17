@@ -32,26 +32,26 @@ import { DualCurrencySystem } from '@/components/dex/dual-currency-system'
 export default function MusicDEXPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTrack, setCurrentTrack] = useState({
-    title: 'Digital Dreams',
-    artist: 'NeonBeats',
-    genre: 'Electronic',
-    price: 0.5,
-    plays: 125000
+    title: 'No Tracks',
+    artist: 'No Artists',
+    genre: 'None',
+    price: 0,
+    plays: 0
   })
 
   const topTracks = [
-    { title: 'Digital Dreams', artist: 'NeonBeats', genre: 'Electronic', price: 0.5, plays: 125000, trend: 'rising' },
-    { title: 'Crypto Symphony', artist: 'BlockchainBard', genre: 'Classical', price: 0.8, plays: 98000, trend: 'falling' },
-    { title: 'DeFi Dance', artist: 'TokenTunes', genre: 'Hip-Hop', price: 0.3, plays: 156000, trend: 'rising' },
-    { title: 'NFT Vibes', artist: 'DigitalDJ', genre: 'House', price: 0.6, plays: 89000, trend: 'stable' }
+    { title: 'No Tracks', artist: 'No Artists', genre: 'None', price: 0, plays: 0, trend: 'stable' },
+    { title: 'No Tracks', artist: 'No Artists', genre: 'None', price: 0, plays: 0, trend: 'stable' },
+    { title: 'No Tracks', artist: 'No Artists', genre: 'None', price: 0, plays: 0, trend: 'stable' },
+    { title: 'No Tracks', artist: 'No Artists', genre: 'None', price: 0, plays: 0, trend: 'stable' }
   ]
 
   const stats = {
-    totalTracks: 127,
-    totalArtists: 45,
-    totalPlays: 2500000,
-    totalVolume: 150000,
-    averagePrice: 0.55
+    totalTracks: 0,
+    totalArtists: 0,
+    totalPlays: 0,
+    totalVolume: 0,
+    averagePrice: 0
   }
 
   return (
@@ -66,8 +66,8 @@ export default function MusicDEXPage() {
             </h1>
           </div>
           <p className="text-2xl text-gray-300 mb-8 max-w-4xl mx-auto">
-            Первая в мире музыкальная DeFi платформа с NFT треками, 
-            гибридными алгоритмами AMM и защитой от волатильности
+            Музыкальная DeFi платформа в разработке. 
+            Solo разработчик, 0 пользователей, 0 треков, 0 дохода.
           </p>
           <div className="flex items-center justify-center space-x-6">
             <Badge variant="outline" className="text-green-400 border-green-400 px-6 py-3 text-lg">
