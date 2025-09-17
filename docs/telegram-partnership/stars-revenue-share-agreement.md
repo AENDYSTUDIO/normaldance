@@ -47,8 +47,8 @@
 ## Performance Metrics
 
 ### Key Performance Indicators
-- **Monthly Active Users (MAU):** 250,000 target by month 3
-- **Stars volume:** $500,000 annual minimum
+- **Monthly Active Users (MAU):** 125,000 target by month 3
+- **Stars volume:** $250,000 annual minimum
 - **Conversion rate:** 15% minimum purchase conversion
 - **System uptime:** 99.9% availability requirement
 

@@ -1,14 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Slider } from '@/components/ui/slider'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Progress } from '@/components/ui/progress'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Avatar, AvatarFallback, AvatarImage, Slider, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tabs, TabsContent, TabsList, TabsTrigger, Progress } from '@/components/ui'
 import {
   Play,
   Pause,
@@ -33,7 +26,7 @@ import {
   CheckCircle,
   AlertCircle,
   Info
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 import { aiRecommendationSystem, Recommendation, RecommendationContext, UserProfile } from '@/lib/ai-recommendation-system'
 import { useAudioStore } from '@/store/use-audio-store'

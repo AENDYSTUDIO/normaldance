@@ -1,8 +1,6 @@
 'use client'
 
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, Badge, Button } from '@/components/ui'
 import { 
   DollarSign, 
   Users, 
@@ -10,7 +8,7 @@ import {
   Calendar,
   ExternalLink,
   TrendingUp
-} from 'lucide-react'
+} from '@/components/icons'
 
 interface CollectionCardProps {
   collection: any

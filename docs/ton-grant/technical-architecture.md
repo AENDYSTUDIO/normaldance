@@ -109,9 +109,9 @@
 - **$2.5M** monthly volume
 
 ### Target (90 days)
-- **1M MAU** capacity
-- **100k artists** supported
-- **$10M** monthly volume
+- **500k MAU** capacity
+- **50k artists** supported
+- **$5M** monthly volume
 
 ### Infrastructure
 - **Kubernetes** orchestration

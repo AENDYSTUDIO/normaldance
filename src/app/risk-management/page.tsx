@@ -150,10 +150,10 @@ export default function RiskManagementPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td className="py-1">0</td><td>% тестов покрытия</td><td>< 80%</td><td>Lead QA</td></tr>
-            <tr><td className="py-1">30</td><td>Churn dev-team</td><td>> 5%</td><td>HR-Director</td></tr>
-            <tr><td className="py-1">60</td><td>CAC vs LTV</td><td>> 1:3</td><td>Head of Growth</td></tr>
-            <tr><td className="py-1">90</td><td>Reg-события</td><td>> 1 кейс</td><td>Legal Counsel</td></tr>
+            <tr><td className="py-1">0</td><td>% тестов покрытия</td><td>&lt; 80%</td><td>Lead QA</td></tr>
+            <tr><td className="py-1">30</td><td>Churn dev-team</td><td>&gt; 5%</td><td>HR-Director</td></tr>
+            <tr><td className="py-1">60</td><td>CAC vs LTV</td><td>&gt; 1:3</td><td>Head of Growth</td></tr>
+            <tr><td className="py-1">90</td><td>Reg-события</td><td>&gt; 1 кейс</td><td>Legal Counsel</td></tr>
           </tbody>
         </table>
       </section>

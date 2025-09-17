@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { AntiPirateSystem } from '@/components/anti-pirate/anti-pirate-system'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@/components/ui'
 import { 
   Shield, 
   Play, 
@@ -54,7 +52,7 @@ import {
   FileText,
   Gauge,
   RefreshCw
-} from 'lucide-react'
+} from '@/components/icons'
 
 export default function AntiPirateDemo() {
   const [activeTab, setActiveTab] = useState('overview')

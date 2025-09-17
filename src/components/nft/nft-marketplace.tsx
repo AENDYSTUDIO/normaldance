@@ -2,15 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { nftMarketplaces } from '@/lib/integrations/nft-marketplaces'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Slider } from '@/components/ui/slider'
+import { Button, Input, Card, CardContent, CardHeader, CardTitle, Badge, Avatar, AvatarFallback, AvatarImage, Tabs, TabsContent, TabsList, TabsTrigger, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Slider } from '@/components/ui'
 import { 
   Search, 
   Filter, 
@@ -43,7 +35,7 @@ import {
   RefreshCw,
   AlertCircle,
   CheckCircle
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
 

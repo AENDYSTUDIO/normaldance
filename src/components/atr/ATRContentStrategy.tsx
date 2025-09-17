@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
 import { 
   Music, 
   TrendingUp, 
@@ -14,7 +11,7 @@ import {
   Globe,
   BarChart3,
   Play
-} from 'lucide-react';
+} from '@/components/icons';
 import { 
   ATR_CONTENT_STRATEGIES, 
   ATR_GENRES, 

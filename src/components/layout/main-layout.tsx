@@ -4,9 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
+import { Button, Avatar, AvatarFallback, AvatarImage, Badge } from '@/components/ui'
 import { 
   Home, 
   TrendingUp, 
@@ -27,7 +25,7 @@ import {
   Star,
   Crown,
   User
-} from 'lucide-react'
+} from '@/components/icons'
 
 const navigation = [
   { name: 'Лента', href: '/feed', icon: Home },

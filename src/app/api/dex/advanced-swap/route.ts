@@ -233,7 +233,7 @@ export async function POST(request: NextRequest) {
 
       // Add to stability reserve (5% of fees)
       const stabilityReserve = swapResult.fee * 0.05
-      await tx.stabilityReserve.upsert(
+      await tx.stabilityReserve.upsert({
         where: { id: 'main' },
         update: { balance: { increment: stabilityReserve } },
         create: { 
@@ -241,7 +241,7 @@ export async function POST(request: NextRequest) {
           balance: stabilityReserve,
           currency: 'TON'
         }
-      )
+      })
 
       return transaction
     })

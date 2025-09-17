@@ -3,10 +3,7 @@
 import { useState } from 'react'
 import { useAudioStore } from '@/store/use-audio-store'
 import useNetworkStatus from '@/hooks/useNetworkStatus' // Импортируем наш новый хук
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card, CardContent, Button, Badge, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
 import { 
   Play, 
   Pause, 
@@ -14,7 +11,7 @@ import {
   MoreHorizontal,
   Clock,
   AlertTriangle
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatNumber, formatTime } from '@/lib/utils'
 import { Track } from '@/store/use-audio-store'
 import { cn } from '@/lib/utils'

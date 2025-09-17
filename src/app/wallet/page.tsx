@@ -7,10 +7,7 @@ import { NDTManager } from '@/components/wallet/ndt-manager'
 import { DeflationStats } from '@/components/wallet/deflation-stats'
 import { StakingManager } from '@/components/wallet/staking-manager'
 import { MusicNFTManager } from '@/components/wallet/music-nft-manager'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Tabs, TabsContent, TabsList, TabsTrigger, Badge, Button } from '@/components/ui'
 import {
   Wallet,
   Coins,
@@ -23,7 +20,7 @@ import {
   Lock,
   Crown,
   TrendingDown
-} from 'lucide-react'
+} from '@/components/icons'
 
 export default function WalletPage() {
   const [activeTab, setActiveTab] = useState('overview')

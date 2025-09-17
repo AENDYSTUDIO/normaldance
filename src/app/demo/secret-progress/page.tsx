@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { SecretProgressBar } from '@/components/gamification/secret-progress-bar'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge } from '@/components/ui'
 import { 
   Music, 
   Users, 
@@ -16,7 +14,7 @@ import {
   Clock,
   Gift,
   Star
-} from 'lucide-react'
+} from '@/components/icons'
 
 export default function SecretProgressDemo() {
   const [selectedTrack, setSelectedTrack] = useState('demo-track-1')

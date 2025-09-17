@@ -3,11 +3,7 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { useAudioStore } from '@/store/use-audio-store'
 import useNetworkStatus from '@/hooks/useNetworkStatus'
-import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Button, Slider, Card, CardContent, Badge, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
 import {
   Play,
   Pause,
@@ -42,8 +38,7 @@ import {
   Plus,
   Download,
   Save
-} from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+} from '@/components/icons'
 import { formatTime } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 import { AudioVisualizer } from './audio-visualizer'

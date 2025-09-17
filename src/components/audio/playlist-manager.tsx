@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAudioStore } from '@/store/use-audio-store'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle, Button, Input, Badge, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
 import { 
   Plus, 
   Play, 
@@ -20,8 +17,7 @@ import {
   Edit,
   Save,
   Trash2
-} from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+} from '@/components/icons'
 import { formatTime, formatNumber } from '@/lib/utils'
 import { Track } from '@/store/use-audio-store'
 import { cn } from '@/lib/utils'

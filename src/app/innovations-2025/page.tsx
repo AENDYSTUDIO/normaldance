@@ -7,10 +7,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'
 import { 
   Zap, 
   Shield, 
@@ -28,7 +25,7 @@ import {
   Rocket,
   Crown,
   Gem
-} from 'lucide-react'
+} from '@/components/icons'
 import { DualCurrencySystem } from '@/components/dex/dual-currency-system'
 
 export default function Innovations2025Page() {

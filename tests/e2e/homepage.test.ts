@@ -15,11 +15,11 @@ test('should navigate to different sections', async ({ page }) => {
   await page.goto('/');
   
   // Проверяем навигацию
-  await page.getByRole('link', { name: 'Тренды' }).click();
+  await page.getByRole('link', { name: 'Тренды' }).first().click();
   await expect(page).toHaveURL(/.*trending/);
   
   await page.goBack();
   
-  await page.getByRole('link', { name: 'Обзор' }).click();
+  await page.getByRole('link', { name: 'Обзор' }).first().click();
   await expect(page).toHaveURL(/.*explore/);
 });

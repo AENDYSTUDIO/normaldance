@@ -4,15 +4,17 @@ import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 interface AudioVisualizerProps {
-  audioUrl: string
+  audioUrl?: string
+  audioElement?: HTMLAudioElement | null
   className?: string
   isPlaying?: boolean
-  type?: 'bars' | 'wave' | 'circle'
+  type?: 'bars' | 'wave' | 'circle' | 'particles'
   color?: string
 }
 
 export function AudioVisualizer({ 
   audioUrl, 
+  audioElement,
   className, 
   isPlaying = false, 
   type = 'bars',
@@ -44,15 +46,20 @@ export function AudioVisualizer({
     analyser.fftSize = 256
     analyserRef.current = analyser
 
-    // Create audio element
+    // Create/connect audio element
     if (!audioRef.current) {
-      audioRef.current = new Audio(audioUrl)
-      audioRef.current.crossOrigin = 'anonymous'
-      
-      const source = audioContext.createMediaElementSource(audioRef.current)
-      sourceRef.current = source
-      source.connect(analyser)
-      analyser.connect(audioContext.destination)
+      if (audioElement) {
+        audioRef.current = audioElement
+      } else if (audioUrl) {
+        audioRef.current = new Audio(audioUrl)
+        audioRef.current.crossOrigin = 'anonymous'
+      }
+      if (audioRef.current) {
+        const source = audioContext.createMediaElementSource(audioRef.current)
+        sourceRef.current = source
+        source.connect(analyser)
+        analyser.connect(audioContext.destination)
+      }
     }
 
     const bufferLength = analyser.frequencyBinCount
@@ -77,6 +84,10 @@ export function AudioVisualizer({
         case 'circle':
           drawCircle(ctx, dataArray, canvas.width, canvas.height, color)
           break
+        case 'particles':
+          // reuse bars drawing as a simple particle effect placeholder
+          drawBars(ctx, dataArray, canvas.width, canvas.height, color)
+          break
       }
     }
 
@@ -91,7 +102,7 @@ export function AudioVisualizer({
         cancelAnimationFrame(animationRef.current)
       }
     }
-  }, [audioUrl, isPlaying, type, color])
+  }, [audioUrl, audioElement, isPlaying, type, color])
 
   const drawBars = (ctx: CanvasRenderingContext2D, data: Uint8Array, width: number, height: number, color: string) => {
     const barWidth = width / data.length * 2

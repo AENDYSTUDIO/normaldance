@@ -2,8 +2,7 @@
 
 import { useState } from 'react'
 import { ClubNFTSystem } from '@/components/clubs/club-nft-system'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle, Badge } from '@/components/ui'
 import { 
   Trophy, 
   Medal, 
@@ -29,7 +28,7 @@ import {
   Music,
   Play,
   Share
-} from 'lucide-react'
+} from '@/components/icons'
 
 export default function ClubNFTDemo() {
   const [activeTab, setActiveTab] = useState('overview')

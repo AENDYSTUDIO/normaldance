@@ -1,11 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge, Input, Label } from '@/components/ui';
 import { 
   CreditCard, 
   Smartphone, 
@@ -15,7 +11,7 @@ import {
   Clock,
   DollarSign,
   CheckCircle
-} from 'lucide-react';
+} from '@/components/icons';
 import { 
   ATR_PAYMENT_METHODS, 
   ATRPaymentMethod, 

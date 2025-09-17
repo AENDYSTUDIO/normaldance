@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, Avatar, AvatarFallback, AvatarImage, Badge, Button } from '@/components/ui'
 import { 
   Headphones, 
   Users, 
@@ -13,7 +10,7 @@ import {
   TrendingUp,
   Heart,
   Play
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatTime } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 

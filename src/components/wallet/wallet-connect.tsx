@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
 import { 
   Wallet, 
   CheckCircle, 
@@ -14,7 +11,7 @@ import {
   Loader2,
   AlertCircle,
   QrCode
-} from 'lucide-react'
+} from '@/components/icons'
 import { useSolanaWallet } from './wallet-adapter'
 import { formatAddress } from './wallet-adapter'
 import { cn } from '@/lib/utils'

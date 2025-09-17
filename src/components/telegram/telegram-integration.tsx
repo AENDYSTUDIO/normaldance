@@ -1,13 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Progress } from '@/components/ui/progress'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Avatar, AvatarFallback, AvatarImage, Progress, Tabs, TabsContent, TabsList, TabsTrigger, Alert, AlertDescription } from '@/components/ui'
 import {
   Bot,
   Users,
@@ -47,7 +41,7 @@ import {
   Award,
   Crown,
   Sparkles
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 import { telegramPartnership, TelegramUser, TelegramPartnershipMetrics } from '@/lib/telegram-partnership'
 

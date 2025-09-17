@@ -1,10 +1,7 @@
 'use client'
 
 import { useEffect, useState, Suspense, lazy, ComponentType, ReactNode } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Badge } from '@/components/ui/badge'
+import { Button, Card, CardContent, CardHeader, CardTitle, Progress, Badge } from '@/components/ui'
 import { 
   Zap, 
   Wifi, 
@@ -17,7 +14,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock
-} from 'lucide-react'
+} from '@/components/icons'
 
 interface PerformanceMetrics {
   loadTime: number

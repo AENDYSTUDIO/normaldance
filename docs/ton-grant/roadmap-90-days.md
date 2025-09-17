@@ -67,10 +67,10 @@
 ### Business KPIs
 | Metric | Month 1 | Month 2 | Month 3 | Target |
 |--------|---------|---------|---------|--------|
-| MAU | 100k | 500k | 1M | 1M+ |
-| Artists | 5k | 25k | 100k | 100k+ |
-| NFT Sales | 10k | 50k | 200k | 200k+ |
-| Revenue | $500k | $2M | $10M | $10M+ |
+| MAU | 50k | 125k | 250k | 500k+ |
+| Artists | 2k | 8k | 25k | 50k+ |
+| NFT Sales | 5k | 25k | 100k | 150k+ |
+| Revenue | $250k | $1M | $2.5M | $5M+ |
 
 ### TON Ecosystem KPIs
 | Metric | Month 1 | Month 2 | Month 3 | Target |

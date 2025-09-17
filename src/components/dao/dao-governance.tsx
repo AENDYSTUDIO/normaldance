@@ -1,16 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Progress } from '@/components/ui/progress'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Input, Textarea, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Tabs, TabsContent, TabsList, TabsTrigger, Progress, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Alert, AlertDescription } from '@/components/ui'
 import {
   Vote,
   Users,
@@ -40,7 +31,7 @@ import {
   Search,
   SortAsc,
   SortDesc
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 import { daoGovernance, Proposal, GovernanceSettings, DAOToken } from '@/lib/dao-governance'
 

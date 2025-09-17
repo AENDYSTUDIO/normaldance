@@ -2,14 +2,7 @@
 
 import { MainLayout } from '@/components/layout/main-layout'
 import { AudioPlayer } from '@/components/audio/audio-player'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Switch } from '@/components/ui/switch'
-import { Badge } from '@/components/ui/badge'
+import { Button, Input, Label, Textarea, Card, CardContent, CardHeader, CardTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Switch, Badge } from '@/components/ui'
 import {
   Upload,
   Music,
@@ -17,7 +10,7 @@ import {
   Info,
   AlertCircle,
   CheckCircle
-} from 'lucide-react'
+} from '@/components/icons'
 
 import { useState } from 'react'
 
