@@ -19,7 +19,7 @@ import {
   Star,
   Plus,
   ExternalLink,
-  Auction,
+  Gavel, // Auction icon replacement
   BarChart3,
   LineChart,
   PieChart,
@@ -665,7 +665,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
         <TabsContent value="auctions" className="space-y-6">
           <div className="mb-4">
             <h2 className="text-2xl font-bold flex items-center gap-2">
-              <Auction className="h-6 w-6" />
+              <Gavel className="h-6 w-6" />
               Активные аукционы
             </h2>
           </div>
@@ -902,7 +902,7 @@ function NFTCard({ nft, onBuy, onAddToWatchlist, onPlaceBid }: NFTCardProps) {
           )}
           {isAuction && (
             <Badge variant="destructive" className="text-xs">
-              <Auction className="h-3 w-3 mr-1" />
+              <Gavel className="h-3 w-3 mr-1" />
               Аукцион
             </Badge>
           )}

@@ -1,0 +1,48 @@
+---
+globs: src/components/ui/*,src/lib/ipfs-enhanced.ts,src/lib/socket.ts
+description: UI components, file storage, and real-time communication patterns
+---
+
+# UI Components & Infrastructure Rules
+
+## UI Component Library
+- **Base components**: Use Radix UI primitives in [src/components/ui/](mdc:src/components/ui/)
+- **Styling**: Tailwind CSS with custom design system
+- **Icons**: Lucide React icons with custom icon system
+- **Themes**: Next-themes for dark/light mode support
+
+## File Storage & CDN
+- **IPFS integration**: Use [src/lib/ipfs-enhanced.ts](mdc:src/lib/ipfs-enhanced.ts) for file storage
+- **Multiple gateways**: Automatic fallback to ipfs.io, pinata.cloud, cloudflare-ipfs.com
+- **File chunking**: Files >10MB automatically chunked with manifest-based reconstruction
+- **Health monitoring**: Automated file availability checking across gateways
+
+## Real-time Communication
+- **Socket.IO**: Custom Socket.IO setup with Redis adapter
+- **Custom path**: Use `/api/socketio` instead of standard `/socket.io`
+- **Event handling**: Implement proper event listeners and cleanup
+- **Connection management**: Handle connection states and reconnection logic
+
+## Audio & Media
+- **Audio player**: Custom audio player with Web Audio API
+- **Visualization**: Audio visualizer components for music playback
+- **Playlist management**: Implement playlist creation and management
+- **Streaming**: Support for audio streaming and progressive loading
+
+## Performance Optimization
+- **Lazy loading**: Use lazy loading for heavy components
+- **Code splitting**: Implement proper code splitting for routes
+- **Caching**: Use Redis for session and data caching
+- **CDN**: Leverage CDN for static asset delivery
+
+## Component Patterns
+- **Composition**: Use compound component patterns for complex UI
+- **Accessibility**: Implement proper ARIA attributes and keyboard navigation
+- **Responsive design**: Mobile-first responsive design approach
+- **Error boundaries**: Implement error boundaries for component error handling
+
+## State Management
+- **Local state**: Use React hooks for component state
+- **Global state**: Use Zustand for application-wide state
+- **Form state**: Use React Hook Form for form management
+- **Cache state**: Use React Query for server state management

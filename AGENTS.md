@@ -1,5 +1,7 @@
 # AGENTS.md
 
+This file provides guidance to agents when working with code in this repository.
+
 ## Build/Test Commands (Non-Obvious)
 
 - **Single test execution**: `npm test -- --testPathPattern="filename.test.ts"` (Jest configured for specific file testing)
@@ -8,6 +10,7 @@
 - **MCP server**: `npm run mcp:dev` (Uses tsx watch for hot reload)
 - **Import checking**: `npm run check:imports` (Validates import paths using tsx)
 - **Auto-fix utilities**: `npm run check:detect` (Detects and fixes common issues)
+- **Icon auto-fix**: `npm run check:detect:fix-icons` (Automatically fixes icon-related issues)
 
 ## Critical Architecture Patterns
 
@@ -26,6 +29,7 @@
 - **Import patterns**: Wallet utilities use custom event system, not standard React patterns
 - **Error handling**: Silent failures in wallet operations, return 0 instead of throwing
 - **Russian locale**: All SOL/token formatting uses Russian locale conventions
+- **TypeScript config**: Web3 code intentionally has relaxed types (`noImplicitAny: false`, `no-non-null-assertion: off`)
 
 ## Testing Setup
 

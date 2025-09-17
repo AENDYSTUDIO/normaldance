@@ -7,7 +7,6 @@
 - **Database**: Use global Prisma instance from `src/lib/db.ts`, never create new instances
 - **TypeScript**: Web3 code intentionally has relaxed types (`noImplicitAny: false`, `no-non-null-assertion: off`)
 - **Error handling**: Wallet operations return 0 on error instead of throwing (silent failures)
-- **Testing**: Mobile app tests require extensive mocking of React Native modules in `mobile-app/jest.setup.js`
 - **Build process**: Use `tsx` directly for production builds, Next.js build is disabled
 - **File uploads**: Use custom IPFS/Filecoin redundancy system in `src/lib/ipfs-enhanced.ts`
 - **MCP server**: Use `tsx watch` for development, standard Node.js for production
@@ -21,4 +20,3 @@
 - **Socket.IO setup**: Custom server in `server.ts` handles both Next.js and Socket.IO on same port
 - **ESLint configuration**: All rules intentionally disabled in `eslint.config.mjs` for faster builds
 - **Jest timeout**: 30-second timeout for async operations in `jest.config.js`
-- **Mobile app mocking**: Extensive mocking of expo-av, react-native-track-player, and all React Native modules

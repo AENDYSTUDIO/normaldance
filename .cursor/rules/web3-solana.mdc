@@ -1,0 +1,43 @@
+---
+globs: src/components/wallet/*,src/lib/deflationary-model.ts,programs/**/*
+description: Web3 and Solana blockchain development patterns
+---
+
+# Web3 & Solana Development Rules
+
+## Solana Program Architecture
+- **Fixed program IDs**: Never change NDT_PROGRAM_ID, TRACKNFT_PROGRAM_ID, STAKING_PROGRAM_ID
+- **Program locations**: 
+  - NDT: [programs/ndt/src/lib.rs](mdc:programs/ndt/src/lib.rs)
+  - Staking: [programs/staking/src/lib.rs](mdc:programs/staking/src/lib.rs)
+  - TrackNFT: [programs/tracknft/src/lib.rs](mdc:programs/tracknft/src/lib.rs)
+
+## Wallet Integration Patterns
+- **Custom adapter**: Use [src/components/wallet/wallet-adapter.tsx](mdc:src/components/wallet/wallet-adapter.tsx)
+- **Event system**: Use `walletEmitter` for custom event handling
+- **Connection**: Use `createConnection()` with custom timeout configuration
+- **Error handling**: Return 0 on wallet errors, don't throw exceptions
+
+## Deflationary Token Model
+- **Burn percentage**: 2% automatic burn on all transactions
+- **Reward distribution**: 20% to staking rewards, 30% to treasury
+- **Implementation**: Use [src/lib/deflationary-model.ts](mdc:src/lib/deflationary-model.ts)
+- **Transaction types**: transfer, stake, unstake, reward, burn
+
+## Transaction Handling
+- **Custom creation**: Use custom transaction creation, not standard Solana patterns
+- **Russian locale**: All SOL/token formatting uses Russian locale conventions
+- **Timeout handling**: Implement proper timeout for RPC calls
+- **Retry logic**: Implement retry mechanisms for failed transactions
+
+## Web3 Security Patterns
+- **Program validation**: Always validate program IDs before execution
+- **Transaction signing**: Use proper transaction signing with wallet integration
+- **Error boundaries**: Implement proper error boundaries for Web3 operations
+- **State management**: Use Zustand for Web3 state management
+
+## Solana-Specific Guidelines
+- **RPC configuration**: Use devnet for development, mainnet for production
+- **Lamports conversion**: Use LAMPORTS_PER_SOL for SOL conversions
+- **PublicKey handling**: Properly handle PublicKey serialization/deserialization
+- **Account management**: Implement proper account creation and management

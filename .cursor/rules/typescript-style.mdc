@@ -1,0 +1,35 @@
+---
+globs: *.ts,*.tsx
+description: TypeScript configuration and coding standards
+---
+
+# TypeScript & Code Style Rules
+
+## TypeScript Configuration
+- **Relaxed types**: `noImplicitAny: false`, `no-non-null-assertion: off` (intentional for Web3)
+- **Path mapping**: Use `@/*` for src imports
+- **Strict mode**: Enabled but with Web3-specific exceptions
+
+## Code Style (Project-Specific)
+- **ESLint disabled**: All rules intentionally disabled in [eslint.config.mjs](mdc:eslint.config.mjs) for faster builds
+- **Import patterns**: Wallet utilities use custom event system, not standard React patterns
+- **Error handling**: Silent failures in wallet operations, return 0 instead of throwing
+- **Russian locale**: All SOL/token formatting uses Russian locale conventions
+
+## Web3 Specific Patterns
+- **Transaction handling**: Custom transaction creation in wallet-adapter.tsx, not standard Solana patterns
+- **Token formatting**: Always use Russian locale formatting for SOL amounts in `formatSol()`
+- **Deflationary economics**: 2% burn with 20% to staking rewards, 30% to treasury
+- **Global wallet emitter**: Use `walletEmitter` from wallet-adapter.tsx for custom event system
+
+## Import Guidelines
+- Use `@/` prefix for src directory imports
+- Wallet utilities: Import from `src/components/wallet/wallet-adapter.tsx`
+- Database: Import from `src/lib/db.ts`
+- UI components: Import from `src/components/ui/`
+- Utilities: Import from `src/lib/`
+
+## Error Handling
+- Wallet operations: Return 0 on error, don't throw exceptions
+- Database operations: Use try-catch with proper error logging
+- API calls: Implement proper error boundaries and fallbacks

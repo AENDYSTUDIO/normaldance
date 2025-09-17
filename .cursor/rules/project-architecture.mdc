@@ -1,0 +1,40 @@
+---
+alwaysApply: true
+description: Core architecture patterns and critical system components
+---
+
+# NORMALDANCE Project Architecture
+
+## Core Architecture Patterns
+
+### Custom Server Setup
+- **Custom server**: Uses [server.ts](mdc:server.ts) with Socket.IO instead of standard Next.js server
+- **Socket.IO path**: Custom `/api/socketio` path, not standard `/socket.io`
+- **Production build**: Next.js build disabled, uses tsx directly (`npm run build`)
+
+### Database & State Management
+- **Database**: Use global Prisma instance from [src/lib/db.ts](mdc:src/lib/db.ts), never create new instances
+- **State**: Use Zustand for global state management
+- **Caching**: Redis integration for session management and caching
+
+### Web3 Integration
+- **Wallet system**: Custom event emitter system in [src/components/wallet/wallet-adapter.tsx](mdc:src/components/wallet/wallet-adapter.tsx)
+- **Deflationary model**: All token transactions must use `DeflationaryModel` class for automatic 2% burn calculation
+- **Fixed program IDs**: NDT_PROGRAM_ID, TRACKNFT_PROGRAM_ID, STAKING_PROGRAM_ID are hardcoded - never change
+- **Error handling**: Wallet operations return 0 on error instead of throwing (silent failures)
+
+### File Storage & CDN
+- **IPFS/Filecoin**: Use custom IPFS/Filecoin redundancy system in [src/lib/ipfs-enhanced.ts](mdc:src/lib/ipfs-enhanced.ts)
+- **CDN integration**: Automatic fallback to multiple gateways (ipfs.io, pinata.cloud, cloudflare-ipfs.com)
+- **File chunking**: Files >10MB automatically chunked with manifest-based reconstruction
+
+### MCP Server
+- **Development**: Use `tsx watch` for development (`npm run mcp:dev`)
+- **Custom path**: Model Context Protocol server in [src/mcp/server.ts](mdc:src/mcp/server.ts)
+- **Protocol**: Custom `protocol://` URI system (track://, user://, nft://, staking://)
+
+## Critical Dependencies
+- **Solana**: @solana/web3.js, @solana/wallet-adapter-* packages
+- **UI**: Radix UI components with Tailwind CSS
+- **Audio**: Custom audio player with Web Audio API
+- **Mobile**: React Native with Expo framework

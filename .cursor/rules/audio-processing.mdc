@@ -1,0 +1,42 @@
+---
+globs: src/components/audio/**,src/lib/audio-*,src/hooks/useAudio*
+description: Audio processing, playback, and Web Audio API patterns
+---
+
+# Audio Processing Rules
+
+## Web Audio API Integration
+- **Audio context**: Use Web Audio API for advanced audio processing
+- **Audio nodes**: Implement proper audio node chains for effects
+- **Buffer management**: Handle audio buffers efficiently
+- **Memory management**: Properly dispose of audio resources
+
+## Audio Playback
+- **Custom player**: Use custom audio player implementation
+- **Streaming**: Implement audio streaming for large files
+- **Format support**: Support multiple audio formats (MP3, WAV, FLAC)
+- **Cross-browser**: Ensure cross-browser audio compatibility
+
+## Mobile Audio (React Native)
+- **expo-av**: Use expo-av for mobile audio playback
+- **Background playback**: Implement background audio playback
+- **Audio session**: Manage audio session properly on mobile
+- **Performance**: Optimize audio performance for mobile devices
+
+## Audio Processing
+- **Real-time processing**: Implement real-time audio effects
+- **Audio analysis**: Use Web Audio API for audio analysis
+- **Visualization**: Create audio visualizations using canvas
+- **Effects**: Implement audio effects (EQ, reverb, delay)
+
+## File Handling
+- **Audio uploads**: Handle audio file uploads with validation
+- **Format conversion**: Convert audio formats as needed
+- **Compression**: Implement audio compression for storage
+- **CDN integration**: Use CDN for audio file delivery
+
+## Performance Optimization
+- **Lazy loading**: Implement lazy loading for audio files
+- **Caching**: Cache audio files for better performance
+- **Preloading**: Preload audio files for smooth playback
+- **Memory limits**: Implement memory limits for audio processing

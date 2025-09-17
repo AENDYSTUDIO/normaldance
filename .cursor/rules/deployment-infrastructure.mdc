@@ -1,0 +1,42 @@
+---
+globs: docker-compose*.yml,Dockerfile*,deploy-*.js,scripts/deploy-*,helm/**/*,k8s/**/*
+description: Deployment, CI/CD, and infrastructure patterns
+---
+
+# Deployment & Infrastructure Rules
+
+## Docker Configuration
+- **Multi-stage builds**: Use multi-stage Docker builds for optimization
+- **Production images**: Use Alpine Linux for smaller production images
+- **Health checks**: Implement proper health checks in Docker containers
+- **Environment variables**: Use proper environment variable management
+
+## Kubernetes & Helm
+- **Helm charts**: Use Helm charts in [helm/normaldance/](mdc:helm/normaldance/) for deployment
+- **ConfigMaps**: Use ConfigMaps for configuration management
+- **Secrets**: Use Kubernetes secrets for sensitive data
+- **Resource limits**: Set proper CPU and memory limits
+
+## CI/CD Pipeline
+- **GitHub Actions**: Use GitHub Actions for CI/CD automation
+- **Build stages**: Separate build, test, and deployment stages
+- **Environment promotion**: Use staging → production promotion workflow
+- **Rollback strategy**: Implement proper rollback mechanisms
+
+## Environment Management
+- **Environment configs**: Use [environments.config.js](mdc:environments.config.js) for environment management
+- **Secrets management**: Use proper secrets management (not hardcoded)
+- **Database migrations**: Run database migrations as part of deployment
+- **Health monitoring**: Implement health checks and monitoring
+
+## Deployment Commands
+- **Development**: `npm run dev` for local development
+- **Production**: `npm run build && npm start` for production
+- **Docker**: `docker-compose up -d` for containerized deployment
+- **Kubernetes**: `helm install normaldance ./helm/normaldance/` for K8s deployment
+
+## Monitoring & Logging
+- **Prometheus**: Use Prometheus for metrics collection
+- **Grafana**: Use Grafana for monitoring dashboards
+- **Log aggregation**: Implement proper log aggregation and analysis
+- **Alerting**: Set up proper alerting for critical issues
