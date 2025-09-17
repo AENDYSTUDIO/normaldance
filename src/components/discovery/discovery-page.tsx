@@ -3,11 +3,7 @@
 import { useState, useEffect } from 'react'
 import { MainLayout } from '@/components/layout/main-layout'
 import { TrackCard } from '@/components/audio/track-card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button, Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Badge, Card, CardContent, CardHeader, CardTitle } from '@/components/ui'
 import { 
   Search, 
   Filter, 
@@ -20,7 +16,7 @@ import {
   Sparkles,
   Users,
   Calendar
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatTime } from '@/lib/utils'
 
 // Mock data for demonstration

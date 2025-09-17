@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Progress } from '@/components/ui'
 import { 
   Play, 
   Clock, 
@@ -20,7 +17,7 @@ import {
   Users,
   Zap,
   Star
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 
 interface ListeningStats {

@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { UnifiedSystem } from '@/components/unified/unified-system'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@/components/ui'
 import { 
   Home,
   Music,
@@ -384,7 +382,7 @@ import {
   Cloud98,
   Cloud99,
   Cloud100
-} from 'lucide-react'
+} from '@/components/icons'
 
 export default function UnifiedDemo() {
   const [activeTab, setActiveTab] = useState('overview')

@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Input, Badge } from '@/components/ui'
 import { 
   Search, 
   Filter, 
@@ -18,7 +15,7 @@ import {
   Music,
   Users,
   Calendar
-} from 'lucide-react'
+} from '@/components/icons'
 import { TrackCard } from '@/components/audio/track-card'
 import { formatNumber, formatTime } from '@/lib/utils'
 

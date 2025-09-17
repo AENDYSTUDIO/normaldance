@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
   walletAddress: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12
+    marginBottom: 12,
   },
   addressText: {
     fontSize: 14,

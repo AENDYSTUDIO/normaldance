@@ -64,7 +64,7 @@ export default function TelegramPartnershipPage() {
           <li><strong>@normaldance_bot</strong> – главный вход</li>
           <li><strong>Mini-App</strong> – каталог, плеер, чек-аут</li>
           <li><strong>TON Connect 2</strong> – 1-клик оплата USDT/TON</li>
-          <li><strong>Stars</strong> – покупка «дешёвых» NFT (< 500 ⭐)</li>
+          <li><strong>Stars</strong> – покупка «дешёвых» NFT (&lt; 500 ⭐)</li>
           <li><strong>Sponsored Messages</strong> – ретаргетинг музыкальных каналов</li>
         </ul>
       </section>
@@ -133,7 +133,7 @@ export default function TelegramPartnershipPage() {
           <li><strong>Sponsored Messages</strong> – 2,000 каналов, CPC $0.019</li>
           <li><strong>RichAds push-задачи</strong> – 83% CTR, $16 CPM</li>
           <li><strong>CPA-сети</strong> – Admitad, CityAds (оплата за покупку NFT)</li>
-          <li><strong>Инфлюенсеры</strong> – 50 музыкальных каналов > 100k подписчиков</li>
+          <li><strong>Инфлюенсеры</strong> – 50 музыкальных каналов &gt; 100k подписчиков</li>
         </ul>
       </section>
 
@@ -239,7 +239,7 @@ export default function TelegramPartnershipPage() {
               <li>Ранний доступ к новым API (Wallet SDK 2.0, AI-чаты)</li>
               <li>Возможность попасть в Telegram App Directory</li>
             </ul>
-            <p><strong>Требования:</strong> >10k активных пользователей Mini-App, 0 жалоб на спам/фрод</p>
+            <p><strong>Требования:</strong> &gt;10k активных пользователей Mini-App, 0 жалоб на спам/фрод</p>
           </div>
         </div>
 
@@ -261,7 +261,7 @@ export default function TelegramPartnershipPage() {
             <p><strong>Advertiser Verification даёт:</strong></p>
             <ul className="list-disc list-inside ml-4">
               <li>CPC $0.08 (vs $0.8 FB)</li>
-              <li>Доступ к Sponsored Messages в чужих каналах (>1 трлн показов/мес)</li>
+              <li>Доступ к Sponsored Messages в чужих каналах (&gt;1 трлн показов/мес)</li>
             </ul>
           </div>
         </div>

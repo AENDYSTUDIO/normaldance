@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button, Progress } from '@/components/ui'
 import { 
   Trophy, 
   Star, 
@@ -24,7 +21,7 @@ import {
   CheckCircle,
   Lock,
   Unlock
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 
 interface Achievement {

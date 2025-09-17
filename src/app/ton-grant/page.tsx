@@ -50,7 +50,7 @@ export default function TONGrantPage() {
             <tr><td className="py-1">1</td><td>Собрать пакет документов</td><td>≤ 10 МБ</td></tr>
             <tr><td className="py-1">2</td><td>Подать заявку</td><td>builders@ton.org</td></tr>
             <tr><td className="py-1">3</td><td>Публичный тред в Twitter</td><td>#TONChampions</td></tr>
-            <tr><td className="py-1">4</td><td>Ответ на вопросы</td><td>< 48 ч</td></tr>
+            <tr><td className="py-1">4</td><td>Ответ на вопросы</td><td>&lt; 48 ч</td></tr>
           </tbody>
         </table>
       </section>

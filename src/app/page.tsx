@@ -2,9 +2,7 @@ import { MainLayout } from '@/components/layout/main-layout'
 import { AudioPlayer } from '@/components/audio/audio-player'
 import { TrackCard } from '@/components/audio/track-card'
 import { ListeningNow } from '@/components/audio/listening-now'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
+import { Button, Input, Badge, Card, CardContent, CardHeader, CardTitle, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
 import {
   Search,
   Play,
@@ -16,7 +14,7 @@ import {
   Radio,
   Star,
   Award
-} from 'lucide-react'
+} from '@/components/icons'
 
 // Mock data for demonstration
 const mockTracks = [

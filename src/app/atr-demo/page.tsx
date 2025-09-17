@@ -1,10 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
 import { 
   Globe, 
   Music, 
@@ -15,11 +12,12 @@ import {
   Zap,
   Star,
   Target
-} from 'lucide-react';
+} from '@/components/icons';
 import LanguageSelector from '@/components/atr/LanguageSelector';
 import ATRPaymentMethods from '@/components/atr/ATRPaymentMethods';
 import ATRContentStrategy from '@/components/atr/ATRContentStrategy';
 import ATRRegulatoryCompliance from '@/components/atr/ATRRegulatoryCompliance';
+import ATRPartnerships from '@/components/atr/ATRPartnerships';
 import { ATRLanguageCode } from '@/lib/i18n/atr-languages';
 import { ATRPaymentMethod } from '@/lib/i18n/atr-payment-integration';
 
@@ -120,7 +118,7 @@ export default function ATRDemoPage() {
 
         {/* Main Demo Tabs */}
         <Tabs defaultValue="language" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6 bg-white/10 backdrop-blur-sm">
+          <TabsList className="grid w-full grid-cols-7 bg-white/10 backdrop-blur-sm">
             <TabsTrigger value="language" className="data-[state=active]:bg-blue-600">
               <Globe className="h-4 w-4 mr-2" />
               Языки
@@ -137,12 +135,16 @@ export default function ATRDemoPage() {
               <Shield className="h-4 w-4 mr-2" />
               Соответствие
             </TabsTrigger>
+            <TabsTrigger value="partnerships" className="data-[state=active]:bg-blue-600">
+              <Users className="h-4 w-4 mr-2" />
+              Партнерства
+            </TabsTrigger>
             <TabsTrigger value="strategy" className="data-[state=active]:bg-blue-600">
               <Target className="h-4 w-4 mr-2" />
               Стратегия
             </TabsTrigger>
             <TabsTrigger value="implementation" className="data-[state=active]:bg-blue-600">
-              <Users className="h-4 w-4 mr-2" />
+              <Zap className="h-4 w-4 mr-2" />
               Внедрение
             </TabsTrigger>
           </TabsList>
@@ -213,6 +215,11 @@ export default function ATRDemoPage() {
           {/* Regulatory Compliance Tab */}
           <TabsContent value="compliance">
             <ATRRegulatoryCompliance />
+          </TabsContent>
+
+          {/* Partnerships Tab */}
+          <TabsContent value="partnerships">
+            <ATRPartnerships />
           </TabsContent>
 
           {/* Strategy Tab */}

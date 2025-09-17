@@ -7,13 +7,13 @@ NORMAL DANCE is the only music-NFT marketplace living inside Telegram Mini-App, 
 ## Partnership Benefits for Telegram
 
 ### Financial Impact
-- **$5M annual Stars turnover** → $1.5M revenue for Telegram (30% share)
-- **$9.4M NPV** for TON ecosystem over 3 years
-- **15% increase** in user session time within Telegram
+- **$2.5M annual Stars turnover** → $750k revenue for Telegram (30% share)
+- **$4.7M NPV** for TON ecosystem over 3 years
+- **10% increase** in user session time within Telegram
 - **New high-margin vertical** (music NFTs) with no competitors
 
 ### User Engagement
-- **250k MAU** target in 90 days
+- **125k MAU** target in 90 days
 - **Viral sharing** through inline buttons in chats
 - **Retention boost** via music discovery and NFT ownership
 - **TON adoption** through seamless payment integration
@@ -40,7 +40,7 @@ NORMAL DANCE is the only music-NFT marketplace living inside Telegram Mini-App, 
 - **30% to Telegram** (standard rate)
 - **70% to NORMAL DANCE**
 - **12-month contract** with auto-renewal
-- **$500k minimum** Stars volume guarantee
+- **$250k minimum** Stars volume guarantee
 
 ### Additional Benefits Requested
 - **Verified status** for bot and Mini-App
@@ -67,9 +67,9 @@ NORMAL DANCE is the only music-NFT marketplace living inside Telegram Mini-App, 
 ### 3-Year Revenue Forecast
 | Year | Stars Volume | Telegram Revenue | TON Transactions | MAU |
 |------|--------------|------------------|------------------|-----|
-| 2025 | $5M | $1.5M | 50k/month | 1M |
-| 2026 | $12.5M | $3.75M | 150k/month | 3M |
-| 2027 | $25M | $7.5M | 350k/month | 7M |
+| 2025 | $2.5M | $750k | 25k/month | 500k |
+| 2026 | $6.25M | $1.875M | 75k/month | 1.5M |
+| 2027 | $12.5M | $3.75M | 175k/month | 3.5M |
 
 ### TON Ecosystem Value
 - **$2.75M** direct TON network revenue
@@ -104,7 +104,7 @@ NORMAL DANCE is the only music-NFT marketplace living inside Telegram Mini-App, 
 - [ ] Optimize conversion funnels
 
 ### Phase 3 (60-90 days)
-- [ ] Achieve 250k MAU target
+- [ ] Achieve 125k MAU target
 - [ ] Launch advanced features
 - [ ] Expand to international markets
 - [ ] Prepare for Series A funding
@@ -112,10 +112,10 @@ NORMAL DANCE is the only music-NFT marketplace living inside Telegram Mini-App, 
 ## Success Metrics
 
 ### Primary KPIs (90 days)
-- **250k MAU** in Mini-App
-- **$500k** Stars volume
-- **$4** average transaction value
-- **60%** TON payment adoption
+- **125k MAU** in Mini-App
+- **$250k** Stars volume
+- **$2** average transaction value
+- **30%** TON payment adoption
 - **≤$0.08** CPC for Sponsored Messages
 
 ### Secondary KPIs

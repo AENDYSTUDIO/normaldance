@@ -11,11 +11,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Progress } from '@/components/ui/progress'
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button, Tabs, TabsContent, TabsList, TabsTrigger, Progress } from '@/components/ui'
 import { 
   Music, 
   TrendingUp, 
@@ -35,7 +31,7 @@ import {
   Mic,
   Disc,
   Headphones
-} from 'lucide-react'
+} from '@/components/icons'
 
 interface MusicDashboardData {
   marketData: any

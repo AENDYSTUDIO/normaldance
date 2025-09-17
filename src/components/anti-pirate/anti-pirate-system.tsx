@@ -1,9 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge } from '@/components/ui'
 import { 
   Play, 
   Pause, 
@@ -40,7 +38,7 @@ import {
   Smartphone as Phone,
   Laptop,
   Tablet
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 
 interface PlaybackSession {

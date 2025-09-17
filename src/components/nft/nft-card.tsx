@@ -1,18 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Card, CardContent, Button, Badge, Avatar, AvatarFallback, AvatarImage, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui'
 import { 
   Eye, 
   Heart, 
   ShoppingCart, 
   Clock,
   ExternalLink
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
 

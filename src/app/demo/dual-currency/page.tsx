@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { DualCurrencySystem } from '@/components/dex/dual-currency-system'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@/components/ui'
 import { 
   Coins, 
   TrendingUp, 
@@ -21,6 +19,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Info,
+  Gift,
   Lock,
   Unlock,
   Activity,
@@ -41,7 +40,7 @@ import {
   Database,
   Key,
   FileText
-} from 'lucide-react'
+} from '@/components/icons'
 
 export default function DualCurrencyDemo() {
   const [activeTab, setActiveTab] = useState('overview')
@@ -337,7 +336,7 @@ export default function DualCurrencyDemo() {
                     <div className="p-4 bg-gray-700/30 rounded-lg">
                       <div className="text-sm text-gray-400 mb-2">Механизм:</div>
                       <div className="text-white">
-                        5% комиссии свопа идёт в «стаб-резерв», который автоматически выкупает NDT при просадке >15% за сутки.
+                        5% комиссии свопа идёт в «стаб-резерв», который автоматически выкупает NDT при просадке { '>' }15% за сутки.
                       </div>
                     </div>
                   </div>

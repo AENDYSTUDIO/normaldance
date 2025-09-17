@@ -16,8 +16,27 @@ export interface Track {
   price?: number
   isExplicit: boolean
   isPublished: boolean
+  // Optional fields used by UI components
+  isPremium?: boolean
+  bitrate?: number
+  year?: string | number
+  label?: string
   createdAt: string
   updatedAt: string
+}
+
+export interface Playlist {
+  id: string
+  name: string
+  description?: string
+  coverImage?: string
+  tracks: Track[]
+  isPublic: boolean
+  createdAt: Date
+  updatedAt: Date
+  createdBy: string
+  playCount: number
+  likeCount: number
 }
 
 interface AudioState {
@@ -39,7 +58,7 @@ interface AudioState {
   repeat: 'off' | 'one' | 'all'
   
   // Actions
-  play: () => void
+  play: (track?: Track) => void
   pause: () => void
   togglePlay: () => void
   setVolume: (volume: number) => void
@@ -64,6 +83,16 @@ interface AudioState {
   // History
   addToHistory: (track: Track) => void
   clearHistory: () => void
+
+  // Likes
+  toggleLike: (trackId: string) => void
+
+  // Playlists (simple in-memory stubs for UI)
+  createPlaylist: (params: { name: string; description?: string; isPublic?: boolean }) => Promise<Playlist>
+  addToPlaylist: (playlistId: string, track: Track) => Promise<void>
+  removeFromPlaylist: (playlistId: string, trackId: string) => Promise<void>
+  getUserPlaylists: () => Promise<Playlist[]>
+  setCurrentPlaylist: (playlistId: string | null) => void
 }
 
 export const useAudioStore = create<AudioState>()(
@@ -83,7 +112,10 @@ export const useAudioStore = create<AudioState>()(
       repeat: 'off',
 
       // Playback actions
-      play: () => set({ isPlaying: true }),
+      play: (track) => set((state) => ({
+        isPlaying: true,
+        currentTrack: track ?? state.currentTrack ?? state.queue[state.currentQueueIndex] ?? null
+      })),
       pause: () => set({ isPlaying: false }),
       togglePlay: () => set((state) => ({ isPlaying: !state.isPlaying })),
       setVolume: (volume) => set({ volume }),
@@ -204,6 +236,49 @@ export const useAudioStore = create<AudioState>()(
         return { history: newHistory }
       }),
       clearHistory: () => set({ history: [] })
+      ,
+
+      // Likes
+      toggleLike: (trackId) => set((state) => {
+        const update = (t: Track) => t.id === trackId ? { ...t, likeCount: Math.max(0, (t.likeCount || 0) + (1)) } : t
+        const queue = state.queue.map(update)
+        const history = state.history.map(update)
+        const currentTrack = state.currentTrack && state.currentTrack.id === trackId
+          ? { ...state.currentTrack, likeCount: Math.max(0, (state.currentTrack.likeCount || 0) + 1) }
+          : state.currentTrack
+        return { queue, history, currentTrack }
+      }),
+
+      // Simple in-memory playlist stubs
+      createPlaylist: async ({ name, description, isPublic }) => {
+        const id = `pl_${Date.now()}`
+        const now = new Date()
+        return {
+          id,
+          name,
+          description,
+          coverImage: undefined,
+          tracks: [],
+          isPublic: !!isPublic,
+          createdAt: now,
+          updatedAt: now,
+          createdBy: 'current-user',
+          playCount: 0,
+          likeCount: 0
+        }
+      },
+      addToPlaylist: async (_playlistId, _track) => {
+        return
+      },
+      removeFromPlaylist: async (_playlistId, _trackId) => {
+        return
+      },
+      getUserPlaylists: async () => {
+        return []
+      },
+      setCurrentPlaylist: (_playlistId) => {
+        // no-op placeholder for UI wiring
+      }
     }),
     {
       name: 'audio-store',

@@ -3,11 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge, Avatar, AvatarFallback, AvatarImage, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'
 import { 
   ArrowLeft, 
   Heart, 
@@ -21,7 +17,7 @@ import {
   Download,
   Eye,
   TrendingUp
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatDistanceToNow } from 'date-fns'
 import { ru } from 'date-fns/locale'
 import Link from 'next/link'

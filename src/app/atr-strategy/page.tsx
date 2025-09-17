@@ -1,10 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Globe, Music, Users, TrendingUp, Shield, Zap } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Button } from '@/components/ui';
+import { Globe, Music, Users, TrendingUp, Shield, Zap } from '@/components/icons';
 
 export default function ATRStrategyPage() {
   const atrCountries = [

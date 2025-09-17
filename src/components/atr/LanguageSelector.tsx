@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Globe, Users, Zap, Shield } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge } from '@/components/ui';
+import { Globe, Users, Zap, Shield } from '@/components/icons';
 import { ATR_LANGUAGES, ATRLanguageCode, getLanguageByRegion } from '@/lib/i18n/atr-languages';
 import { getPaymentMethodsByLanguage } from '@/lib/i18n/atr-payment-integration';
 

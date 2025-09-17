@@ -1,9 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge } from '@/components/ui'
 import { 
   // Core Icons
   Home,
@@ -385,7 +383,7 @@ import {
   Cloud98,
   Cloud99,
   Cloud100
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 
 // Import all components

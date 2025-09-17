@@ -2,9 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { NFTMarketplace } from '@/components/nft/nft-marketplace'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Button } from '@/components/ui'
 import { 
   Shield, 
   Zap, 
@@ -14,7 +12,7 @@ import {
   Diamond,
   ArrowRight,
   Sparkles
-} from 'lucide-react'
+} from '@/components/icons'
 import Link from 'next/link'
 
 export default function NFTPage() {

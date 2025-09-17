@@ -35,11 +35,10 @@ import {
   Settings,
   Download,
   Save,
-  Playlist,
-  Queue,
+  ListMusic,
   Radio,
   Mic,
-  Equalizer,
+  SlidersHorizontal,
   Waves,
   Circle,
   Square,
@@ -49,7 +48,6 @@ import {
   Award,
   Target,
   Activity,
-  Pulse,
   Ruler,
   Gauge,
   Volume1,
@@ -66,7 +64,7 @@ import {
   Star,
   Sparkles,
   Diamond
-} from 'lucide-react'
+} from '@/components/icons'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { formatTime } from '@/lib/utils'
 import { cn } from '@/lib/utils'
@@ -509,7 +507,7 @@ export function AudioPlayer() {
                 size="sm"
                 onClick={() => setShowEqualizer(!showEqualizer)}
               >
-                <Equalizer className="h-4 w-4" />
+                <SlidersHorizontal className="h-4 w-4" />
               </Button>
               
               <Button
@@ -541,7 +539,7 @@ export function AudioPlayer() {
                 size="sm"
                 onClick={() => setShowPlaylistManager(!showPlaylistManager)}
               >
-                <Playlist className="h-4 w-4" />
+                <ListMusic className="h-4 w-4" />
               </Button>
               
               <Button
@@ -602,9 +600,8 @@ export function AudioPlayer() {
           <AudioVisualizer
             audioElement={audioRef.current}
             isPlaying={isPlaying}
-            type={visualizerType}
+            type={visualizerType as any}
             color={visualizerColor}
-            sensitivity={visualizerSensitivity}
           />
         </div>
       )}
@@ -630,7 +627,7 @@ export function AudioPlayer() {
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={playlist.coverImage} />
                   <AvatarFallback>
-                    <Playlist className="h-4 w-4" />
+                    <ListMusic className="h-4 w-4" />
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">

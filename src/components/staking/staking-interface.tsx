@@ -3,12 +3,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { MainLayout } from '@/components/layout/main-layout'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button, Input, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Progress, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'
 import { 
   TrendingUp, 
   DollarSign, 
@@ -32,7 +27,7 @@ import {
   Sparkles,
   TrendingDown,
   RefreshCw
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatNumber } from '@/lib/utils'
 
 interface StakingPool {
@@ -1094,4 +1089,22 @@ export function StakingInterface() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      {analytics.volumeHistory.map((item, index) =>
+                      {analytics.volumeHistory.map((item, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <span className="text-sm">{item.date}</span>
+                          <span className="text-sm font-medium">{formatNumber(item.volume)} NDT</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <div className="text-sm text-muted-foreground">Аналитика недоступна</div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
+    </MainLayout>
+  )
+}

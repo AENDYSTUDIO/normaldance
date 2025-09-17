@@ -1,11 +1,7 @@
 import { MainLayout } from '@/components/layout/main-layout'
 import { AudioPlayer } from '@/components/audio/audio-player'
 import { TrackCard } from '@/components/audio/track-card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Button, Badge, Card, CardContent, CardHeader, CardTitle, Avatar, AvatarFallback, AvatarImage, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'
 import { 
   Edit, 
   Music, 
@@ -15,7 +11,7 @@ import {
   Settings,
   Trophy,
   TrendingUp
-} from 'lucide-react'
+} from '@/components/icons'
 import { formatNumber, formatDate } from '@/lib/utils'
 
 // Mock user data

@@ -25,7 +25,7 @@ $50,000 + Audit + Traffic Support
 - **$2.5B** global music streaming market
 
 ## Slide 5: Traction
-- **250k MAU** - 12k artists - $2.5M volume
+- **250k MAU** - 12k artists - $500k volume
 - **Q2-Q4 2024** growth trajectory
 - **15 payment rails** integrated
 - **TON mainnet** deployment ready
@@ -43,16 +43,16 @@ $50,000 + Audit + Traffic Support
 - **Mass adoption** driver for TON
 
 ## Slide 8: Financial Model
-- **Year 1:** $30M revenue, $6M profit
-- **Year 2:** $75M revenue, $15M profit  
-- **Year 3:** $150M revenue, $30M profit
-- **TON share:** 30% of all transactions
+- **Year 1:** $5M revenue, $1M profit
+- **Year 2:** $12M revenue, $2.5M profit
+- **Year 3:** $25M revenue, $5M profit
+- **TON share:** 15% of all transactions
 
 ## Slide 9: Roadmap (90 days)
-- **Month 1:** 500k MAU, 25k artists
-- **Month 2:** 750k MAU, 50k artists  
-- **Month 3:** 1M MAU, 100k artists
-- **KPIs:** 50k TON TX/month, $1.5M Stars revenue
+- **Month 1:** 125k MAU, 6k artists
+- **Month 2:** 250k MAU, 12k artists
+- **Month 3:** 500k MAU, 25k artists
+- **KPIs:** 25k TON TX/month, $750k Stars revenue
 
 ## Slide 10: Ask & Impact
 - **$50k grant** + audit + traffic support

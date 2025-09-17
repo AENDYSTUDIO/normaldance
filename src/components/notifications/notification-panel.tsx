@@ -1,12 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger, ScrollArea, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
 import { 
   Bell, 
   BellOff, 
@@ -26,7 +21,7 @@ import {
   X,
   ChevronDown,
   ExternalLink
-} from 'lucide-react'
+} from '@/components/icons'
 import { useNotifications } from '@/lib/notifications/notification-system'
 import { NotificationType, NotificationPriority } from '@/lib/notifications/notification-system'
 

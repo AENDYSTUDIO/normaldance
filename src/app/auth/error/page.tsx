@@ -1,8 +1,7 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { AlertTriangle, ArrowLeft, Home } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@/components/ui'
+import { AlertTriangle, ArrowLeft, Home } from '@/components/icons'
 import Link from 'next/link'
 
 export default function ErrorPage() {

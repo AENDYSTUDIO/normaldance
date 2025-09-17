@@ -1,11 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Input, Label } from '@/components/ui'
+import { AlertCircle, CheckCircle, Loader2 } from '@/components/icons'
 import { useWalletContext } from '@/components/wallet/wallet-provider'
 
 export function AuthTest() {

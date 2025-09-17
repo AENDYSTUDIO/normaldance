@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { ChatMatrix } from '@/components/chat/chat-matrix'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, Badge, Button } from '@/components/ui'
 import { 
   MessageCircle, 
   Users, 
@@ -40,7 +38,7 @@ import {
   Award,
   Clock,
   DollarSign
-} from 'lucide-react'
+} from '@/components/icons'
 
 export default function ChatMatrixDemo() {
   const [activeTab, setActiveTab] = useState('overview')

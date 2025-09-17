@@ -1,10 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle, Progress, Button, Badge } from '@/components/ui'
 import { 
   Zap, 
   Flame, 
@@ -22,7 +19,7 @@ import {
   Play,
   Share,
   MessageCircle
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 
 interface ProgressPhase {

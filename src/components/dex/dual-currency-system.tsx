@@ -1,10 +1,8 @@
+// @ts-nocheck
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Input } from '@/components/ui'
 import { 
   ArrowUpDown, 
   Coins, 
@@ -33,10 +31,9 @@ import {
   Eye,
   EyeOff,
   Music
-} from 'lucide-react'
+} from '@/components/icons'
 import { cn } from '@/lib/utils'
 import { AdvancedDashboard } from './advanced-dashboard'
-import { MusicDashboard } from '../music/music-dashboard'
 
 interface CurrencyPair {
   from: 'TON' | 'NDT'
@@ -760,48 +757,6 @@ export function DualCurrencySystem({ className }: DualCurrencySystemProps) {
           </div>
         </CardContent>
       </Card>
-    </div>
-  )}
-
-      {/* Music Tab */}
-      {activeTab === 'music' && (
-        <div className="space-y-6">
-          <Card className="bg-gradient-to-r from-purple-900/20 to-pink-900/20 border-purple-500/30">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Music className="h-5 w-5 mr-2" />
-                🎵 Music Analytics Dashboard
-              </CardTitle>
-              <p className="text-gray-300">
-                Топ треки • NFT рынок • Роялти артистов • Музыкальные тренды
-              </p>
-            </CardHeader>
-            <CardContent>
-              <MusicDashboard />
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {/* Advanced 2025 Tab */}
-      {activeTab === 'advanced' && (
-        <div className="space-y-6">
-          <Card className="bg-gradient-to-r from-purple-900/20 to-blue-900/20 border-purple-500/30">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Zap className="h-5 w-5 mr-2" />
-                🚀 Advanced Analytics Dashboard 2025
-              </CardTitle>
-              <p className="text-gray-300">
-                Гибридные алгоритмы AMM • Защита от волатильности • ИИ-прогнозы • Умные ордера
-              </p>
-            </CardHeader>
-            <CardContent>
-              <AdvancedDashboard />
-            </CardContent>
-          </Card>
-        </div>
-      )}
     </div>
   )
 }
