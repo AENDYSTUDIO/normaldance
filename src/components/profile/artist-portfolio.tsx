@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Progress } from '@/components/ui'
+import { DonateButton } from '@/components/donate/donate-button'
 import { 
   Music, 
   Play, 
@@ -397,10 +398,16 @@ export function ArtistPortfolio({ className, artistId }: ArtistPortfolioProps) {
                 )}
               </div>
               
-              <Button onClick={() => setShowEditModal(true)}>
-                <Edit className="h-4 w-4 mr-2" />
-                Редактировать профиль
-              </Button>
+              <div className="flex space-x-3">
+                <Button onClick={() => setShowEditModal(true)}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  Редактировать профиль
+                </Button>
+                <DonateButton 
+                  artistWallet="9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM" 
+                  artistName={portfolio.artistInfo.displayName} 
+                />
+              </div>
             </div>
             
             <div className="text-right">

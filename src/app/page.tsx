@@ -1,4 +1,7 @@
 // Минимальная главная страница для быстрого старта
+import { NFTMemorialMint } from '@/components/nft/nft-memorial-mint'
+import { StarsPayment } from '@/components/telegram/stars-payment'
+
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
@@ -44,6 +47,20 @@ export default function HomePage() {
               <button className="w-full bg-white/20 text-white font-bold py-4 px-8 rounded-lg hover:bg-white/30 transition-all duration-300">
                 Загрузить трек
               </button>
+            </div>
+            
+            {/* Монетизация */}
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <NFTMemorialMint />
+              <div className="bg-white/5 rounded-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-4">🎆 Telegram Stars</h3>
+                <p className="text-blue-200 mb-4">Оплачивай музыку через Telegram</p>
+                <StarsPayment 
+                  amount={100} 
+                  description="Подписка NORMAL DANCE" 
+                  onSuccess={() => alert('Подписка активирована!')} 
+                />
+              </div>
             </div>
           </div>
           
