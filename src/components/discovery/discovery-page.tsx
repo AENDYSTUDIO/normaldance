@@ -197,7 +197,7 @@ export function DiscoveryPage() {
     setTracks(filtered)
   }, [searchQuery, selectedGenre, sortBy, activeTab])
 
-  const trendingTracks = mockTracks.filter(track => track.playCount > 10000).slice(0, 3)
+  const trendingTracks = [](track => track.playCount > 10000).slice(0, 3)
   const newTracks = mockTracks
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 3)

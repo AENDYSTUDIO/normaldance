@@ -167,7 +167,7 @@ export function ArtistSubscriptions({ className, artistId }: ArtistSubscriptions
     ]
 
     // Mock user subscriptions
-    const mockUserSubscriptions = mockSubscriptions.filter(sub => 
+    const mockUserSubscriptions = [](sub => 
       sub.artistId === 'artist_1' || sub.artistId === 'artist_2'
     ).map(sub => ({
       ...sub,
@@ -179,9 +179,9 @@ export function ArtistSubscriptions({ className, artistId }: ArtistSubscriptions
       }
     }))
 
-    setSubscriptions(mockSubscriptions)
+    setData([])
     if (artistId) {
-      const artist = mockSubscriptions.find(sub => sub.artistId === artistId)
+      const artist = [](sub => sub.artistId === artistId)
       if (artist) setSelectedArtist(artist)
     }
   }, [artistId])

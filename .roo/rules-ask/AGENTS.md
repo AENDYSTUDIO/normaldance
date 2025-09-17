@@ -1,25 +1,21 @@
-# Project Ask Rules (Non-Obvious Only)
+# Ask Mode Rules (Non-Obvious Only)
 
-- **Custom server setup**: Uses `server.ts` with Socket.IO instead of standard Next.js server
-- **Socket.IO path**: Custom `/api/socketio` path, not standard `/socket.io`
-- **Wallet integration**: Custom event emitter system in `src/components/wallet/wallet-adapter.tsx`, not standard wallet-adapter-react patterns
-- **Deflationary model**: 2% burn on all transactions, implemented in `src/lib/deflationary-model.ts`
-- **Database**: Global Prisma instance in `src/lib/db.ts`, never create new instances
-- **TypeScript**: Web3 code has relaxed types (`noImplicitAny: false`, `no-non-null-assertion: off`)
-- **Error handling**: Wallet operations return 0 on error instead of throwing (silent failures)
-- **Testing**: Mobile app tests require extensive mocking of React Native modules in `mobile-app/jest.setup.js`
-- **Build process**: Use `tsx` directly for production builds, Next.js build is disabled
-- **File uploads**: Custom IPFS/Filecoin redundancy system in `src/lib/ipfs-enhanced.ts`
-- **MCP server**: Separate Model Context Protocol server in `src/mcp/server.ts`
-- **Solana programs**: Custom Anchor programs with fixed program IDs in `programs/`
-- **Mobile app**: Separate Expo app with extensive mocking for testing
-- **IPFS system**: Multi-gateway redundancy with automatic fallback
-- **Russian locale**: All SOL/token formatting uses Russian locale conventions
-- **Fixed program IDs**: NDT_PROGRAM_ID, TRACKNFT_PROGRAM_ID, STAKING_PROGRAM_ID are hardcoded in `wallet-adapter.tsx` - never change
-- **IPFS chunking**: Files >10MB automatically chunked in `ipfs-enhanced.ts` with manifest-based reconstruction
-- **Global wallet emitter**: Use `walletEmitter` from `wallet-adapter.tsx` for custom event system
-- **Deflationary economics**: 2% burn with 20% to staking rewards, 30% to treasury - configured in `deflationary-model.ts`
-- **Socket.IO setup**: Custom server in `server.ts` handles both Next.js and Socket.IO on same port
-- **ESLint configuration**: All rules intentionally disabled in `eslint.config.mjs` for faster builds
-- **Jest timeout**: 30-second timeout for async operations in `jest.config.js`
-- **Mobile app mocking**: Extensive mocking of expo-av, react-native-track-player, and all React Native modules
+- **Project architecture**: Custom server setup with Socket.IO integration instead of standard Next.js server
+- **Wallet integration**: Custom event emitter system in `wallet-adapter.tsx`, not standard wallet-adapter-react patterns
+- **Deflationary economics**: Complex 2% burn model with 20% staking rewards and 30% treasury distribution
+- **Database pattern**: Global Prisma instance with connection timeout and error format configuration
+- **IPFS system**: Multi-gateway redundancy with automatic chunking for files >10MB and manifest reconstruction
+- **MCP server**: Custom protocol system (track://, user://, nft://, staking://) with specialized providers
+- **Mobile architecture**: Separate React Native app with extensive mocking layer for testing
+- **TypeScript configuration**: Web3 code uses relaxed type settings (`noImplicitAny: false`, `no-non-null-assertion: off`)
+- **Build system**: Production builds use `tsx` directly, Next.js build is disabled
+- **Testing setup**: Dual Jest environments with 30-second timeouts and comprehensive mocking
+- **File storage**: IPFS/Filecoin redundancy with health monitoring across multiple gateways
+- **Solana integration**: Fixed program IDs create tight coupling between frontend and smart contracts
+- **Russian locale**: All financial calculations and display use Russian number formatting
+- **Socket.IO server**: Custom server handles both Next.js and Socket.IO simultaneously on same port
+- **ESLint configuration**: All rules intentionally disabled for build performance optimization
+- **Error handling**: Silent failures in wallet operations return 0 instead of throwing exceptions
+- **Transaction flow**: Custom Solana transaction creation not following standard patterns
+- **Deflationary model**: Complex burn calculations with automatic distribution to staking and treasury
+- **Mobile mocking**: Extensive mocking of expo-av, react-native-track-player, and all React Native modules

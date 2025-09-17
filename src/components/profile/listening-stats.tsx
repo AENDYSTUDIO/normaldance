@@ -151,7 +151,7 @@ export function ListeningStats({ className }: ListeningStatsProps) {
       ]
     }
 
-    setStats(mockStats)
+    setData([])
   }, [])
 
   const formatTime = (minutes: number) => {

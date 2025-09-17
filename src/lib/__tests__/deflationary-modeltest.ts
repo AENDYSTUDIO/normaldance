@@ -79,14 +79,14 @@ describe('Deflationary Model', () => {
         const amount = 1234.567890
         const formatted = model.formatTokenAmount(amount)
         
-        expect(formatted).toBe('1,234.567890')
+        expect(formatted).toBe('1\u00A0234,56789')
       })
 
       it('should handle small amounts', () => {
         const amount = 0.001
         const formatted = model.formatTokenAmount(amount)
         
-        expect(formatted).toBe('0.00')
+        expect(formatted).toBe('0,001')
       })
     })
 

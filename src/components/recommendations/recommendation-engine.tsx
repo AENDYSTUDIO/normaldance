@@ -43,7 +43,7 @@ export function RecommendationEngine() {
       { trackId: '3', playCount: 8, rating: 5.0, timestamp: new Date('2024-01-17') },
       { trackId: '4', playCount: 2, rating: 3.5, timestamp: new Date('2024-01-18') }
     ]
-    setListeningHistory(mockHistory)
+    setData([])
   }, [])
 
   const generatePersonalRecommendations = async (): Promise<Track[]> => {

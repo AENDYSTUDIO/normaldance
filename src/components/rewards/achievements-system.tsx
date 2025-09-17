@@ -268,8 +268,8 @@ export function AchievementsSystem({ className }: AchievementsSystemProps) {
       lastActivity: new Date().toISOString()
     }
 
-    setAchievements(mockAchievements)
-    setUserStats(mockUserStats)
+    setData([])
+    setData([])
   }, [])
 
   const getRarityColor = (rarity: string) => {

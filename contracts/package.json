@@ -1,0 +1,31 @@
+{
+  "name": "normaldance-contracts",
+  "version": "1.0.1",
+  "description": "NORMAL DANCE Smart Contracts",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network mainnet",
+    "test": "hardhat test",
+    "verify": "hardhat verify"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.0",
+    "ethers": "^6.15.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "hardhat": "^2.17.0"
+  },
+  "keywords": [
+    "music",
+    "web3",
+    "nft",
+    "franchise",
+    "solana",
+    "ethereum"
+  ],
+  "author": "NORMAL DANCE Team",
+  "license": "MIT"
+}

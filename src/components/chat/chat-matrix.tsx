@@ -223,7 +223,7 @@ export function ChatMatrix({ className }: ChatMatrixProps) {
   ]
 
   useEffect(() => {
-    setMessages(mockMessages)
+    setData([])
     setUserRole({ type: 'voter', permissions: ['vote'], description: 'Голосующий' })
   }, [])
 

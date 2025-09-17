@@ -27,5 +27,5 @@
 - [Production Dashboard](https://dashboard.normaldance.com)
 
 ## 📞 Поддержка
-- **Technical Support**: support@normaldance.com
-- **Security Issues**: security@normaldance.com
+- **Technical Support**: [ЗАПОЛНИТЬ]
+- **Security Issues**: [ЗАПОЛНИТЬ]

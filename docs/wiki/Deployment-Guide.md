@@ -170,8 +170,8 @@ metadata:
   name: letsencrypt-prod
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: admin@normaldance.com
+    server: [ЗАПОЛНИТЬ]
+    email: [ЗАПОЛНИТЬ]
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:

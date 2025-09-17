@@ -314,7 +314,7 @@ export function StakingInterface() {
       totalParticipants: 2341,
       successRate: 98.5
     }
-    setAnalytics(mockAnalytics)
+    setData([])
   }, [])
 
   const handleStake = async () => {
@@ -548,7 +548,7 @@ export function StakingInterface() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {mockStakingPools.map((pool) => (
+                    {[]((pool) => (
                       <div
                         key={pool.id}
                         className={`p-4 border rounded-lg cursor-pointer transition-all ${
@@ -686,7 +686,7 @@ export function StakingInterface() {
                   <div>
                     <label className="text-sm font-medium mb-2 block">Выберите пул</label>
                     <div className="space-y-2">
-                      {mockStakingPools.map((pool) => (
+                      {[]((pool) => (
                         <div
                           key={pool.id}
                           className={`p-3 border rounded-lg cursor-pointer transition-colors ${

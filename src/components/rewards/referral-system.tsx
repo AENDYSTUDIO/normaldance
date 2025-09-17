@@ -106,7 +106,7 @@ export function ReferralSystem({ className }: ReferralSystemProps) {
       ]
     }
 
-    setReferralData(mockReferralData)
+    setData([])
   }, [])
 
   const copyToClipboard = async (text: string) => {

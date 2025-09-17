@@ -127,7 +127,7 @@ export function ListeningNow({ className, maxUsers = 5 }: ListeningNowProps) {
 
     // Simulate loading
     setTimeout(() => {
-      setListeners(mockListeners.slice(0, maxUsers))
+      setListeners([](0, maxUsers))
       setIsLoading(false)
     }, 1000)
   }, [maxUsers])

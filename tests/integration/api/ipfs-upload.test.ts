@@ -750,7 +750,7 @@ describe('IPFS Upload API - Comprehensive Tests', () => {
     })
   })
 
-  describe('Integration Tests', {
+  describe('Integration Tests', () => {
     it('should handle complete upload workflow', async () => {
       const formData = new FormData()
       formData.append('file', new Blob(['test content'], { type: 'audio/mpeg' }), 'test.mp3')

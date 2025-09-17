@@ -311,8 +311,8 @@ We are committed to building a sustainable, engaging platform that will enhance 
 ---
 
 **Contact Information:**
-- Email: admin@normaldance.com
-- Website: https://normaldance.com
+- Email: [ЗАПОЛНИТЬ]
+- Website: [ЗАПОЛНИТЬ]
 - Telegram: @normaldance_bot
 - GitHub: https://github.com/AENDYSTUDIO/normaldance-mini-app
 - Mini App: https://t.me/normaldance_bot/app

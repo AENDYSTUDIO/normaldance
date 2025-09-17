@@ -240,8 +240,8 @@ We are committed to building a sustainable, scalable platform that will transfor
 ---
 
 **Contact Information:**
-- Email: admin@normaldance.com
-- Website: https://normaldance.com
+- Email: [ЗАПОЛНИТЬ]
+- Website: [ЗАПОЛНИТЬ]
 - GitHub: https://github.com/AENDYSTUDIO/normaldance
 - LinkedIn: [Developer Profile]
 

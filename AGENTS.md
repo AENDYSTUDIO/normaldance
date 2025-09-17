@@ -1,81 +1,66 @@
 # AGENTS.md
 
-This file provides guidance to agents when working with code in this repository.
-
 ## Build/Test Commands (Non-Obvious)
 
 - **Single test execution**: `npm test -- --testPathPattern="filename.test.ts"` (Jest configured for specific file testing)
 - **Mobile app tests**: `cd mobile-app && npm test` (Separate test environment with extensive mocking)
-- **Development server**: `npm run dev` (Uses nodemon + tsx, not standard Next.js dev server)
 - **Production build**: `npm run build` (Next.js build disabled, uses tsx directly)
 - **MCP server**: `npm run mcp:dev` (Uses tsx watch for hot reload)
+- **Import checking**: `npm run check:imports` (Validates import paths using tsx)
+- **Auto-fix utilities**: `npm run check:detect` (Detects and fixes common issues)
 
 ## Critical Architecture Patterns
 
-- **Custom server setup**: Uses `server.ts` with Socket.IO integration, not standard Next.js server
+- **Custom server setup**: Uses `server.ts` with Socket.IO instead of standard Next.js server
 - **Socket.IO path**: Custom `/api/socketio` path, not standard `/socket.io`
-- **Wallet integration**: Phantom wallet only, custom event emitter system in `src/components/wallet/wallet-adapter.tsx`
-- **Deflationary model**: 2% burn on all transactions, implemented in `src/lib/deflationary-model.ts`
-- **Database**: Prisma with SQLite, global instance pattern in `src/lib/db.ts`
-- **Middleware**: Role-based access control with NextAuth, artist/curator/admin paths protected
+- **Wallet integration**: Use custom event emitter system in `src/components/wallet/wallet-adapter.tsx`, not standard wallet-adapter-react patterns
+- **Deflationary model**: All token transactions must use `DeflationaryModel` class for automatic 2% burn calculation
+- **Database**: Use global Prisma instance from `src/lib/db.ts`, never create new instances
+- **TypeScript**: Web3 code intentionally has relaxed types (`noImplicitAny: false`, `no-non-null-assertion: off`)
+- **Error handling**: Wallet operations return 0 on error instead of throwing (silent failures)
 
 ## Code Style (Project-Specific)
 
-- **ESLint disabled**: All linting rules turned off in `eslint.config.mjs` (intentional)
+- **ESLint disabled**: All rules intentionally disabled in `eslint.config.mjs` for faster builds
 - **TypeScript**: `noImplicitAny: false`, `no-non-null-assertion: off` (relaxed for Web3)
 - **Import patterns**: Wallet utilities use custom event system, not standard React patterns
 - **Error handling**: Silent failures in wallet operations, return 0 instead of throwing
+- **Russian locale**: All SOL/token formatting uses Russian locale conventions
 
 ## Testing Setup
 
 - **Dual test environments**: Separate Jest configs for main app (`jest.config.js`) and mobile app (`mobile-app/jest.setup.js`)
 - **Extensive mocking**: Mobile app mocks all React Native modules, expo libraries, and WebSocket
-- **Test timeout**: 30 seconds for async operations (longer than standard)
+- **Test timeout**: 30-second timeout for async operations in `jest.config.js`
 - **Coverage**: Excludes `__tests__` directories from coverage reports
+- **Mobile app mocking**: Extensive mocking of expo-av, react-native-track-player, and all React Native modules
 
 ## Web3 Specific
 
-- **Solana programs**: Custom Anchor programs in `programs/` with fixed program IDs
-- **Transaction handling**: Custom transaction creation in `src/components/wallet/wallet-adapter.tsx`
-- **Token formatting**: Russian locale formatting for SOL amounts, custom decimal handling
-- **Wallet state**: Custom context system, not standard wallet-adapter-react patterns
-
-## Mobile App
-
-- **Expo setup**: Custom service layer in `mobile-app/src/services/mobileService.ts`
-- **Audio handling**: Extensive mocking of expo-av for testing
-- **Wallet integration**: Separate from main app, custom mobile wallet service
+- **Solana programs**: Fixed program IDs in `programs/tracknft/src/lib.rs` - never change these
+- **Transaction handling**: Custom transaction creation in `wallet-adapter.tsx`, not standard Solana patterns
+- **Token formatting**: Always use Russian locale formatting for SOL amounts in `formatSol()`
+- **Fixed program IDs**: NDT_PROGRAM_ID, TRACKNFT_PROGRAM_ID, STAKING_PROGRAM_ID are hardcoded in `wallet-adapter.tsx` - never change
+- **Deflationary economics**: 2% burn with 20% to staking rewards, 30% to treasury - configured in `deflationary-model.ts`
+- **Global wallet emitter**: Use `walletEmitter` from `wallet-adapter.tsx` for custom event system
 
 ## File Storage & CDN
 
-- **IPFS/Filecoin redundancy**: Custom system in `src/lib/ipfs-enhanced.ts` with multiple gateway replication
+- **IPFS/Filecoin redundancy**: Use custom IPFS/Filecoin redundancy system in `src/lib/ipfs-enhanced.ts`
 - **CDN integration**: Automatic fallback to multiple gateways (ipfs.io, pinata.cloud, cloudflare-ipfs.com)
-- **File chunking**: Large files automatically chunked for IPFS upload
+- **File chunking**: Files >10MB automatically chunked in `ipfs-enhanced.ts` with manifest-based reconstruction
 - **Health monitoring**: Automated file availability checking across multiple gateways
 
-## Инвесторская страница
+## MCP Server
 
-- **Роут**: `/invest`
-- **Файл**: `src/app/invest/page.tsx`
-- **Обновляется вручную** при смене метрик или условий сделки.
+- **Development**: Use `tsx watch` for development, standard Node.js for production
+- **Custom path**: Model Context Protocol server in `src/mcp/server.ts`
+- **Providers**: Music, User, NFT, and Staking context providers
+- **Protocol**: Custom `protocol://` URI system (track://, user://, nft://, staking://)
 
-## TON Foundation Grant
+## Special Routes
 
-- **Роут**: `/ton-grant`
-- **Файл**: `src/app/ton-grant/page.tsx`
-- **Цель**: Получение гранта $50,000 + аудит + трафик от TON Foundation
-- **Статус**: Готов к подаче заявки
-
-## Telegram Partnership
-
-- **Роут**: `/telegram-partnership`
-- **Файл**: `src/app/telegram-partnership/page.tsx`
-- **Цель**: Verified Mini-App + Stars revenue share + App Directory
-- **Статус**: Готов к подаче заявки
-
-## Risk Management
-
-- **Роут**: `/risk-management`
-- **Файл**: `src/app/risk-management/page.tsx`
-- **Цель**: 4-ступенчатая модель страховки, анти-хрупкая архитектура
-- **Статус**: Активная стратегия минимизации рисков
+- **Investor page**: `/invest` - manually updated when metrics change
+- **TON Foundation Grant**: `/ton-grant` - ready for $50,000 grant application
+- **Telegram Partnership**: `/telegram-partnership` - ready for Mini-App + Stars revenue share
+- **Risk Management**: `/risk-management` - active 4-step insurance model

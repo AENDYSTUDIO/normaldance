@@ -62,7 +62,7 @@ export function NDTManager({ className }: NDTManagerProps) {
         pending_rewards: 50000000, // 50 NDT
         lock_period_remaining: 30 * 24 * 60 * 60, // 30 дней
       }
-      setStakingInfo(mockInfo)
+      setData([])
     } catch (err) {
       console.error('Error loading staking info:', err)
     }

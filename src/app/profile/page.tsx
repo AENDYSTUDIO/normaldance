@@ -105,7 +105,7 @@ export default function ProfilePage() {
           {/* Banner */}
           <div className="h-48 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg">
             <img 
-              src={mockUser.banner} 
+              src={[]} 
               alt="Banner" 
               className="w-full h-full object-cover rounded-lg opacity-50"
             />
@@ -115,19 +115,19 @@ export default function ProfilePage() {
           <div className="relative px-6 pb-6">
             <div className="flex items-end space-x-4 -mt-16">
               <Avatar className="h-32 w-32 border-4 border-background">
-                <AvatarImage src={mockUser.avatar} />
+                <AvatarImage src={[]} />
                 <AvatarFallback className="text-2xl">
-                  {mockUser.displayName.charAt(0)}
+                  {[].charAt(0)}
                 </AvatarFallback>
               </Avatar>
               
               <div className="flex-1 pb-2">
                 <div className="flex items-center space-x-2 mb-2">
-                  <h1 className="text-3xl font-bold">{mockUser.displayName}</h1>
-                  <Badge className={`${getLevelColor(mockUser.level)} text-white`}>
-                    {getLevelIcon(mockUser.level)} {mockUser.level}
+                  <h1 className="text-3xl font-bold">{[]}</h1>
+                  <Badge className={`${getLevelColor([])} text-white`}>
+                    {getLevelIcon([])} {[]}
                   </Badge>
-                  {mockUser.isArtist && (
+                  {[] && (
                     <Badge variant="secondary">
                       <Music className="h-3 w-3 mr-1" />
                       Артист
@@ -135,22 +135,22 @@ export default function ProfilePage() {
                   )}
                 </div>
                 
-                <p className="text-muted-foreground mb-3">@{mockUser.username}</p>
-                <p className="text-sm mb-4 max-w-2xl">{mockUser.bio}</p>
+                <p className="text-muted-foreground mb-3">@{[]}</p>
+                <p className="text-sm mb-4 max-w-2xl">{[]}</p>
                 
                 <div className="flex items-center space-x-4 text-sm">
                   <div className="flex items-center space-x-1">
                     <Users className="h-4 w-4" />
-                    <span className="font-medium">{formatNumber(mockUser._count.followers)}</span>
+                    <span className="font-medium">{formatNumber([].followers)}</span>
                     <span className="text-muted-foreground">подписчиков</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <span className="font-medium">{formatNumber(mockUser._count.following)}</span>
+                    <span className="font-medium">{formatNumber([].following)}</span>
                     <span className="text-muted-foreground">подписок</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Music className="h-4 w-4" />
-                    <span className="font-medium">{mockUser._count.tracks}</span>
+                    <span className="font-medium">{[].tracks}</span>
                     <span className="text-muted-foreground">треков</span>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5 text-blue-600" />
                 <div>
-                  <p className="text-2xl font-bold">{formatNumber(mockUser._count.playCount || 0)}</p>
+                  <p className="text-2xl font-bold">{formatNumber([].playCount || 0)}</p>
                   <p className="text-xs text-muted-foreground">Прослушиваний</p>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-2">
                 <Heart className="h-5 w-5 text-red-600" />
                 <div>
-                  <p className="text-2xl font-bold">{formatNumber(mockUser._count.likes)}</p>
+                  <p className="text-2xl font-bold">{formatNumber([].likes)}</p>
                   <p className="text-xs text-muted-foreground">Лайков</p>
                 </div>
               </div>
@@ -201,7 +201,7 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-2">
                 <Trophy className="h-5 w-5 text-yellow-600" />
                 <div>
-                  <p className="text-2xl font-bold">{mockUser.balance.toFixed(1)}</p>
+                  <p className="text-2xl font-bold">{[].toFixed(1)}</p>
                   <p className="text-xs text-muted-foreground">$NDT</p>
                 </div>
               </div>
@@ -213,7 +213,7 @@ export default function ProfilePage() {
               <div className="flex items-center space-x-2">
                 <Play className="h-5 w-5 text-green-600" />
                 <div>
-                  <p className="text-2xl font-bold">{mockUser._count.rewards}</p>
+                  <p className="text-2xl font-bold">{[].rewards}</p>
                   <p className="text-xs text-muted-foreground">Наград</p>
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function ProfilePage() {
           
           <TabsContent value="tracks" className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Треки ({mockUser._count.tracks})</h2>
+              <h2 className="text-xl font-semibold">Треки ({[].tracks})</h2>
               <Button>
                 <Music className="h-4 w-4 mr-2" />
                 Загрузить трек
@@ -239,7 +239,7 @@ export default function ProfilePage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {mockTracks.map((track) => (
+              {[]((track) => (
                 <TrackCard key={track.id} track={track} />
               ))}
             </div>
@@ -247,7 +247,7 @@ export default function ProfilePage() {
           
           <TabsContent value="playlists" className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Плейлисты ({mockUser._count.playlists})</h2>
+              <h2 className="text-xl font-semibold">Плейлисты ({[].playlists})</h2>
               <Button>Создать плейлист</Button>
             </div>
             
@@ -266,15 +266,15 @@ export default function ProfilePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Email</p>
-                    <p>{mockUser.email}</p>
+                    <p>{[]}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Кошелек</p>
-                    <p className="font-mono text-sm">{mockUser.wallet}</p>
+                    <p className="font-mono text-sm">{[]}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Дата регистрации</p>
-                    <p>{formatDate(mockUser.createdAt)}</p>
+                    <p>{formatDate([])}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Статус</p>
@@ -284,7 +284,7 @@ export default function ProfilePage() {
                 
                 <div>
                   <p className="text-sm font-medium text-muted-foreground mb-2">О себе</p>
-                  <p>{mockUser.bio}</p>
+                  <p>{[]}</p>
                 </div>
               </CardContent>
             </Card>

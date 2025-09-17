@@ -274,7 +274,7 @@ export function ArtistPortfolio({ className, artistId }: ArtistPortfolioProps) {
       ]
     }
 
-    setPortfolio(mockPortfolio)
+    setData([])
   }, [artistId])
 
   const formatNumber = (num: number) => {

@@ -13,8 +13,8 @@
 ### Quick Setup
 ```bash
 # Clone repository
-git clone git@github.com:AENDYSTUDIO/normaldance-production-ready.git
-cd normaldance-production-ready
+git clone [ЗАПОЛНИТЬ]
+cd [ЗАПОЛНИТЬ]
 
 # Install dependencies
 npm install

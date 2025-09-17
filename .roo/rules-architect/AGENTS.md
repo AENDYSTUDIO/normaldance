@@ -1,26 +1,23 @@
-# Project Architecture Rules (Non-Obvious Only)
+# Architect Mode Rules (Non-Obvious Only)
 
-- **Custom server setup**: Uses `server.ts` with Socket.IO instead of standard Next.js server
-- **Socket.IO path**: Custom `/api/socketio` path, not standard `/socket.io`
-- **Wallet integration**: Custom event emitter system in `src/components/wallet/wallet-adapter.tsx`, not standard wallet-adapter-react patterns
-- **Deflationary model**: 2% burn on all transactions, implemented in `src/lib/deflationary-model.ts`
-- **Database**: Global Prisma instance in `src/lib/db.ts`, never create new instances
-- **TypeScript**: Web3 code has relaxed types (`noImplicitAny: false`, `no-non-null-assertion: off`)
-- **Error handling**: Wallet operations return 0 on error instead of throwing (silent failures)
-- **Testing**: Mobile app tests require extensive mocking of React Native modules in `mobile-app/jest.setup.js`
-- **Build process**: Use `tsx` directly for production builds, Next.js build is disabled
-- **File uploads**: Custom IPFS/Filecoin redundancy system in `src/lib/ipfs-enhanced.ts`
-- **MCP server**: Separate Model Context Protocol server architecture
-- **Solana programs**: Fixed program IDs create coupling between frontend and smart contracts
-- **IPFS/Filecoin**: Redundancy system requires multiple gateway coordination
-- **Mobile architecture**: Separate from main app with custom service layer
-- **Deflationary economics**: 2% burn creates automatic token scarcity and treasury distribution
-- **Russian locale formatting**: Built into all financial calculations and display
-- **Fixed program IDs**: Hardcoded program IDs create tight frontend-smart contract coupling
-- **IPFS chunking**: Large files automatically chunked with manifest-based reconstruction
-- **Global wallet emitter**: Custom event system architecture for wallet state management
-- **Deflationary distribution**: 2% burn with 20% staking rewards, 30% treasury allocation
-- **Socket.IO server architecture**: Custom server handles both Next.js and Socket.IO simultaneously
-- **ESLint architecture**: All rules disabled for build performance optimization
-- **Jest architecture**: 30-second timeout for async operations due to extensive mocking
-26 - **Mobile app architecture**: Complete module mocking layer for testing isolation
+- **Architecture pattern**: Custom server setup with Socket.IO integration instead of standard Next.js server
+- **Communication layer**: Custom `/api/socketio` path for real-time communication
+- **Wallet architecture**: Custom event emitter system replacing standard wallet-adapter-react patterns
+- **Economic model**: Deflationary token system with 2% burn, 20% staking rewards, 30% treasury distribution
+- **Data layer**: Global Prisma instance with connection timeout and error format optimization
+- **Storage architecture**: Multi-gateway IPFS/Filecoin redundancy with automatic chunking and health monitoring
+- **Integration pattern**: MCP server with custom protocol system (track://, user://, nft://, staking://)
+- **Mobile architecture**: Separate React Native app with comprehensive mocking layer for testing
+- **TypeScript strategy**: Web3 code uses relaxed type settings for compatibility with Solana libraries
+- **Build optimization**: Production builds use `tsx` directly, Next.js build disabled for performance
+- **Testing strategy**: Dual Jest environments with extended timeouts and extensive mocking
+- **Security model**: Silent error handling in wallet operations with return 0 instead of throwing
+- **Transaction architecture**: Custom Solana transaction creation not following standard patterns
+- **Financial system**: Russian locale formatting for all SOL amounts and token calculations
+- **Performance optimization**: ESLint rules disabled for faster build times
+- **Socket.IO architecture**: Custom server handling both Next.js and Socket.IO simultaneously
+- **Smart contract integration**: Fixed program IDs create tight frontend-smart contract coupling
+- **File handling**: Large files automatically chunked with manifest-based reconstruction
+- **Event system**: Global wallet emitter for custom event handling across application
+- **Mocking strategy**: Extensive React Native module mocking for mobile app testing
+- **Error recovery**: Automatic fallback to multiple IPFS gateways for file availability
