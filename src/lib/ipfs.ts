@@ -24,8 +24,9 @@ const PINATA_CONFIG = {
 }
 
 // Создание Pinata клиента
+import pinataSDK from '@pinata/sdk'
 export const pinata = PINATA_CONFIG.pinataApiKey && PINATA_CONFIG.pinataSecretApiKey
-  ? create({
+  ? new pinataSDK({
       pinataApiKey: PINATA_CONFIG.pinataApiKey,
       pinataSecretApiKey: PINATA_CONFIG.pinataSecretApiKey,
     })

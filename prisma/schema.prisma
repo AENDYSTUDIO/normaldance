@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./db/production.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // User model for artists and listeners
