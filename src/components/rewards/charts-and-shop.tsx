@@ -197,8 +197,8 @@ export function ChartsAndShop({ className }: ChartsAndShopProps) {
     ]
 
     // Set mock data
-    setWeeklyCharts(mockWeeklyCharts)
-    setShopItems(mockShopItems)
+    setData([])
+    setData([])
   }, [])
 
   const [weeklyCharts, setWeeklyCharts] = useState<ChartEntry[]>([])

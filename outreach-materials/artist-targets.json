@@ -1,0 +1,37 @@
+[
+  {
+    "name": "SoundCloud Indie Artists",
+    "platform": "SoundCloud",
+    "searchUrl": "https://soundcloud.com/search/people?q=indie%20electronic",
+    "priority": "high",
+    "notes": "Активные независимые артисты"
+  },
+  {
+    "name": "Twitter Crypto Music",
+    "platform": "Twitter",
+    "searchUrl": "https://twitter.com/search?q=%23cryptomusic%20OR%20%23web3music",
+    "priority": "high",
+    "notes": "Крипто-музыкальное сообщество"
+  },
+  {
+    "name": "Reddit EDM Producers",
+    "platform": "Reddit",
+    "searchUrl": "https://reddit.com/r/edmproduction",
+    "priority": "medium",
+    "notes": "Сообщество продюсеров"
+  },
+  {
+    "name": "Instagram Local Music",
+    "platform": "Instagram",
+    "searchUrl": "https://instagram.com/explore/tags/localmusic/",
+    "priority": "medium",
+    "notes": "Локальная музыкальная сцена"
+  },
+  {
+    "name": "YouTube Music Channels",
+    "platform": "YouTube",
+    "searchUrl": "https://youtube.com/results?search_query=indie+music+producer",
+    "priority": "low",
+    "notes": "Музыкальные каналы"
+  }
+]

@@ -1,6 +1,6 @@
 import { describe, it, expect } from '@jest/globals';
 import { renderHook, act } from '@testing-library/react';
-import { useAudioStore } from '@/store/use-audio-store';
+import { useAudioStore } from '@/hooks/useAudioStore';
 
 describe('useAudioStore', () => {
   it('should initialize with default values', () => {

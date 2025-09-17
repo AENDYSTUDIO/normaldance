@@ -1,0 +1,21 @@
+{
+  "outreach": {
+    "messagesSent": 0,
+    "responsesReceived": 0,
+    "artistsContacted": 0,
+    "positiveResponses": 0,
+    "negativeResponses": 0,
+    "noResponse": 0
+  },
+  "conversion": {
+    "artistsInterested": 0,
+    "artistsOnboarded": 0,
+    "firstTrackUploaded": 0,
+    "firstRevenue": 0
+  },
+  "timeline": {
+    "startDate": "2025-09-17T03:03:38.654Z",
+    "targetFirstArtist": "2025-09-24T03:03:38.655Z",
+    "targetFirstTrack": "2025-10-01T03:03:38.655Z"
+  }
+}

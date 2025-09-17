@@ -146,7 +146,7 @@ export function SocialIntegration({ className, artistId }: SocialIntegrationProp
       }
     ]
 
-    setAccounts(mockAccounts)
+    setData([])
   }, [artistId])
 
   const getPlatformIcon = (platform: SocialAccount['platform']) => {

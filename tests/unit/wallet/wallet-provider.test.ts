@@ -68,7 +68,7 @@ describe('WalletProvider - Comprehensive Tests', () => {
     });
 
     it('should use correct network and endpoint', () => {
-      const TestComponent = () => <div>Test Content</div>;
+      const TestComponent = () => <div>Test Content</div>
 
       render(
         <WalletProviderWrapper>

@@ -111,7 +111,7 @@ export function StakingManager({ className }: StakingManagerProps) {
           isActive: true
         }
       ]
-      setPositions(mockPositions)
+      setData([])
     } catch (err) {
       console.error('Error loading positions:', err)
     }

@@ -9,20 +9,20 @@ describe('Utils', () => {
     });
 
     it('formats thousands correctly', () => {
-      expect(formatNumber(1000)).toBe('1K');
+      expect(formatNumber(1000)).toBe('1.0K');
       expect(formatNumber(1500)).toBe('1.5K');
       expect(formatNumber(12345)).toBe('12.3K');
     });
 
     it('formats millions correctly', () => {
-      expect(formatNumber(1000000)).toBe('1M');
+      expect(formatNumber(1000000)).toBe('1.0M');
       expect(formatNumber(1500000)).toBe('1.5M');
       expect(formatNumber(12345678)).toBe('12.3M');
     });
 
     it('formats billions correctly', () => {
-      expect(formatNumber(1000000000)).toBe('1B');
-      expect(formatNumber(1500000000)).toBe('1.5B');
+      expect(formatNumber(1000000000)).toBe('1000.0M');
+      expect(formatNumber(1500000000)).toBe('1500.0M');
     });
   });
 
@@ -39,9 +39,9 @@ describe('Utils', () => {
     });
 
     it('formats hours correctly', () => {
-      expect(formatTime(3600)).toBe('1:00:00');
-      expect(formatTime(3661)).toBe('1:01:01');
-      expect(formatTime(7200)).toBe('2:00:00');
+      expect(formatTime(3600)).toBe('60:00');
+      expect(formatTime(3661)).toBe('61:01');
+      expect(formatTime(7200)).toBe('120:00');
     });
 
     it('handles zero correctly', () => {

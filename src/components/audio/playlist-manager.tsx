@@ -114,7 +114,7 @@ export function PlaylistManager({ className }: PlaylistManagerProps) {
         createdBy: 'current-user'
       }
     ]
-    setPlaylists(mockPlaylists)
+    setData([])
   }, [])
 
   const handleCreatePlaylist = () => {

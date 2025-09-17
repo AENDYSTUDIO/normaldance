@@ -491,9 +491,9 @@ export function UnifiedSystem({ className }: UnifiedSystemProps) {
   ]
 
   useEffect(() => {
-    setUserProfile(mockUserProfile)
-    setSystemStats(mockSystemStats)
-    setNotifications(mockNotifications)
+    setData([])
+    setData([])
+    setData([])
   }, [])
 
   const modules = [

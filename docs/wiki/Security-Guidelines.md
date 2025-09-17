@@ -188,9 +188,9 @@ class SecurityLogger {
 6. **Lessons Learned** - Process improvement
 
 ### Emergency Contacts
-- **Security Team**: security@normaldance.com
-- **On-call Engineer**: +1-XXX-XXX-XXXX
-- **Legal Team**: legal@normaldance.com
+- **Security Team**: [ЗАПОЛНИТЬ]
+- **On-call Engineer**: [ЗАПОЛНИТЬ]
+- **Legal Team**: [ЗАПОЛНИТЬ]
 
 ## Compliance
 

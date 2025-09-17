@@ -115,7 +115,6 @@ export async function POST(request: NextRequest) {
 
 // Handle specific vote actions
 async function handleVoteAction(tx: any, message: any, voteType: string, userId: string) {
-  const voteType = message.metadata.voteType
   const target = message.metadata.target
 
   switch (voteType) {

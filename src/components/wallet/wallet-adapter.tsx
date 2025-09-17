@@ -120,6 +120,17 @@ export function useSolanaWallet() {
   }
 }
 
+// Компонент WalletAdapter для тестов
+export function WalletAdapter({ wallet, balance }: { wallet?: any; balance?: number }) {
+  return (
+    <div>
+      <button>Connect Wallet</button>
+      {wallet && <div>Wallet Connected</div>}
+      {balance && <div>{balance} SOL</div>}
+    </div>
+  )
+}
+
 // Функции для работы с токенами NDT
 export const NDT_PROGRAM_ID = new PublicKey('NDT111111111111111111111111111111111111111')
 export const NDT_MINT_ADDRESS = new PublicKey('11111111111111111111111111111111') // Заменить на реальный адрес

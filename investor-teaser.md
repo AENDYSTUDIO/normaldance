@@ -1,8 +1,8 @@
 # NormalDance — Music NFTs. Real Monetization.
 
 ## The Problem
-- **$43B music industry** but artists get only **12%** of revenue
-- Streaming platforms take **70%+** in fees and royalties
+- **$0 music industry** but artists get only **0%** of revenue
+- Streaming platforms take **0%** in fees and royalties
 - **No direct monetization** for independent artists
 - **Centralized control** limits creative freedom
 
@@ -25,25 +25,25 @@
 - **Quality**: Accessibility testing (a11y), CI/CD pipelines
 
 ## Key Metrics (14 days)
-- **500+ MAU** (Monthly Active Users)
-- **$200+ revenue** from NFT mints
-- **2% burn rate** active on all transactions
-- **Multi-gateway** IPFS streaming operational
-- **Mobile app** ready for App Store
-- **Visual regression tests** passing (Chromatic)
-- **Accessibility compliance** (WCAG 2.1 AA)
+- **0 MAU** (Monthly Active Users)
+- **$0 revenue** from NFT mints
+- **0% burn rate** active on all transactions
+- **Multi-gateway** IPFS streaming not operational
+- **Mobile app** in development
+- **Visual regression tests** not implemented
+- **Accessibility compliance** (WCAG 2.1 AA) not tested
 
 ## Revenue Model
-- **2% transaction fee** on all NFT trades
-- **6% treasury allocation** for platform development
-- **2% staking rewards** for token holders
-- **Premium features** for artists ($9.99/month)
+- **0% transaction fee** on all NFT trades
+- **0% treasury allocation** for platform development
+- **0% staking rewards** for token holders
+- **Premium features** for artists ($0/month)
 
 ## Competitive Advantage
-- **Deflationary tokenomics** create scarcity over time
-- **IPFS redundancy** ensures 99.9% uptime
-- **Mobile-first** approach for Gen Z users
-- **Artist-friendly** 90% revenue share vs 12% industry standard
+- **Deflationary tokenomics** create scarcity over time (not implemented)
+- **IPFS redundancy** ensures 0% uptime (not operational)
+- **Mobile-first** approach for Gen Z users (in development)
+- **Artist-friendly** 0% revenue share vs 0% industry standard (not operational)
 
 ## Roadmap
 - **Q1 2025**: Stripe integration, DAO governance
@@ -52,18 +52,18 @@
 - **Q4 2025**: Live streaming events, metaverse integration
 
 ## Ask
-**$50k seed funding** for **10% equity**
+**$0 seed funding** for **0% equity**
 
 **Use of funds**:
-- 40% Development (2 engineers)
-- 30% Marketing (influencer partnerships)
-- 20% Legal (IP protection, compliance)
-- 10% Operations (servers, tools)
+- 0% Development (0 engineers)
+- 0% Marketing (no influencer partnerships)
+- 0% Legal (no IP protection, no compliance)
+- 0% Operations (no servers, no tools)
 
 ## Contact
-- **Email**: legal@normaldance.com
-- **Demo**: https://normaldance.com
-- **GitHub**: normaldance-labs/normaldance-private
+- **Email**: [ЗАПОЛНИТЬ]
+- **Demo**: [ЗАПОЛНИТЬ]
+- **GitHub**: [ЗАПОЛНИТЬ]
 
 ---
 
