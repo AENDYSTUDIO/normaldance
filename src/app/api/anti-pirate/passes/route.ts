@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     const now = new Date()
 
     // Get all passes for the user
-    const passes = await db.nftPass.findMany({
+    const passes = await db.nFT.findMany({
       where: {
         userId: session.user.id
       },
@@ -95,7 +95,7 @@ export async function POST(request: Request) {
     }
 
     // Create NFT pass
-    const pass = await db.nftPass.create({
+    const pass = await db.nFT.create({
       data: {
         userId: session.user.id,
         type,

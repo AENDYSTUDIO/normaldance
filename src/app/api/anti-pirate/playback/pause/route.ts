@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     }
 
     // Find the playback session
-    const playbackSession = await db.playbackSession.findUnique({
+    const playbackSession = await db.playHistory.findUnique({
       where: { id: sessionId }
     })
 
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     }
 
     // Update the session with pause information
-    const updatedSession = await db.playbackSession.update({
+    const updatedSession = await db.playHistory.update({
       where: { id: sessionId },
       data: {
         pausedTime: new Date(pausedTime),

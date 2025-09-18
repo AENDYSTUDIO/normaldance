@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     }
 
     // Get pass template
-    const passTemplate = await db.nftPassTemplate.findUnique({
+    const passTemplate = await db.nFT.findUnique({
       where: { id: passId }
     })
 
@@ -50,7 +50,8 @@ export async function POST(request: Request) {
     }
 
     // Check if user has enough TON balance
-    if (user.tonBalance < passTemplate.price) {
+    const passPrice = passTemplate.price || 0
+    if (user.tonBalance < passPrice) {
       return NextResponse.json(
         { error: 'Insufficient TON balance' },
         { status: 400 }
@@ -62,7 +63,7 @@ export async function POST(request: Request) {
       // Deduct TON from user balance
       await tx.user.update({
         where: { id: session.user.id },
-        data: { tonBalance: { decrement: passTemplate.price } }
+        data: { tonBalance: { decrement: passPrice } }
       })
 
       // Create NFT pass
@@ -71,14 +72,14 @@ export async function POST(request: Request) {
           userId: session.user.id,
           type: passTemplate.type,
           name: passTemplate.name,
-          price: passTemplate.price,
+          price: passPrice,
           duration: passTemplate.duration,
           description: passTemplate.description,
           benefits: passTemplate.benefits,
           icon: passTemplate.icon,
           color: passTemplate.color,
           isActive: true,
-          expiresAt: new Date(Date.now() + passTemplate.duration * 60 * 60 * 1000),
+          expiresAt: new Date(Date.now() + (passTemplate.duration || 0) * 60 * 60 * 1000),
           metadata: {
             deviceId,
             walletAddress,
@@ -96,7 +97,7 @@ export async function POST(request: Request) {
           userId: session.user.id,
           passId: pass.id,
           templateId: passTemplate.id,
-          price: passTemplate.price,
+          price: passPrice,
           deviceId,
           walletAddress,
           status: 'COMPLETED'
@@ -111,7 +112,7 @@ export async function POST(request: Request) {
         })
 
         if (track) {
-          const artistReward = passTemplate.price * 0.9
+          const artistReward = passPrice * 0.9
           await tx.user.update({
             where: { id: track.userId },
             data: { tonBalance: { increment: artistReward } }
@@ -122,7 +123,7 @@ export async function POST(request: Request) {
               userId: track.userId,
               type: 'PASS_PURCHASE',
               amount: artistReward,
-              reason: `NFT pass purchase reward (90% of ${passTemplate.price} TON)`
+              reason: `NFT pass purchase reward (90% of ${passPrice} TON)`
             }
           })
         }
