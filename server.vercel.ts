@@ -1,4 +1,4 @@
-# Vercel-optimized server.ts for NORMALDANCE
+// Vercel-optimized server.ts for NORMALDANCE
 
 import { setupSocket } from '@/lib/socket';
 import { createServer } from 'http';
