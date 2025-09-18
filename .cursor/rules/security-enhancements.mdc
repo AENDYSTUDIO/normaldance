@@ -1,0 +1,166 @@
+---
+globs: src/lib/api-security.ts,src/lib/sanitizer.ts,src/lib/security-checklist.ts,src/middleware.ts
+description: Правила безопасности и валидации
+---
+
+# Правила безопасности и валидации
+
+## API Security Framework
+
+### Rate Limiting
+```typescript
+// Конфигурация rate limiting
+const rateLimitConfig = {
+  limit: 100,           // запросов
+  windowMs: 60000,      // в минуту
+  keyGenerator: (req) => getClientIP(req) // по IP
+}
+```
+
+### Authentication & Authorization
+```typescript
+// JWT токены
+const authConfig = {
+  required: true,
+  roles: ['user', 'artist', 'admin'],
+  permissions: ['read', 'write', 'delete']
+}
+```
+
+### Input Validation
+```typescript
+// Zod схемы для валидации
+const trackSchema = z.object({
+  title: z.string().min(1).max(100),
+  artist: z.string().min(1).max(50),
+  genre: z.enum(['electronic', 'rock', 'pop']),
+  duration: z.number().positive()
+})
+```
+
+## Sanitization Rules
+
+### HTML Sanitization
+- **XSS Prevention**: Очистка HTML тегов
+- **Script Removal**: Удаление JavaScript
+- **Attribute Filtering**: Фильтрация атрибутов
+- **URL Validation**: Проверка URL на безопасность
+
+### SQL Injection Prevention
+- **Parameterized Queries**: Использование Prisma ORM
+- **Input Escaping**: Экранирование специальных символов
+- **Query Validation**: Проверка SQL запросов
+- **Database Permissions**: Минимальные права доступа
+
+### File Upload Security
+- **File Type Validation**: Проверка MIME типов
+- **Size Limits**: Ограничения размера файлов
+- **Virus Scanning**: Сканирование на вирусы
+- **Content Validation**: Проверка содержимого
+
+## Security Headers
+
+### Content Security Policy
+```typescript
+const cspConfig = {
+  'default-src': ["'self'"],
+  'script-src': ["'self'", "'unsafe-inline'"],
+  'style-src': ["'self'", "'unsafe-inline'"],
+  'img-src': ["'self'", "data:", "https:"],
+  'connect-src': ["'self'", "wss:", "https:"]
+}
+```
+
+### Security Headers
+- **X-Content-Type-Options**: nosniff
+- **X-Frame-Options**: DENY
+- **X-XSS-Protection**: 1; mode=block
+- **Referrer-Policy**: strict-origin-when-cross-origin
+- **Permissions-Policy**: camera=(), microphone=(), geolocation=()
+
+## Web3 Security
+
+### Wallet Security
+- **Signature Validation**: Проверка подписей транзакций
+- **Address Validation**: Валидация адресов кошельков
+- **Transaction Verification**: Проверка транзакций
+- **Private Key Protection**: Защита приватных ключей
+
+### Smart Contract Security
+- **Program ID Validation**: Проверка ID программ
+- **Transaction Limits**: Ограничения транзакций
+- **Gas Limit Protection**: Защита от высоких комиссий
+- **Reentrancy Protection**: Защита от повторных вызовов
+
+## Data Protection
+
+### Encryption
+- **At Rest**: Шифрование данных в БД
+- **In Transit**: HTTPS/TLS для передачи
+- **Key Management**: Безопасное управление ключами
+- **Key Rotation**: Регулярная смена ключей
+
+### PII Handling
+- **Data Minimization**: Минимальная обработка данных
+- **Consent Management**: Управление согласием
+- **Right to Deletion**: Право на удаление
+- **Data Portability**: Переносимость данных
+
+## Monitoring & Logging
+
+### Security Events
+- **Failed Authentication**: Неудачные попытки входа
+- **Suspicious Activity**: Подозрительная активность
+- **Rate Limit Exceeded**: Превышение лимитов
+- **Data Breach Attempts**: Попытки взлома
+
+### Audit Trail
+- **User Actions**: Действия пользователей
+- **System Changes**: Изменения системы
+- **Data Access**: Доступ к данным
+- **Configuration Changes**: Изменения конфигурации
+
+## Incident Response
+
+### Severity Levels
+- **Critical**: Немедленное реагирование
+- **High**: Реагирование в течение часа
+- **Medium**: Реагирование в течение дня
+- **Low**: Реагирование в течение недели
+
+### Response Procedures
+1. **Detection**: Обнаружение инцидента
+2. **Assessment**: Оценка серьезности
+3. **Containment**: Сдерживание угрозы
+4. **Eradication**: Устранение угрозы
+5. **Recovery**: Восстановление системы
+6. **Lessons Learned**: Анализ и улучшения
+
+## Compliance
+
+### GDPR Compliance
+- **Data Subject Rights**: Права субъектов данных
+- **Privacy by Design**: Приватность по умолчанию
+- **Data Protection Impact Assessment**: Оценка воздействия
+- **Breach Notification**: Уведомление о нарушениях
+
+### SOC2 Compliance
+- **Security**: Безопасность системы
+- **Availability**: Доступность сервиса
+- **Processing Integrity**: Целостность обработки
+- **Confidentiality**: Конфиденциальность
+- **Privacy**: Приватность
+
+## Testing
+
+### Security Testing
+- **Penetration Testing**: Тестирование на проникновение
+- **Vulnerability Scanning**: Сканирование уязвимостей
+- **Code Review**: Обзор кода на безопасность
+- **Dependency Audit**: Аудит зависимостей
+
+### Automated Security
+- **SAST**: Статический анализ кода
+- **DAST**: Динамический анализ приложения
+- **IAST**: Интерактивный анализ
+- **SCA**: Анализ состава программного обеспечения
