@@ -4,12 +4,18 @@ import { readFileSync, existsSync, createReadStream } from 'fs'
 import { join } from 'path'
 
 // GET /api/tracks/stream - Stream audio track
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest) {
   try {
-    const { id } = await params
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Track ID is required' },
+        { status: 400 }
+      )
+    }
+    
     const track = await db.track.findUnique({
       where: { id },
       select: {
@@ -76,14 +82,17 @@ export async function GET(
 }
 
 // POST /api/tracks/stream - Track play count and user listening
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest) {
   try {
-    const { id } = await params
     const body = await request.json()
-    const { userId, duration, completed, position } = body
+    const { id, userId, duration, completed, position } = body
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Track ID is required' },
+        { status: 400 }
+      )
+    }
 
     // Find the track
     const track = await db.track.findUnique({
@@ -155,12 +164,18 @@ export async function POST(
 }
 
 // HEAD /api/tracks/stream - Get track info without streaming
-export async function HEAD(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function HEAD(request: NextRequest) {
   try {
-    const { id } = await params
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+    
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Track ID is required' },
+        { status: 400 }
+      )
+    }
+    
     const track = await db.track.findUnique({
       where: { id },
       select: {
