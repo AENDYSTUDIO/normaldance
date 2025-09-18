@@ -51,7 +51,7 @@ async function createCustomServer() {
       io.adapter(createAdapter(pubClient, subClient))
       console.log('Socket.IO Redis adapter enabled')
     } catch (e) {
-      console.warn('Socket.IO Redis adapter not enabled:', e?.message || e)
+      console.warn('Socket.IO Redis adapter not enabled:', (e as Error)?.message || e)
     }
 
     setupSocket(io);
