@@ -22,7 +22,8 @@ if (process.env.VERCEL) {
   });
   
   await nextApp.prepare();
-  export default nextApp.getRequestHandler();
+  const handler = nextApp.getRequestHandler();
+  export default handler;
 } else {
   // Custom server for local development and other platforms
   async function createCustomServer() {
