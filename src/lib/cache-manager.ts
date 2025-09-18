@@ -62,10 +62,16 @@ class CacheManager {
       // Загрузка кеша из localStorage на клиенте
       try {
         const savedCache = localStorage.getItem('normaldance_cache')
-        if (savedCache) {
-          const parsed = JSON.parse(savedCache)
-          this.storageCache = new Map(parsed.entries)
-          this.currentSize = parsed.size || 0
+        if (savedCache && typeof savedCache === 'string' && savedCache.length < 10000000) { // Ограничиваем размер
+          try {
+            const parsed = JSON.parse(savedCache)
+            if (parsed && typeof parsed === 'object' && Array.isArray(parsed.entries)) {
+              this.storageCache = new Map(parsed.entries)
+              this.currentSize = typeof parsed.size === 'number' ? parsed.size : 0
+            }
+          } catch (parseError) {
+            console.warn('Invalid cache data format:', parseError)
+          }
         }
       } catch (error) {
         console.warn('Failed to load cache from localStorage:', error)

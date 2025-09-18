@@ -7,7 +7,7 @@ import { AnchorProvider, Program, web3 } from '@coral-xyz/anchor'
 // Конфигурация
 const SOLANA_NETWORK = 'devnet'
 const RPC_URL = 'https://api.devnet.solana.com'
-const API_BASE_URL = 'http://localhost:3000'
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://normaldance.vercel.app'
 
 // Интерфейсы
 export interface MobileTrack {
@@ -156,7 +156,10 @@ export class MobileService {
         await this.sound.unloadAsync()
       }
 
-      // Загрузка аудио из IPFS
+      // Загрузка аудио из IPFS с проверкой безопасности
+      if (!track.ipfsHash || !/^[a-zA-Z0-9]{46}$/.test(track.ipfsHash)) {
+        throw new Error('Invalid IPFS hash')
+      }
       const audioUrl = `https://ipfs.io/ipfs/${track.ipfsHash}`
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: audioUrl },
@@ -165,10 +168,12 @@ export class MobileService {
 
       this.sound = newSound
 
-      // Обновление счетчика воспроизведений
-      await fetch(`${API_BASE_URL}/api/tracks/${track.id}/play`, {
-        method: 'POST'
-      })
+      // Обновление счетчика воспроизведений с валидацией ID
+      if (track.id && /^[a-zA-Z0-9-_]+$/.test(track.id)) {
+        await fetch(`${API_BASE_URL}/api/tracks/${encodeURIComponent(track.id)}/play`, {
+          method: 'POST'
+        })
+      }
 
     } catch (error) {
       console.error('Failed to play track:', error)

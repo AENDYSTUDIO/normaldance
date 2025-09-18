@@ -1,9 +1,11 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react'
 import { useAudioStore } from '@/store/use-audio-store'
 import useNetworkStatus from '@/hooks/useNetworkStatus'
 import { Button, Slider, Card, CardContent, Badge, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
+import { EnhancedAudioControls } from './enhanced-audio-controls'
 import {
   Play,
   Pause,
@@ -77,7 +79,7 @@ interface AudioCache {
   }
 }
 
-export function OptimizedAudioPlayer() {
+export const OptimizedAudioPlayer = memo(function OptimizedAudioPlayer() {
   const {
     currentTrack,
     isPlaying,
@@ -489,44 +491,21 @@ export function OptimizedAudioPlayer() {
 
             {/* Управление воспроизведением */}
             <div className="flex-1 flex flex-col items-center space-y-2">
-              <div className="flex items-center space-x-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={toggleShuffle}
-                  className={cn(shuffle && 'text-primary')}
-                >
-                  <Shuffle className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="sm" onClick={playPrevious}>
-                  <SkipBack className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => isPlaying ? pause() : play(currentTrack)}
-                  className="h-8 w-8"
-                >
-                  {isPlaying ? (
-                    <Pause className="h-4 w-4" />
-                  ) : (
-                    <Play className="h-4 w-4" />
-                  )}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={playNext}>
-                  <SkipForward className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setRepeat(repeat === 'off' ? 'all' : repeat === 'all' ? 'one' : 'off')}
-                  className={cn(repeat !== 'off' && 'text-primary')}
-                >
-                  <Repeat className={cn(
-                    'h-4 w-4',
-                    repeat === 'one' && 'rotate-180'
-                  )} />
-                </Button>
-              </div>
+              <EnhancedAudioControls
+                isPlaying={isPlaying}
+                volume={volume}
+                isMuted={isMuted}
+                shuffle={shuffle}
+                repeat={repeat}
+                onPlay={() => play(currentTrack)}
+                onPause={pause}
+                onPrevious={playPrevious}
+                onNext={playNext}
+                onVolumeChange={setVolume}
+                onToggleMute={toggleMute}
+                onToggleShuffle={toggleShuffle}
+                onRepeatChange={() => setRepeat(repeat === 'off' ? 'all' : repeat === 'all' ? 'one' : 'off')}
+              />
               
               {/* Прогресс бар */}
               <div className="flex items-center space-x-2 w-full max-w-md">
@@ -644,7 +623,7 @@ export function OptimizedAudioPlayer() {
       {isPreloading && (
         <div className="fixed bottom-16 left-4 right-4 z-40 bg-card border rounded-lg p-2">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+            <LoadingSpinner size="sm" />
             <span className="text-sm">Предзагрузка...</span>
             <div className="flex-1 bg-secondary rounded-full h-2">
               <div 
@@ -1012,4 +991,4 @@ export function OptimizedAudioPlayer() {
       )}
     </>
   )
-}
+})

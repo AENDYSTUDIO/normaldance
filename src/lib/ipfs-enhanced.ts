@@ -48,9 +48,33 @@ export interface FilecoinStatus {
   duration?: string
 }
 
+// Environment detection
+const isBrowser = typeof window !== 'undefined'
+const isNode = typeof process !== 'undefined' && process.versions?.node
+
+// Browser-safe fetch with timeout
+async function safeFetch(url: string, options: RequestInit = {}): Promise<Response> {
+  if (isBrowser) {
+    return fetch(url, { ...options, signal: AbortSignal.timeout(8000) as any })
+  } else {
+    // Node.js environment - use node-fetch or undici
+    const { fetch: nodeFetch } = await import('undici')
+    return nodeFetch(url, options)
+  }
+}
+
+// Browser-safe File handling
+function createFileFromBuffer(buffer: Buffer, filename: string, mimeType: string): File | Buffer {
+  if (isBrowser) {
+    return new File([buffer], filename, { type: mimeType })
+  } else {
+    return buffer
+  }
+}
+
 // Оптимизированная загрузка файла с репликацией
 export async function uploadWithReplication(
-  file: File,
+  file: File | Buffer,
   metadata: IPFSTrackMetadata,
   options: {
     replicateToGateways?: string[]
@@ -99,21 +123,29 @@ export async function uploadWithReplication(
 
 // Загрузка с чанкованием для больших файлов
 async function uploadLargeFileToIPFS(
-  file: File,
+  file: File | Buffer,
   metadata: IPFSTrackMetadata,
   chunkSize: number
 ): Promise<UploadResult> {
   try {
-    const totalChunks = Math.ceil(file.size / chunkSize)
+    const fileSize = isBrowser ? (file as File).size : (file as Buffer).length
+    const totalChunks = Math.ceil(fileSize / chunkSize)
     const chunks: Uint8Array[] = []
 
     // Чанкуем файл
     for (let i = 0; i < totalChunks; i++) {
       const start = i * chunkSize
-      const end = Math.min(start + chunkSize, file.size)
-      const chunk = file.slice(start, end)
-      const arrayBuffer = await chunk.arrayBuffer()
-      chunks.push(new Uint8Array(arrayBuffer))
+      const end = Math.min(start + chunkSize, fileSize)
+      
+      let chunk: Uint8Array
+      if (isBrowser) {
+        const fileChunk = (file as File).slice(start, end)
+        const arrayBuffer = await fileChunk.arrayBuffer()
+        chunk = new Uint8Array(arrayBuffer)
+      } else {
+        chunk = new Uint8Array((file as Buffer).slice(start, end))
+      }
+      chunks.push(chunk)
     }
 
     console.log(`File split into ${totalChunks} chunks`)
@@ -158,7 +190,7 @@ async function uploadLargeFileToIPFS(
 
     return {
       cid: manifestCID,
-      size: file.size,
+      size: fileSize,
       timestamp: new Date(),
       metadata
     }
@@ -179,7 +211,15 @@ async function replicateToMultipleGateways(
   for (const gateway of gateways) {
     try {
       const url = `${gateway}/ipfs/${cid}`
-      const response = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000) as any })
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      
+      const response = await safeFetch(url, { 
+        method: 'HEAD', 
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
       
       if (response.ok) {
         successNodes.push(gateway)
@@ -234,7 +274,15 @@ export async function checkFileAvailabilityOnMultipleGateways(
   for (const gateway of GATEWAYS) {
     try {
       const url = `${gateway}/ipfs/${cid}`
-      const response = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000) as any })
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000)
+      
+      const response = await safeFetch(url, { 
+        method: 'HEAD', 
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
       
       if (response.ok) {
         availableGateways.push(gateway)
@@ -266,7 +314,12 @@ export async function getFileFromBestGateway(cid: string): Promise<Response> {
   const fetchWithRetry = async (url: string, tries = 3): Promise<Response> => {
     for (let i = 0; i < tries; i++) {
       try {
-        return await fetch(url, { signal: AbortSignal.timeout(8000) as any })
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 8000)
+        
+        const response = await fetch(url, { signal: controller.signal })
+        clearTimeout(timeoutId)
+        return response
       } catch (e) {
         if (i === tries - 1) throw e
       }
@@ -328,6 +381,273 @@ export async function monitorFileHealth(cid: string): Promise<{
     lastChecked: new Date()
   }
 }
+
+// Интерфейс для манифеста бэкапа
+export interface BackupManifest {
+  id: string
+  timestamp: Date
+  files: BackupFile[]
+  totalSize: number
+  status: 'pending' | 'completed' | 'failed' | 'partial'
+  retryCount: number
+  errors: string[]
+  metadata: {
+    version: string
+    source: string
+    description?: string
+  }
+}
+
+export interface BackupFile {
+  path: string
+  cid: string
+  size: number
+  status: 'pending' | 'uploaded' | 'failed'
+  retryCount: number
+  error?: string
+  gateways: string[]
+}
+
+// Система бэкапов с манифестом
+export class IPFSBackupSystem {
+  private manifests = new Map<string, BackupManifest>()
+  private maxRetries = 3
+  private retryDelay = 2000
+
+  // Создание бэкапа с манифестом
+  async createBackup(
+    files: { path: string; content: File | Buffer | string }[],
+    description?: string
+  ): Promise<BackupManifest> {
+    const backupId = `backup_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    
+    const manifest: BackupManifest = {
+      id: backupId,
+      timestamp: new Date(),
+      files: [],
+      totalSize: 0,
+      status: 'pending',
+      retryCount: 0,
+      errors: [],
+      metadata: {
+        version: '1.0',
+        source: 'normaldance-app',
+        description
+      }
+    }
+
+    this.manifests.set(backupId, manifest)
+
+    try {
+      // Загружаем файлы с ретраями
+      for (const file of files) {
+        const backupFile = await this.uploadFileWithRetry(file.path, file.content)
+        manifest.files.push(backupFile)
+        manifest.totalSize += backupFile.size
+      }
+
+      // Загружаем сам манифест
+      const manifestCid = await this.uploadManifest(manifest)
+      console.log(`Backup manifest uploaded: ${manifestCid}`)
+
+      manifest.status = manifest.files.every(f => f.status === 'uploaded') ? 'completed' : 'partial'
+      
+      return manifest
+    } catch (error) {
+      manifest.status = 'failed'
+      manifest.errors.push(`Backup failed: ${error}`)
+      throw error
+    }
+  }
+
+  // Загрузка файла с ретраями
+  private async uploadFileWithRetry(
+    path: string, 
+    content: File | Buffer | string
+  ): Promise<BackupFile> {
+    const backupFile: BackupFile = {
+      path,
+      cid: '',
+      size: 0,
+      status: 'pending',
+      retryCount: 0,
+      gateways: []
+    }
+
+    for (let attempt = 0; attempt <= this.maxRetries; attempt++) {
+      try {
+        backupFile.retryCount = attempt
+        
+        // Конвертируем content в нужный формат
+        let fileData: Buffer
+        if (content instanceof File) {
+          fileData = Buffer.from(await content.arrayBuffer())
+        } else if (typeof content === 'string') {
+          fileData = Buffer.from(content, 'utf-8')
+        } else {
+          fileData = content
+        }
+
+        backupFile.size = fileData.length
+
+        // Загружаем через существующую систему
+        const metadata: IPFSTrackMetadata = {
+          title: path,
+          artist: 'system',
+          genre: 'backup',
+          duration: 0,
+          releaseDate: new Date().toISOString(),
+          isExplicit: false,
+          fileSize: fileData.length,
+          mimeType: 'application/octet-stream'
+        }
+
+        // Создаем временный File объект
+        const tempFile = new File([fileData], path, { type: 'application/octet-stream' })
+        const result = await uploadWithReplication(tempFile, metadata, {
+          replicateToGateways: GATEWAYS,
+          enableFilecoin: false
+        })
+
+        backupFile.cid = result.cid
+        backupFile.status = 'uploaded'
+        backupFile.gateways = result.gateways
+        
+        console.log(`File uploaded successfully: ${path} -> ${result.cid}`)
+        return backupFile
+        
+      } catch (error) {
+        backupFile.error = `Attempt ${attempt + 1}: ${error}`
+        console.warn(`Upload attempt ${attempt + 1} failed for ${path}:`, error)
+        
+        if (attempt < this.maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, this.retryDelay * (attempt + 1)))
+        }
+      }
+    }
+
+    backupFile.status = 'failed'
+    return backupFile
+  }
+
+  // Загрузка манифеста
+  private async uploadManifest(manifest: BackupManifest): Promise<string> {
+    const manifestJson = JSON.stringify(manifest, null, 2)
+    const manifestBuffer = Buffer.from(manifestJson, 'utf-8')
+    
+    const ipfsResult = await import('./ipfs')
+    const { ipfsClient } = ipfsResult
+    const result = await ipfsClient.add(manifestBuffer)
+    
+    return result.cid.toString()
+  }
+
+  // Восстановление из бэкапа
+  async restoreFromBackup(manifestCid: string): Promise<{ [path: string]: Buffer }> {
+    try {
+      // Получаем манифест
+      const manifestResponse = await getFileFromBestGateway(manifestCid)
+      const manifestJson = await manifestResponse.text()
+      const manifest: BackupManifest = JSON.parse(manifestJson)
+      
+      const restoredFiles: { [path: string]: Buffer } = {}
+      
+      // Восстанавливаем каждый файл
+      for (const file of manifest.files) {
+        if (file.status === 'uploaded') {
+          try {
+            const fileResponse = await getFileFromBestGateway(file.cid)
+            const fileBuffer = Buffer.from(await fileResponse.arrayBuffer())
+            restoredFiles[file.path] = fileBuffer
+            console.log(`File restored: ${file.path}`)
+          } catch (error) {
+            console.error(`Failed to restore file ${file.path}:`, error)
+          }
+        }
+      }
+      
+      return restoredFiles
+    } catch (error) {
+      console.error('Failed to restore from backup:', error)
+      throw error
+    }
+  }
+
+  // Получение статуса бэкапа
+  getBackupStatus(backupId: string): BackupManifest | null {
+    return this.manifests.get(backupId) || null
+  }
+
+  // Получение всех бэкапов
+  getAllBackups(): BackupManifest[] {
+    return Array.from(this.manifests.values())
+  }
+
+  // Проверка целостности бэкапа
+  async verifyBackup(backupId: string): Promise<{
+    valid: boolean
+    issues: string[]
+    availableFiles: number
+    totalFiles: number
+  }> {
+    const manifest = this.manifests.get(backupId)
+    if (!manifest) {
+      return {
+        valid: false,
+        issues: ['Backup manifest not found'],
+        availableFiles: 0,
+        totalFiles: 0
+      }
+    }
+
+    const issues: string[] = []
+    let availableFiles = 0
+
+    for (const file of manifest.files) {
+      try {
+        const availability = await checkFileAvailabilityOnMultipleGateways(file.cid)
+        if (availability.available) {
+          availableFiles++
+        } else {
+          issues.push(`File not available: ${file.path} (${file.cid})`)
+        }
+      } catch (error) {
+        issues.push(`Error checking file ${file.path}: ${error}`)
+      }
+    }
+
+    return {
+      valid: issues.length === 0,
+      issues,
+      availableFiles,
+      totalFiles: manifest.files.length
+    }
+  }
+
+  // Генерация отчета о бэкапах
+  generateBackupReport(): {
+    totalBackups: number
+    completedBackups: number
+    failedBackups: number
+    totalSize: number
+    oldestBackup?: Date
+    newestBackup?: Date
+  } {
+    const backups = Array.from(this.manifests.values())
+    
+    return {
+      totalBackups: backups.length,
+      completedBackups: backups.filter(b => b.status === 'completed').length,
+      failedBackups: backups.filter(b => b.status === 'failed').length,
+      totalSize: backups.reduce((sum, b) => sum + b.totalSize, 0),
+      oldestBackup: backups.length > 0 ? new Date(Math.min(...backups.map(b => b.timestamp.getTime()))) : undefined,
+      newestBackup: backups.length > 0 ? new Date(Math.max(...backups.map(b => b.timestamp.getTime()))) : undefined
+    }
+  }
+}
+
+// Глобальный экземпляр системы бэкапов
+export const backupSystem = new IPFSBackupSystem()
 
 // Кэширование результатов для улучшения производительности
 const cache = new Map<string, {

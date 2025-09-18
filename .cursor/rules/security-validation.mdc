@@ -1,4 +1,15 @@
 ---
+alwaysApply: true
+---
+# Security & Validation Rules
+
+- **Сессии/кэш**: используйте Redis согласно инфраструктурным правилам; не храните секреты в коде.
+- **База данных**: импортируйте только глобальный Prisma из [`src/lib/db.ts`](mdc:src/lib/db.ts); не создавайте новые клиенты.
+- **Валидация ввода**: валидируйте и санитизируйте пользовательские данные (XSS/SSRF/инъекции). Не логируйте секреты/PII.
+- **CORS/Headers**: соблюдайте настройки для кастомного сервера [`server.ts`](mdc:server.ts); путь Socket.IO строго `/api/socketio`.
+- **Загрузка файлов**: придерживайтесь `ipfs-enhanced` с автоматическим чанкингом >10MB и fallback на CDN.
+- **Ключи и конфиг**: используйте [`config/secrets-config.json`](mdc:config/secrets-config.json) и шаблоны [`config/secrets-templates.js`](mdc:config/secrets-templates.js). Не коммитьте реальные секреты.
+---
 globs: src/api/**,src/lib/auth.ts,src/lib/validation.ts,src/middleware/**
 description: Security patterns, validation, and authentication rules
 ---

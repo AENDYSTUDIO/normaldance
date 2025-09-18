@@ -6,25 +6,32 @@
       "use": "@vercel/next"
     }
   ],
+  "env": {
+    "NODE_ENV": "production",
+    "NEXT_TELEMETRY_DISABLED": "1"
+  },
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
         {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; img-src 'self' https://ipfs.io https://cloudflare-ipfs.com https://gateway.pinata.cloud data:; connect-src 'self' https://ipfs.io https://cloudflare-ipfs.com https://gateway.pinata.cloud https://o450000000000000.ingest.sentry.io https://api.mixpanel.com https://api.stripe.com; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'"
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         }
       ]
-    }
-  ],
-  "env": {
-    "NODE_ENV": "production",
-    "NEXT_TELEMETRY_DISABLED": "1"
-  },
-  "crons": [
-    {
-      "path": "/api/analytics",
-      "schedule": "0 0 * * *"
     }
   ]
 }

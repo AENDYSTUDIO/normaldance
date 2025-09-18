@@ -1,0 +1,10 @@
+---
+globs: mobile-app/**/*
+---
+# Mobile App Rules (React Native / Expo)
+
+- **Тесты**: запуск из [`mobile-app`](mdc:mobile-app) командой `cd mobile-app && npm test`. Конфиг и моки: `mobile-app/jest.setup.js`.
+- **Моки**: замещаются `expo-av`, `react-native-track-player`, `WebSocket` и базовые модули React Native.
+- **Сетевое взаимодействие**: при необходимости WebSocket — учитывайте серверный путь `/api/socketio`.
+- **Хранение**: используйте совместимые обертки и не создавайте новые глобальные состояния вне Zustанд/проектных утилит.
+- **Форматирование SOL/токенов**: используйте проектные утилиты с русской локалью.

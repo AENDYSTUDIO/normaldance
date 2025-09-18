@@ -1,0 +1,9 @@
+---
+globs: *.ts,*.tsx
+---
+# TypeScript Style and State Management
+
+- **TypeScript config**: Relaxed types for Web3: `noImplicitAny: false`, `no-non-null-assertion: off`. See [`tsconfig.json`](mdc:tsconfig.json) and project configs.
+- **ESLint**: Intentionally disabled rules in [`eslint.config.mjs`](mdc:eslint.config.mjs) for faster builds.
+- **State management**: Prefer Zustand for global state. Do not introduce alternative global state libraries.
+- **Formatting**: Follow project conventions and avoid reformatting unrelated code. Use Russian locale for SOL/token formatting utilities.

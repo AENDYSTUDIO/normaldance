@@ -1,0 +1,9 @@
+---
+alwaysApply: true
+---
+# File Storage and CDN
+
+- **IPFS/Filecoin redundancy**: Use the enhanced client in [`src/lib/ipfs-enhanced.ts`](mdc:src/lib/ipfs-enhanced.ts).
+- **Gateway fallback**: Automatic fallback among ipfs.io, pinata.cloud, and cloudflare-ipfs.com is built-in; do not bypass.
+- **Chunking**: Files larger than 10MB must be chunked with manifest-based reconstruction (handled by `ipfs-enhanced`).
+- **Health monitoring**: Respect automated availability checks across gateways.

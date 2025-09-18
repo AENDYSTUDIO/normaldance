@@ -39,15 +39,16 @@ export const authOptions: NextAuthOptions = {
             // Проверяем, существует ли пользователь, и создаем при необходимости
             let user = await db.user.findFirst({
               where: {
-                wallet: message.data.address
+                walletAddress: message.data.address
               }
             })
 
             if (!user) {
               user = await db.user.create({
                 data: {
-                  wallet: message.data.address,
+                  walletAddress: message.data.address,
                   username: `user_${message.data.address.slice(0, 8)}`,
+                  displayName: `User ${message.data.address.slice(0, 8)}`,
                   email: `${message.data.address}@solana.local`,
                   isArtist: false,
                   level: 'BRONZE'
@@ -57,7 +58,7 @@ export const authOptions: NextAuthOptions = {
 
             return {
               id: user.id,
-              wallet: user.wallet,
+              walletAddress: user.walletAddress,
               username: user.username,
               email: user.email,
               isArtist: user.isArtist,
@@ -90,7 +91,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, account, profile }) {
       // Обработка Web3 аутентификации
       if (account?.provider === 'solana' && user) {
-        token.wallet = (user as any).wallet
+        token.walletAddress = (user as any).walletAddress
         token.username = (user as any).username
         token.isArtist = (user as any).isArtist
         token.level = (user as any).level
@@ -112,7 +113,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.sub!
-        session.user.wallet = token.wallet as string
+        session.user.walletAddress = token.walletAddress as string
         session.user.username = token.username as string
         session.user.isArtist = token.isArtist as boolean
         session.user.level = token.level as string
@@ -151,7 +152,7 @@ export async function getCurrentUser() {
       id: true,
       email: true,
       username: true,
-      wallet: true,
+      walletAddress: true,
       isArtist: true,
       level: true,
       createdAt: true,

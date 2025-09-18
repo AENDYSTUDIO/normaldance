@@ -1,0 +1,13 @@
+---
+alwaysApply: true
+---
+# NORMALDANCE Core Architecture
+
+- **Custom server**: Uses [`server.ts`](mdc:server.ts) with Socket.IO; Next.js server is not used.
+- **Socket.IO path**: Custom path is `/api/socketio` (not `/socket.io`). See [`server.ts`](mdc:server.ts).
+- **Production build**: Next.js build is disabled; uses `tsx` directly. See `scripts` in [`package.json`](mdc:package.json) and [`AGENTS.md`](mdc:AGENTS.md).
+- **Global database instance**: Always import Prisma from [`src/lib/db.ts`](mdc:src/lib/db.ts). Do not create new Prisma clients.
+- **Global state**: Use Zustand for app-wide state.
+- **Caching/session**: Use Redis for sessions and caching per project infra docs.
+
+Related docs: [`AGENTS.md`](mdc:AGENTS.md), [`README_github.md`](mdc:README_github.md), [`COMPREHENSIVE_PROJECT_ANALYSIS_NORMALDANCE_2025.md`](mdc:COMPREHENSIVE_PROJECT_ANALYSIS_NORMALDANCE_2025.md)

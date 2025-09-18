@@ -9,14 +9,13 @@ jest.mock('@/components/wallet/wallet-provider', () => ({
 }))
 
 // Mock wallet adapter functions
-jest.mock('@/components/wallet/wallet-adapter', () => ({
-  createTransaction: jest.fn().mockResolvedValue({
-    add: jest.fn(),
-    recentBlockhash: 'test-blockhash',
-    feePayer: new PublicKey('test-public-key')
-  }),
-  sendTransaction: jest.fn().mockResolvedValue('test-signature')
-}))
+jest.mock('@/components/wallet/wallet-adapter', () => {
+  const mockTx = { add: jest.fn(), recentBlockhash: 'test-blockhash', feePayer: 'test-public-key' }
+  return {
+    createTransaction: jest.fn().mockResolvedValue(mockTx),
+    sendTransaction: jest.fn().mockResolvedValue('test-signature')
+  }
+})
 
 // Mock Solana connection
 jest.mock('@solana/web3.js', () => ({
@@ -43,7 +42,7 @@ jest.mock('@solana/web3.js', () => ({
 
 const mockWalletContext = {
   connected: true,
-  publicKey: new PublicKey('test-public-key'),
+  publicKey: { toBase58: () => 'test-public-key' },
   balance: 10.5,
   ndtBalance: 1000,
   connect: jest.fn(),

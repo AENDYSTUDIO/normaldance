@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+# Testing and Mobile App Rules
+
+- **Main tests (Jest)**: See [`jest.config.js`](mdc:jest.config.js) and [`jest.setup.js`](mdc:jest.setup.js). Use `npm test -- --testPathPattern="filename.test.ts"` for single-file runs (per [`AGENTS.md`](mdc:AGENTS.md)).
+- **Mobile app tests**: Run from [`mobile-app`](mdc:mobile-app) with `cd mobile-app && npm test`. Extensive mocks are configured in `mobile-app/jest.setup.js`.
+- **Timeouts**: Async test timeout is 30s in the main Jest config.
+- **Coverage**: `__tests__` directories are excluded from coverage.
+- **React Native/Expo mocking**: Mobile tests mock expo-av, react-native-track-player, WebSocket, and core RN modules.

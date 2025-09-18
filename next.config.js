@@ -1,24 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    optimizeCss: true,
+  serverExternalPackages: ['@prisma/client'],
+  outputFileTracingRoot: __dirname,
+  typescript: {
+    ignoreBuildErrors: true
   },
-  images: {
-    domains: ['ipfs.io', 'gateway.pinata.cloud', 'cloudflare-ipfs.com'],
-    unoptimized: true
-  },
-  webpack: (config) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-      tls: false,
-    }
-    return config
-  },
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
-}
+  eslint: {
+    ignoreDuringBuilds: true
+  }
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

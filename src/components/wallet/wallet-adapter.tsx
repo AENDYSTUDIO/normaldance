@@ -4,6 +4,8 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { WalletNotConnectedError } from '@solana/wallet-adapter-base'
 import { useWallet, useConnection } from '@solana/wallet-adapter-react'
 import * as Sentry from '@sentry/nextjs'
+import { useCallback, useMemo } from 'react'
+import { walletEmitter } from '@/components/wallet/wallet-adapter'
 
 // Конфигурация сети
 const NETWORK = WalletAdapterNetwork.Devnet
@@ -39,62 +41,109 @@ export function createPhantomWallet(): PhantomWalletAdapter {
 export function useSolanaWallet() {
   const wallet = useWallet()
   const { connection } = useConnection()
+  
+  // Мемоизированное подключение
+  const memoizedConnection = useMemo(() => connection, [connection])
 
-  const connectWallet = async () => {
+  const connectWallet = useCallback(async () => {
     if (!wallet.connected) {
-      if (!wallet.connect) throw new Error('Wallet does not support connection')
-      await wallet.connect()
+      if (!wallet.connect) {
+        console.warn('Wallet does not support connection')
+        walletEmitter.emit('error', { type: 'connect', message: 'unsupported' })
+        return 0 as any
+      }
+      try {
+        await wallet.connect()
+        walletEmitter.emit('connect', { publicKey: wallet.publicKey })
+        return wallet.publicKey?.toString() || null
+      } catch (error) {
+        console.error('Connection failed:', error)
+        Sentry.captureException(error)
+        walletEmitter.emit('error', { type: 'connect', error })
+        return 0 as any
+      }
     }
-  }
+    return wallet.publicKey?.toString() || null
+  }, [wallet])
 
-  const disconnectWallet = async () => {
+  const disconnectWallet = useCallback(async () => {
     if (wallet.connected) {
-      if (!wallet.disconnect) throw new Error('Wallet does not support disconnection')
-      await wallet.disconnect()
+      if (!wallet.disconnect) {
+        console.warn('Wallet does not support disconnection')
+        walletEmitter.emit('error', { type: 'disconnect', message: 'unsupported' })
+        return 0 as any
+      }
+      try {
+        await wallet.disconnect()
+        walletEmitter.emit('disconnect')
+        return true
+      } catch (error) {
+        console.error('Disconnection failed:', error)
+        Sentry.captureException(error)
+        walletEmitter.emit('error', { type: 'disconnect', error })
+        return 0 as any
+      }
     }
-  }
+    return true
+  }, [wallet])
 
-  const signMessage = async (message: Uint8Array): Promise<Uint8Array> => {
-    if (!wallet.connected) throw new WalletNotConnectedError()
-    if (!wallet.signMessage) throw new Error('Wallet does not support message signing')
-    
+  const signMessage = useCallback(async (message: Uint8Array): Promise<any> => {
+    if (!wallet.connected) {
+      console.warn('signMessage: wallet not connected')
+      walletEmitter.emit('error', { type: 'signMessage', message: 'not_connected' })
+      return 0 as any
+    }
+    if (!wallet.signMessage) {
+      console.warn('Wallet does not support message signing')
+      walletEmitter.emit('error', { type: 'signMessage', message: 'unsupported' })
+      return 0 as any
+    }
     try {
       return await wallet.signMessage(message)
     } catch (error) {
       console.error('Error signing message:', error)
       Sentry.captureException(error)
-      throw error
+      walletEmitter.emit('error', { type: 'signMessage', error })
+      return 0 as any
     }
-  }
+  }, [wallet])
 
-  const sendTransaction = async (transaction: Transaction): Promise<string> => {
-    if (!wallet.connected) throw new WalletNotConnectedError()
-    if (!wallet.sendTransaction) throw new Error('Wallet does not support transaction sending')
-    
+  const sendTransaction = useCallback(async (transaction: Transaction): Promise<any> => {
+    if (!wallet.connected) {
+      console.warn('sendTransaction: wallet not connected')
+      walletEmitter.emit('error', { type: 'sendTransaction', message: 'not_connected' })
+      return 0 as any
+    }
+    if (!wallet.sendTransaction) {
+      console.warn('Wallet does not support transaction sending')
+      walletEmitter.emit('error', { type: 'sendTransaction', message: 'unsupported' })
+      return 0 as any
+    }
     try {
-      const signature = await wallet.sendTransaction(transaction, connection)
+      const signature = await wallet.sendTransaction(transaction, memoizedConnection)
       return signature
     } catch (error) {
       console.error('Error sending transaction:', error)
       Sentry.captureException(error)
-      throw error
+      walletEmitter.emit('error', { type: 'sendTransaction', error })
+      return 0 as any
     }
-  }
+  }, [wallet, memoizedConnection])
 
-  const getBalance = async (): Promise<number> => {
+  const getBalance = useCallback(async (): Promise<number> => {
     if (!wallet.publicKey) return 0
     
     try {
-      const balance = await connection.getBalance(wallet.publicKey)
+      const balance = await memoizedConnection.getBalance(wallet.publicKey)
       return balance / LAMPORTS_PER_SOL
     } catch (error) {
       console.error('Error getting balance:', error)
       Sentry.captureException(error)
       return 0
     }
-  }
+  }, [wallet.publicKey, memoizedConnection])
 
-  const getTokenBalance = async (mintAddress: string): Promise<number> => {
+  const getTokenBalance = useCallback(async (mintAddress: string): Promise<number> => {
     if (!wallet.publicKey) return 0
     
     try {
@@ -107,7 +156,7 @@ export function useSolanaWallet() {
       Sentry.captureException(error)
       return 0
     }
-  }
+  }, [wallet.publicKey])
 
   return {
     ...wallet,

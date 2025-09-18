@@ -1,753 +1,396 @@
-/**
- * Оптимизатор для мобильного приложения NormalDance
- * Адаптация под мобильные устройства, офлайн режим, управление памятью и батареей
- */
-
-import { AppState, Platform } from 'react-native'
-import NetInfo from '@react-native-community/netinfo'
+import * as FileSystem from 'expo-file-system'
+import NetInfo from '@react-native-async-storage/async-storage'
 import { Audio } from 'expo-av'
 
-interface MobileOptimizationConfig {
-  maxCacheSize: number // Максимальный размер кеша в байтах
-  preloadDistance: number // Количество треков для предзагрузки
-  offlineMode: boolean // Включить офлайн режим
-  batteryThreshold: number // Порог батареи для оптимизации
-  memoryThreshold: number // Порог памяти для оптимизации
+// Интерфейсы для мобильной оптимизации
+interface CacheConfig {
+  maxSize: number // MB
+  maxAge: number // ms
+  compressionLevel: number
 }
 
-interface NetworkInfo {
-  isConnected: boolean
-  isInternetReachable: boolean
-  connectionType: 'wifi' | 'cellular' | 'none' | 'unknown'
-  effectiveType: '2g' | '3g' | '4g' | '5g' | 'unknown'
-  downlink?: number
-  rtt?: number
+interface OfflineData {
+  tracks: any[]
+  playlists: any[]
+  userProfile: any
+  lastSync: number
 }
 
-interface DeviceInfo {
-  platform: 'ios' | 'android'
-  osVersion: string
-  freeDiskStorage: number
-  totalMemory: number
-  lowMemory: boolean
-  batteryLevel?: number
-  batteryState?: 'unplugged' | 'charging' | 'full' | 'unknown'
-}
+// Менеджер кеша медиа файлов
+export class MobileMediaCache {
+  private cacheDir: string
+  private config: CacheConfig
+  private cacheIndex = new Map<string, { size: number; lastAccess: number; path: string }>()
 
-class MobileOptimizer {
-  private config: MobileOptimizationConfig
-  private networkInfo: NetworkInfo | null = null
-  private deviceInfo: DeviceInfo | null = null
-  private appState: 'active' | 'background' | 'inactive' = 'active'
-  private isOptimizing = false
-  private optimizationCallbacks: Map<string, Function[]> = new Map()
-
-  constructor(config: MobileOptimizationConfig) {
+  constructor(config: CacheConfig = {
+    maxSize: 500, // 500MB
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 дней
+    compressionLevel: 0.8
+  }) {
     this.config = config
-    this.initialize()
+    this.cacheDir = `${FileSystem.cacheDirectory}media/`
+    this.initializeCache()
   }
 
-  /**
-   * Инициализация оптимизатора
-   */
-  private async initialize(): Promise<void> {
-    // Получение информации о сети
-    this.updateNetworkInfo()
-    
-    // Получение информации об устройстве
-    this.updateDeviceInfo()
-    
-    // Мониторинг состояния приложения
-    this.monitorAppState()
-    
-    // Мониторинг батареи
-    this.monitorBattery()
-    
-    // Мониторинг памяти
-    this.monitorMemory()
-    
-    console.log('MobileOptimizer initialized')
-  }
-
-  /**
-   * Обновление информации о сети
-   */
-  private async updateNetworkInfo(): Promise<void> {
+  // Инициализация кеша
+  private async initializeCache(): Promise<void> {
     try {
-      const state = await NetInfo.fetch()
-      this.networkInfo = {
-        isConnected: state.isConnected,
-        isInternetReachable: state.isInternetReachable,
-        connectionType: state.type as NetworkInfo['connectionType'],
-        effectiveType: state.effectiveType as NetworkInfo['effectiveType'],
-        downlink: state.downlink,
-        rtt: state.rtt
+      const dirInfo = await FileSystem.getInfoAsync(this.cacheDir)
+      if (!dirInfo.exists) {
+        await FileSystem.makeDirectoryAsync(this.cacheDir, { intermediates: true })
       }
       
-      this.triggerOptimization('network')
+      // Загружаем индекс кеша
+      await this.loadCacheIndex()
+      
+      // Очищаем устаревшие файлы
+      await this.cleanupExpiredFiles()
     } catch (error) {
-      console.warn('Failed to update network info:', error)
+      console.error('Failed to initialize media cache:', error)
     }
   }
 
-  /**
-   * Обновление информации об устройстве
-   */
-  private async updateDeviceInfo(): Promise<void> {
+  // Загрузка индекса кеша
+  private async loadCacheIndex(): Promise<void> {
     try {
-      const deviceInfo: DeviceInfo = {
-        platform: Platform.OS as 'ios' | 'android',
-        osVersion: Platform.Version.toString(),
-        freeDiskStorage: await this.getFreeDiskStorage(),
-        totalMemory: await this.getTotalMemory(),
-        lowMemory: await this.isLowMemory()
+      const indexPath = `${this.cacheDir}index.json`
+      const indexInfo = await FileSystem.getInfoAsync(indexPath)
+      
+      if (indexInfo.exists) {
+        const indexData = await FileSystem.readAsStringAsync(indexPath)
+        const index = JSON.parse(indexData)
+        
+        for (const [key, value] of Object.entries(index)) {
+          this.cacheIndex.set(key, value as any)
+        }
       }
-
-      // Получение информации о батарее (если доступно)
-      if (Platform.OS === 'android') {
-        // Для Android можно использовать BatteryStatus
-        // batteryLevel и batteryState будут получены через мониторинг
-      }
-
-      this.deviceInfo = deviceInfo
-      this.triggerOptimization('device')
     } catch (error) {
-      console.warn('Failed to update device info:', error)
+      console.warn('Failed to load cache index:', error)
     }
   }
 
-  /**
-   * Мониторинг состояния приложения
-   */
-  private monitorAppState(): void {
-    AppState.addEventListener('change', (state) => {
-      this.appState = state as 'active' | 'background' | 'inactive'
-      this.triggerOptimization('appState')
+  // Сохранение индекса кеша
+  private async saveCacheIndex(): Promise<void> {
+    try {
+      const indexPath = `${this.cacheDir}index.json`
+      const indexData = Object.fromEntries(this.cacheIndex)
+      await FileSystem.writeAsStringAsync(indexPath, JSON.stringify(indexData))
+    } catch (error) {
+      console.error('Failed to save cache index:', error)
+    }
+  }
+
+  // Кеширование медиа файла
+  async cacheMedia(url: string, key: string): Promise<string | null> {
+    try {
+      const filePath = `${this.cacheDir}${key}`
+      
+      // Проверяем есть ли уже в кеше
+      const cached = this.cacheIndex.get(key)
+      if (cached) {
+        const fileInfo = await FileSystem.getInfoAsync(cached.path)
+        if (fileInfo.exists) {
+          // Обновляем время доступа
+          cached.lastAccess = Date.now()
+          this.cacheIndex.set(key, cached)
+          return cached.path
+        }
+      }
+
+      // Проверяем размер кеша
+      await this.ensureCacheSpace()
+
+      // Загружаем файл
+      const downloadResult = await FileSystem.downloadAsync(url, filePath)
+      
+      if (downloadResult.status === 200) {
+        const fileInfo = await FileSystem.getInfoAsync(filePath)
+        
+        this.cacheIndex.set(key, {
+          size: fileInfo.size || 0,
+          lastAccess: Date.now(),
+          path: filePath
+        })
+        
+        await this.saveCacheIndex()
+        return filePath
+      }
+      
+      return null
+    } catch (error) {
+      console.error('Failed to cache media:', error)
+      return null
+    }
+  }
+
+  // Получение медиа из кеша
+  async getCachedMedia(key: string): Promise<string | null> {
+    const cached = this.cacheIndex.get(key)
+    if (!cached) return null
+
+    const fileInfo = await FileSystem.getInfoAsync(cached.path)
+    if (!fileInfo.exists) {
+      this.cacheIndex.delete(key)
+      return null
+    }
+
+    // Обновляем время доступа
+    cached.lastAccess = Date.now()
+    this.cacheIndex.set(key, cached)
+    
+    return cached.path
+  }
+
+  // Обеспечение места в кеше
+  private async ensureCacheSpace(): Promise<void> {
+    const currentSize = Array.from(this.cacheIndex.values())
+      .reduce((sum, item) => sum + item.size, 0)
+    
+    const maxSizeBytes = this.config.maxSize * 1024 * 1024
+    
+    if (currentSize > maxSizeBytes * 0.8) { // Начинаем очистку при 80%
+      await this.evictLRU()
+    }
+  }
+
+  // Удаление наименее используемых файлов
+  private async evictLRU(): Promise<void> {
+    const entries = Array.from(this.cacheIndex.entries())
+      .sort(([, a], [, b]) => a.lastAccess - b.lastAccess)
+    
+    const toEvict = entries.slice(0, Math.floor(entries.length * 0.2)) // Удаляем 20%
+    
+    for (const [key, item] of toEvict) {
+      try {
+        await FileSystem.deleteAsync(item.path, { idempotent: true })
+        this.cacheIndex.delete(key)
+      } catch (error) {
+        console.warn(`Failed to evict ${key}:`, error)
+      }
+    }
+    
+    await this.saveCacheIndex()
+  }
+
+  // Очистка устаревших файлов
+  private async cleanupExpiredFiles(): Promise<void> {
+    const now = Date.now()
+    const expiredKeys: string[] = []
+    
+    for (const [key, item] of this.cacheIndex.entries()) {
+      if (now - item.lastAccess > this.config.maxAge) {
+        expiredKeys.push(key)
+      }
+    }
+    
+    for (const key of expiredKeys) {
+      const item = this.cacheIndex.get(key)!
+      try {
+        await FileSystem.deleteAsync(item.path, { idempotent: true })
+        this.cacheIndex.delete(key)
+      } catch (error) {
+        console.warn(`Failed to cleanup ${key}:`, error)
+      }
+    }
+    
+    if (expiredKeys.length > 0) {
+      await this.saveCacheIndex()
+    }
+  }
+
+  // Получение статистики кеша
+  getCacheStats() {
+    const totalSize = Array.from(this.cacheIndex.values())
+      .reduce((sum, item) => sum + item.size, 0)
+    
+    return {
+      filesCount: this.cacheIndex.size,
+      totalSizeMB: (totalSize / 1024 / 1024).toFixed(2),
+      maxSizeMB: this.config.maxSize,
+      usagePercent: ((totalSize / (this.config.maxSize * 1024 * 1024)) * 100).toFixed(1)
+    }
+  }
+}
+
+// Менеджер offline-first данных
+export class OfflineDataManager {
+  private storageKey = 'offline_data'
+  
+  // Сохранение данных для offline
+  async saveOfflineData(data: Partial<OfflineData>): Promise<void> {
+    try {
+      const existing = await this.getOfflineData()
+      const updated = { ...existing, ...data, lastSync: Date.now() }
+      
+      await AsyncStorage.setItem(this.storageKey, JSON.stringify(updated))
+    } catch (error) {
+      console.error('Failed to save offline data:', error)
+    }
+  }
+
+  // Получение offline данных
+  async getOfflineData(): Promise<OfflineData> {
+    try {
+      const data = await AsyncStorage.getItem(this.storageKey)
+      if (data) {
+        return JSON.parse(data)
+      }
+    } catch (error) {
+      console.error('Failed to get offline data:', error)
+    }
+    
+    return {
+      tracks: [],
+      playlists: [],
+      userProfile: null,
+      lastSync: 0
+    }
+  }
+
+  // Проверка актуальности данных
+  async isDataStale(maxAge: number = 24 * 60 * 60 * 1000): Promise<boolean> {
+    const data = await this.getOfflineData()
+    return Date.now() - data.lastSync > maxAge
+  }
+
+  // Синхронизация с сервером
+  async syncWithServer(): Promise<boolean> {
+    try {
+      const netInfo = await NetInfo.fetch()
+      if (!netInfo.isConnected) {
+        return false
+      }
+
+      // Здесь должна быть логика синхронизации с API
+      // Пока заглушка
+      const mockData = {
+        tracks: [], // Данные с сервера
+        playlists: [],
+        userProfile: {}
+      }
+      
+      await this.saveOfflineData(mockData)
+      return true
+    } catch (error) {
+      console.error('Failed to sync with server:', error)
+      return false
+    }
+  }
+}
+
+// Оптимизатор производительности
+export class MobilePerformanceOptimizer {
+  private mediaCache: MobileMediaCache
+  private offlineManager: OfflineDataManager
+  
+  constructor() {
+    this.mediaCache = new MobileMediaCache()
+    this.offlineManager = new OfflineDataManager()
+  }
+
+  // Предзагрузка критических ресурсов
+  async preloadCriticalResources(resources: { url: string; key: string }[]): Promise<void> {
+    const preloadPromises = resources.map(async (resource) => {
+      try {
+        await this.mediaCache.cacheMedia(resource.url, resource.key)
+      } catch (error) {
+        console.warn(`Failed to preload ${resource.key}:`, error)
+      }
+    })
+
+    await Promise.allSettled(preloadPromises)
+  }
+
+  // Оптимизированная загрузка аудио
+  async loadOptimizedAudio(url: string, trackId: string): Promise<Audio.Sound | null> {
+    try {
+      // Сначала проверяем кеш
+      const cachedPath = await this.mediaCache.getCachedMedia(trackId)
+      const audioUrl = cachedPath || url
+
+      // Если нет в кеше и есть сеть - кешируем
+      if (!cachedPath) {
+        const netInfo = await NetInfo.fetch()
+        if (netInfo.isConnected) {
+          this.mediaCache.cacheMedia(url, trackId) // Асинхронно
+        }
+      }
+
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: audioUrl },
+        { shouldPlay: false, isLooping: false }
+      )
+
+      return sound
+    } catch (error) {
+      console.error('Failed to load optimized audio:', error)
+      return null
+    }
+  }
+
+  // Измерение производительности
+  measurePerformance<T>(operation: () => Promise<T>, name: string): Promise<T> {
+    return new Promise(async (resolve, reject) => {
+      const startTime = Date.now()
+      
+      try {
+        const result = await operation()
+        const endTime = Date.now()
+        
+        console.log(`Performance [${name}]: ${endTime - startTime}ms`)
+        resolve(result)
+      } catch (error) {
+        const endTime = Date.now()
+        console.error(`Performance [${name}] failed after ${endTime - startTime}ms:`, error)
+        reject(error)
+      }
     })
   }
 
-  /**
-   * Мониторинг батареи
-   */
-  private monitorBattery(): void {
-    if (Platform.OS === 'android') {
-      // Для Android можно использовать BatteryStatus API
-      // В этом примере используем эмуляцию
-      setInterval(async () => {
-        const batteryLevel = await this.getBatteryLevel()
-        const batteryState = await this.getBatteryState()
-        
-        if (this.deviceInfo) {
-          this.deviceInfo.batteryLevel = batteryLevel
-          this.deviceInfo.batteryState = batteryState
-          
-          if (batteryLevel < this.config.batteryThreshold) {
-            this.triggerOptimization('battery')
-          }
-        }
-      }, 30000) // Проверка каждые 30 секунд
-    }
-  }
-
-  /**
-   * Мониторинг памяти
-   */
-  private monitorMemory(): void {
-    setInterval(async () => {
-      const isLowMemory = await this.isLowMemory()
-      
-      if (isLowMemory && this.deviceInfo && !this.deviceInfo.lowMemory) {
-        this.deviceInfo.lowMemory = true
-        this.triggerOptimization('memory')
-      } else if (!isLowMemory && this.deviceInfo && this.deviceInfo.lowMemory) {
-        this.deviceInfo.lowMemory = false
-      }
-    }, 60000) // Проверка каждую минуту
-  }
-
-  /**
-   * Получение свободного места на диске
-   */
-  private async getFreeDiskStorage(): Promise<number> {
-    // В реальном приложении здесь будет использование API React Native
-    // Для примера возвращаем случайное значение
-    return Math.floor(Math.random() * 1000000000) // 0-1GB
-  }
-
-  /**
-   * Получение общей памяти
-   */
-  private async getTotalMemory(): Promise<number> {
-    // В реальном приложении здесь будет использование API React Native
-    return 4000000000 // 4GB по умолчанию
-  }
-
-  /**
-   * Проверка низкой памяти
-   */
-  private async isLowMemory(): Promise<boolean> {
-    // В реальном приложении здесь будет использование API React Native
-    return Math.random() < 0.1 // 10% шанс низкой памяти для примера
-  }
-
-  /**
-   * Получение уровня батареи
-   */
-  private async getBatteryLevel(): Promise<number> {
-    // В реальном приложении здесь будет использование BatteryStatus API
-    return Math.random() * 100 // 0-100%
-  }
-
-  /**
-   * Получение состояния батареи
-   */
-  private async getBatteryState(): Promise<'unplugged' | 'charging' | 'full' | 'unknown'> {
-    // В реальном приложении здесь будет использование BatteryStatus API
-    const states = ['unplugged', 'charging', 'full', 'unknown']
-    return states[Math.floor(Math.random() * states.length)] as any
-  }
-
-  /**
-   * Триггер оптимизации
-   */
-  private triggerOptimization(type: string): void {
-    if (this.isOptimizing) return
-    
-    this.isOptimizing = true
-    console.log(`Triggering optimization for: ${type}`)
-    
-    // Выполнение оптимизации
-    this.performOptimization(type)
-    
-    // Уведомление колбэков
-    const callbacks = this.optimizationCallbacks.get(type)
-    if (callbacks) {
-      callbacks.forEach(callback => callback())
-    }
-    
-    this.isOptimizing = false
-  }
-
-  /**
-   * Выполнение оптимизации
-   */
-  private async performOptimization(type: string): Promise<void> {
-    switch (type) {
-      case 'network':
-        await this.optimizeForNetwork()
-        break
-      case 'device':
-        await this.optimizeForDevice()
-        break
-      case 'appState':
-        await this.optimizeForAppState()
-        break
-      case 'battery':
-        await this.optimizeForBattery()
-        break
-      case 'memory':
-        await this.optimizeForMemory()
-        break
-    }
-  }
-
-  /**
-   * Оптимизация под сеть
-   */
-  private async optimizeForNetwork(): Promise<void> {
-    if (!this.networkInfo) return
-
-    console.log('Optimizing for network:', this.networkInfo)
-
-    // Определение качества сети
-    const isSlowNetwork = this.networkInfo.effectiveType === '2g' || 
-                         this.networkInfo.effectiveType === '3g' ||
-                         this.networkInfo.connectionType === 'cellular'
-
-    // Оптимизация загрузки аудио
-    if (isSlowNetwork) {
-      // Снижение качества аудио
-      await this.setAudioQuality('low')
-      
-      // Отключение предзагрузки
-      await this.setPreloadEnabled(false)
-      
-      // Уменьшение размера кеша
-      await this.setCacheSize(this.config.maxCacheSize * 0.5)
-    } else {
-      // Восстановление стандартных настроек
-      await this.setAudioQuality('medium')
-      await this.setPreloadEnabled(true)
-      await this.setCacheSize(this.config.maxCacheSize)
-    }
-
-    // Оптимизация изображений
-    await this.optimizeImages(isSlowNetwork)
-  }
-
-  /**
-   * Оптимизация под устройство
-   */
-  private async optimizeForDevice(): Promise<void> {
-    if (!this.deviceInfo) return
-
-    console.log('Optimizing for device:', this.deviceInfo)
-
-    // Оптимизация под старые устройства
-    if (this.isOldDevice(this.deviceInfo)) {
-      await this.reduceAnimations()
-      await this.disableAdvancedFeatures()
-    }
-
-    // Оптимизация под iOS
-    if (this.deviceInfo.platform === 'ios') {
-      await this.optimizeForIOS()
-    }
-
-    // Оптимизация под Android
-    if (this.deviceInfo.platform === 'android') {
-      await this.optimizeForAndroid()
-    }
-  }
-
-  /**
-   * Оптимизация под состояние приложения
-   */
-  private async optimizeForAppState(): Promise<void> {
-    console.log('Optimizing for app state:', this.appState)
-
-    switch (this.appState) {
-      case 'background':
-        // Остановка фоновых процессов
-        await this.stopBackgroundTasks()
-        // Снижение качества аудио
-        await this.setAudioQuality('low')
-        break
-        
-      case 'inactive':
-        // Пауза воспроизведения
-        await this.pausePlayback()
-        break
-        
-      case 'active':
-        // Восстановление стандартных настроек
-        await this.restoreDefaults()
-        break
-    }
-  }
-
-  /**
-   * Оптимизация под батарею
-   */
-  private async optimizeForBattery(): Promise<void> {
-    if (!this.deviceInfo?.batteryLevel) return
-
-    console.log('Optimizing for battery:', this.deviceInfo.batteryLevel)
-
-    if (this.deviceInfo.batteryLevel < this.config.batteryThreshold) {
-      // Агрессивная оптимизация при низкой батарее
-      await this.setPowerSavingMode(true)
-      await this.setAudioQuality('low')
-      await this.disableBackgroundSync()
-      await this.reduceScreenBrightness()
-    } else {
-      // Восстановление стандартных настроек
-      await this.setPowerSavingMode(false)
-    }
-  }
-
-  /**
-   * Оптимизация под память
-   */
-  private async optimizeForMemory(): Promise<void> {
-    if (!this.deviceInfo?.lowMemory) return
-
-    console.log('Optimizing for memory')
-
-    // Очистка кеша
-    await this.clearCache()
-    
-    // Уменьшение размера буфера аудио
-    await this.setAudioBufferSize(1024)
-    
-    // Отключение визуализаций
-    await this.disableVisualizations()
-    
-    // Уменьшение размера истории
-    await this.reduceHistorySize()
-  }
-
-  /**
-   * Установка качества аудио
-   */
-  private async setAudioQuality(quality: 'low' | 'medium' | 'high'): Promise<void> {
-    // В реальном приложении здесь будет настройка аудио
-    console.log(`Setting audio quality to: ${quality}`)
-  }
-
-  /**
-   * Включение/выключение предзагрузки
-   */
-  private async setPreloadEnabled(enabled: boolean): Promise<void> {
-    console.log(`Preload enabled: ${enabled}`)
-  }
-
-  /**
-   * Установка размера кеша
-   */
-  private async setCacheSize(size: number): Promise<void> {
-    console.log(`Setting cache size to: ${size} bytes`)
-  }
-
-  /**
-   * Оптимизация изображений
-   */
-  private async optimizeImages(isSlowNetwork: boolean): Promise<void> {
-    console.log(`Optimizing images for slow network: ${isSlowNetwork}`)
-  }
-
-  /**
-   * Проверка старого устройства
-   */
-  private isOldDevice(deviceInfo: DeviceInfo): boolean {
-    const oldVersions = {
-      android: '8.0',
-      ios: '12.0'
-    }
-    
-    const version = parseFloat(deviceInfo.osVersion)
-    const oldVersion = parseFloat(oldVersions[deviceInfo.platform])
-    
-    return version < oldVersion
-  }
-
-  /**
-   * Снижение анимаций
-   */
-  private async reduceAnimations(): Promise<void> {
-    console.log('Reducing animations')
-  }
-
-  /**
-   * Отключение продвинутых функций
-   */
-  private async disableAdvancedFeatures(): Promise<void> {
-    console.log('Disabling advanced features')
-  }
-
-  /**
-   * Оптимизация под iOS
-   */
-  private async optimizeForIOS(): Promise<void> {
-    console.log('Optimizing for iOS')
-  }
-
-  /**
-   * Оптимизация под Android
-   */
-  private async optimizeForAndroid(): Promise<void> {
-    console.log('Optimizing for Android')
-  }
-
-  /**
-   * Остановка фоновых задач
-   */
-  private async stopBackgroundTasks(): Promise<void> {
-    console.log('Stopping background tasks')
-  }
-
-  /**
-   * Пауза воспроизведения
-   */
-  private async pausePlayback(): Promise<void> {
-    console.log('Pausing playback')
-  }
-
-  /**
-   * Восстановление стандартных настроек
-   */
-  private async restoreDefaults(): Promise<void> {
-    console.log('Restoring defaults')
-  }
-
-  /**
-   * Включение энергосберегающего режима
-   */
-  private async setPowerSavingMode(enabled: boolean): Promise<void> {
-    console.log(`Power saving mode: ${enabled}`)
-  }
-
-  /**
-   * Отключение фоновой синхронизации
-   */
-  private async disableBackgroundSync(): Promise<void> {
-    console.log('Disabling background sync')
-  }
-
-  /**
-   * Снижение яркости экрана
-   */
-  private async reduceScreenBrightness(): Promise<void> {
-    console.log('Reducing screen brightness')
-  }
-
-  /**
-   * Установка размера буфера аудио
-   */
-  private async setAudioBufferSize(size: number): Promise<void> {
-    console.log(`Setting audio buffer size to: ${size}`)
-  }
-
-  /**
-   * Отключение визуализаций
-   */
-  private async disableVisualizations(): Promise<void> {
-    console.log('Disabling visualizations')
-  }
-
-  /**
-   * Уменьшение размера истории
-   */
-  private async reduceHistorySize(): Promise<void> {
-    console.log('Reducing history size')
-  }
-
-  /**
-   * Очистка кеша
-   */
-  private async clearCache(): Promise<void> {
-    console.log('Clearing cache')
-  }
-
-  /**
-   * Получение текущей конфигурации
-   */
-  getConfig(): MobileOptimizationConfig {
-    return { ...this.config }
-  }
-
-  /**
-   * Обновление конфигурации
-   */
-  updateConfig(newConfig: Partial<MobileOptimizationConfig>): void {
-    this.config = { ...this.config, ...newConfig }
-    this.triggerOptimization('config')
-  }
-
-  /**
-   * Получение текущей информации о сети
-   */
-  getNetworkInfo(): NetworkInfo | null {
-    return this.networkInfo
-  }
-
-  /**
-   * Получение информации об устройстве
-   */
-  getDeviceInfo(): DeviceInfo | null {
-    return this.deviceInfo
-  }
-
-  /**
-   * Получение состояния приложения
-   */
-  getAppState(): 'active' | 'background' | 'inactive' {
-    return this.appState
-  }
-
-  /**
-   * Ручной запуск оптимизации
-   */
-  async manualOptimization(type?: string): Promise<void> {
-    if (type) {
-      await this.performOptimization(type)
-    } else {
-      // Полная оптимизация
-      await this.optimizeForNetwork()
-      await this.optimizeForDevice()
-      await this.optimizeForAppState()
-      await this.optimizeForBattery()
-      await this.optimizeForMemory()
-    }
-  }
-
-  /**
-   * Добавление колбэка для оптимизации
-   */
-  onOptimization(type: string, callback: Function): void {
-    if (!this.optimizationCallbacks.has(type)) {
-      this.optimizationCallbacks.set(type, [])
-    }
-    this.optimizationCallbacks.get(type)!.push(callback)
-  }
-
-  /**
-   * Удаление колбэка
-   */
-  offOptimization(type: string, callback: Function): void {
-    const callbacks = this.optimizationCallbacks.get(type)
-    if (callbacks) {
-      const index = callbacks.indexOf(callback)
-      if (index > -1) {
-        callbacks.splice(index, 1)
-      }
-    }
-  }
-
-  /**
-   * Получение статистики оптимизации
-   */
-  getOptimizationStats() {
+  // Получение статистики производительности
+  getPerformanceStats() {
     return {
-      networkInfo: this.networkInfo,
-      deviceInfo: this.deviceInfo,
-      appState: this.appState,
-      config: this.config,
-      isOptimizing: this.isOptimizing
+      cache: this.mediaCache.getCacheStats(),
+      memory: {
+        // В React Native нет прямого доступа к памяти
+        // Можно использовать библиотеки типа react-native-device-info
+      }
     }
   }
 }
 
-// Конфигурация по умолчанию
-const defaultConfig: MobileOptimizationConfig = {
-  maxCacheSize: 100 * 1024 * 1024, // 100MB
-  preloadDistance: 3,
-  offlineMode: true,
-  batteryThreshold: 20, // 20%
-  memoryThreshold: 100 * 1024 * 1024 // 100MB
-}
+// Глобальные экземпляры
+export const mobileMediaCache = new MobileMediaCache()
+export const offlineDataManager = new OfflineDataManager()
+export const mobileOptimizer = new MobilePerformanceOptimizer()
 
-// Создание экземпляра оптимизатора
-export const mobileOptimizer = new MobileOptimizer(defaultConfig)
+// React Native хук для мобильной оптимизации
+export function useMobileOptimization() {
+  const [isOnline, setIsOnline] = useState(true)
+  const [cacheStats, setCacheStats] = useState(mobileMediaCache.getCacheStats())
 
-// Хуки для использования в React Native компонентах
-export function useMobileOptimizer() {
-  const [stats, setStats] = useState(mobileOptimizer.getOptimizationStats())
-
-  // Обновление статистики
   useEffect(() => {
+    // Подписка на изменения сети
+    const unsubscribe = NetInfo.addEventListener(state => {
+      setIsOnline(state.isConnected ?? false)
+    })
+
+    // Обновление статистики кеша
     const interval = setInterval(() => {
-      setStats(mobileOptimizer.getOptimizationStats())
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  // Обработка оптимизаций
-  useEffect(() => {
-    const handleOptimization = () => {
-      setStats(mobileOptimizer.getOptimizationStats())
-    }
-
-    mobileOptimizer.onOptimization('network', handleOptimization)
-    mobileOptimizer.onOptimization('device', handleOptimization)
-    mobileOptimizer.onOptimization('battery', handleOptimization)
-    mobileOptimizer.onOptimization('memory', handleOptimization)
+      setCacheStats(mobileMediaCache.getCacheStats())
+    }, 10000)
 
     return () => {
-      mobileOptimizer.offOptimization('network', handleOptimization)
-      mobileOptimizer.offOptimization('device', handleOptimization)
-      mobileOptimizer.offOptimization('battery', handleOptimization)
-      mobileOptimizer.offOptimization('memory', handleOptimization)
+      unsubscribe()
+      clearInterval(interval)
     }
   }, [])
 
   return {
-    stats,
-    config: mobileOptimizer.getConfig(),
-    updateConfig: mobileOptimizer.updateConfig.bind(mobileOptimizer),
-    manualOptimization: mobileOptimizer.manualOptimization.bind(mobileOptimizer),
-    getNetworkInfo: mobileOptimizer.getNetworkInfo.bind(mobileOptimizer),
-    getDeviceInfo: mobileOptimizer.getDeviceInfo.bind(mobileOptimizer),
-    getAppState: mobileOptimizer.getAppState.bind(mobileOptimizer)
+    isOnline,
+    cacheStats,
+    preloadResources: mobileOptimizer.preloadCriticalResources.bind(mobileOptimizer),
+    loadAudio: mobileOptimizer.loadOptimizedAudio.bind(mobileOptimizer),
+    syncOfflineData: offlineDataManager.syncWithServer.bind(offlineDataManager)
   }
 }
-
-// Утилиты для мобильной оптимизации
-export const mobileUtils = {
-  /**
-   * Форматирование размера файла
-   */
-  formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 B'
-    const k = 1024
-    const sizes = ['B', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-  },
-
-  /**
-   * Проверка доступности сети
-   */
-  isNetworkAvailable(): boolean {
-    return mobileOptimizer.getNetworkInfo()?.isConnected || false
-  },
-
-  /**
-   * Получение типа сети
-   */
-  getNetworkType(): string {
-    return mobileOptimizer.getNetworkInfo()?.connectionType || 'unknown'
-  },
-
-  /**
-   * Проверка низкой батареи
-   */
-  isBatteryLow(): boolean {
-    return mobileOptimizer.getDeviceInfo()?.batteryLevel !== undefined && 
-           mobileOptimizer.getDeviceInfo()?.batteryLevel! < 20
-  },
-
-  /**
-   * Проверка низкой памяти
-   */
-  isMemoryLow(): boolean {
-    return mobileOptimizer.getDeviceInfo()?.lowMemory || false
-  },
-
-  /**
-   * Оптимизация изображения для мобильных устройств
-   */
-  optimizeImageForMobile(uri: string, options: {
-    width?: number
-    height?: number
-    quality?: number
-    format?: 'jpeg' | 'png'
-  } = {}): string {
-    // В реальном приложении здесь будет использование Image API React Native
-    return uri
-  },
-
-  /**
-   * Дебаунс функция для мобильных устройств
-   */
-  debounceMobile<T extends (...args: any[]) => any>(
-    func: T,
-    delay: number
-  ): T {
-    let timeoutId: NodeJS.Timeout
-    return ((...args: any[]) => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => func(...args), delay)
-    }) as T
-  },
-
-  /**
-   * Троттл функция для мобильных устройств
-   */
-  throttleMobile<T extends (...args: any[]) => any>(
-    func: T,
-    limit: number
-  ): T {
-    let inThrottle: boolean
-    return ((...args: any[]) => {
-      if (!inThrottle) {
-        func(...args)
-        inThrottle = true
-        setTimeout(() => inThrottle = false, limit)
-      }
-    }) as T
-  }
-}
-
-export default MobileOptimizer

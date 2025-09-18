@@ -1,54 +1,59 @@
-# 🚀 NORMALDANCE - Быстрый старт
+# 🚀 NORMALDANCE - Быстрый запуск
 
-## Что уже готово:
-✅ Next.js 15 приложение  
-✅ Prisma ORM с базой данных  
-✅ Web3 интеграция (Solana)  
-✅ IPFS для хранения файлов  
-✅ NextAuth аутентификация  
-✅ Tailwind CSS + shadcn/ui  
+## 1. Первоначальная настройка
 
-## Быстрый деплой:
-
-### 1. Настройка секретов
 ```bash
-setup-secrets.bat
+# Запусти setup
+setup-quick.bat
 ```
 
-### 2. Проверка проекта
+## 2. Запуск разработки
+
 ```bash
-check-project.bat
+# Запусти dev сервер
+start-dev.bat
 ```
 
-### 3. Деплой на Vercel
+## 3. Проверь что работает
+
+- 🌐 **Сайт**: http://localhost:3000
+- 🏥 **Health**: http://localhost:3000/api/health  
+- 📊 **Analytics**: http://localhost:3000/api/analytics
+
+## 4. Если что-то не работает
+
+### База данных
 ```bash
-quick-deploy.bat
+npx prisma db push
+npx prisma generate
 ```
 
-### 4. Настройка переменных окружения
+### Зависимости
 ```bash
-vercel-env-setup.bat
+npm install
 ```
 
-## Переменные окружения для Vercel:
+### Папки
+```bash
+mkdir uploads
+mkdir uploads\audio
+mkdir uploads\images
+```
 
+## 5. Для продакшена
+
+1. Получи бесплатный Redis на [Upstash](https://upstash.com)
+2. Добавь в `.env.local`:
 ```env
-DATABASE_URL=postgresql://neondb_owner:npg_Z8K9X7Y6@ep-rough-forest-a5m2n3p4.us-east-2.aws.neon.tech/neondb?sslmode=require
-NEXTAUTH_SECRET=[сгенерированный секрет]
-NEXTAUTH_URL=https://normaldance.vercel.app
-PINATA_API_KEY=[ваш ключ]
-PINATA_SECRET_API_KEY=[ваш секретный ключ]
-NEXT_PUBLIC_SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
-NEXT_PUBLIC_PLATFORM_WALLET=9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM
+UPSTASH_REDIS_REST_URL=твой_url
+UPSTASH_REDIS_REST_TOKEN=твой_токен
 ```
+3. Запусти: `deploy-optimized.sh`
 
-## Тестирование:
-После деплоя проверьте: `https://your-app.vercel.app/api/test`
+## 🎯 Готово!
 
-## Что дальше:
-1. Настроить Pinata IPFS ключи
-2. Добавить реальные треки
-3. Настроить Solana кошелек
-4. Запустить маркетинг
-
-🎵 **NORMALDANCE готов к запуску!**
+Теперь у тебя работает:
+- ✅ Безопасность (rate limiting, headers)
+- ✅ Кеширование (memory/redis)
+- ✅ Мониторинг (health, analytics)
+- ✅ Оптимизация (images, performance)

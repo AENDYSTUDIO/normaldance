@@ -163,9 +163,10 @@ export async function GET(request: Request) {
         });
         
         if (tokenResponse.ok) {
-          const result = await checkUrl('spotify', healthCheck.external.spotify.url, {
+          const tokenData = await tokenResponse.json();
+          const result = await checkUrl('spotify', healthCheck.external.social.spotify.url, {
             headers: {
-              'Authorization': 'Bearer dummy_token' // В реальном коде здесь будет настоящий токен
+              'Authorization': `Bearer ${tokenData.access_token}`
             }
           });
           healthCheck.checks.social = result.status;

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { readFileSync, existsSync, createReadStream } from 'fs'
 import { join } from 'path'
+import { validateFilePath, sanitizeString } from '@/lib/sanitizer'
 
 // GET /api/tracks/stream - Stream audio track
 export async function GET(request: Request) {
@@ -35,8 +36,16 @@ export async function GET(request: Request) {
       )
     }
 
-    // Extract filename from audioUrl
+    // Extract filename from audioUrl with security validation
     const audioPath = track.audioUrl.replace('/uploads/audio/', '')
+    
+    if (!validateFilePath(audioPath)) {
+      return NextResponse.json(
+        { error: 'Invalid file path' },
+        { status: 400 }
+      )
+    }
+    
     const fullPath = join(process.cwd(), 'uploads', 'audio', audioPath)
 
     if (!existsSync(fullPath)) {
@@ -66,7 +75,7 @@ export async function GET(request: Request) {
     headers.set('Accept-Ranges', 'bytes')
     headers.set('Content-Length', chunkSize.toString())
     headers.set('Content-Type', 'audio/mpeg')
-    headers.set('Content-Disposition', `inline; filename="${track.title}.mp3"`)
+    headers.set('Content-Disposition', `inline; filename="${sanitizeString(track.title)}.mp3"`)
 
     return new NextResponse(fileStream as any, {
       status: range ? 206 : 200,
@@ -137,7 +146,7 @@ export async function POST(request: Request) {
             userId,
             type: 'LISTENING',
             amount: 1, // 1 $NDT token per completed listen
-            reason: `Listening reward for track ${track.title}`
+            reason: `Listening reward for track ${sanitizeString(track.title)}`
           }
         })
 
@@ -195,8 +204,16 @@ export async function HEAD(request: Request) {
       )
     }
 
-    // Extract filename from audioUrl
+    // Extract filename from audioUrl with security validation
     const audioPath = track.audioUrl.replace('/uploads/audio/', '')
+    
+    if (!validateFilePath(audioPath)) {
+      return NextResponse.json(
+        { error: 'Invalid file path' },
+        { status: 400 }
+      )
+    }
+    
     const fullPath = join(process.cwd(), 'uploads', 'audio', audioPath)
 
     if (!existsSync(fullPath)) {
@@ -214,7 +231,7 @@ export async function HEAD(request: Request) {
     headers.set('Accept-Ranges', 'bytes')
     headers.set('Content-Length', fileSize.toString())
     headers.set('Content-Type', 'audio/mpeg')
-    headers.set('Content-Disposition', `inline; filename="${track.title}.mp3"`)
+    headers.set('Content-Disposition', `inline; filename="${sanitizeString(track.title)}.mp3"`)
 
     return new NextResponse(null, {
       status: 200,

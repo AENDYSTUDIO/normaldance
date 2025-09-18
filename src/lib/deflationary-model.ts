@@ -40,21 +40,27 @@ export const TREASURY_BPS = 600 // 6 % (пример)
 export const STAKING_BPS = 200 // 2 %
 
 export function calcDistribution(amount: number) {
+  // Рассчитываем общую комиссию (2% от суммы)
   const fee = Math.floor((amount * FEE_BPS) / 10_000)
-  const treasury = Math.floor((amount * TREASURY_BPS) / 10_000)
-  const staking = Math.floor((amount * STAKING_BPS) / 10_000)
-  const burn = fee // 2 % burn
-  const net = amount - fee - treasury - staking
-  return { burn, treasury, staking, net }
+  
+  // Из комиссии распределяем:
+  // 30% от burn в казну, 20% от burn на стейкинг, 50% сжигается
+  const burnAmount = fee // Вся комиссия идет на burn
+  const treasury = Math.floor(burnAmount * 0.3) // 30% от burn
+  const staking = Math.floor(burnAmount * 0.2) // 20% от burn
+  const actualBurn = burnAmount - treasury - staking // Остаток действительно сжигается
+  const net = amount - fee
+  
+  return { burn: actualBurn, treasury, staking, net }
 }
 
 // Конфигурация дефляционной модели
-export const DEFALATIONARY_CONFIG: DeflationaryConfig = {
+export const DEFLATIONARY_CONFIG: DeflationaryConfig = {
   totalSupply: 1000000000, // 1,000,000,000 NDT
   burnPercentage: 2, // 2% сжигания при каждой транзакции
   stakingRewardsPercentage: 20, // 20% от сжигания идет на rewards
   treasuryPercentage: 30, // 30% от сжигания идет в казну
-  maxSupply: 2000000000, // Максимальный供应 2B NDT
+  maxSupply: 2000000000, // Максимальный supply 2B NDT
   decimals: 9,
 }
 
@@ -64,7 +70,7 @@ export class DeflationaryModel {
   private config: DeflationaryConfig
   private mint: Mint
 
-  constructor(connection: Connection, config: DeflationaryConfig = DEFALATIONARY_CONFIG) {
+  constructor(connection: Connection, config: DeflationaryConfig = DEFLATIONARY_CONFIG) {
     this.connection = connection
     this.config = config
     this.mint = new Mint({ address: NDT_MINT_ADDRESS })
