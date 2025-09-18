@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, memo } from 'react'
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Avatar, AvatarFallback, AvatarImage } from '@/components/ui'
+import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { 
   Wallet, 
   CheckCircle, 
@@ -20,7 +21,7 @@ interface WalletConnectProps {
   className?: string
 }
 
-export function WalletConnect({ className }: WalletConnectProps) {
+export const WalletConnect = memo(function WalletConnect({ className }: WalletConnectProps) {
   const {
     connected,
     publicKey,
@@ -43,48 +44,51 @@ export function WalletConnect({ className }: WalletConnectProps) {
     }
   }, [connected, publicKey])
 
-  const loadBalance = async () => {
+  const loadBalance = useCallback(async () => {
     setBalanceLoading(true)
     try {
       await getBalance()
       const ndtBalance = await getTokenBalance('NDT_MINT_ADDRESS')
       // Store NDT balance in state if needed
     } catch (err) {
-      setError('Failed to load balance')
+      setError('Не удалось загрузить баланс')
     } finally {
       setBalanceLoading(false)
     }
-  }
+  }, [getBalance, getTokenBalance])
 
-  const handleConnect = async () => {
+  const handleConnect = useCallback(async () => {
     setIsConnecting(true)
     setError(null)
     try {
       await connectWallet()
       setShowQR(false)
     } catch (err) {
-      setError('Failed to connect wallet')
+      setError('Не удалось подключить кошелек')
       console.error('Connection error:', err)
     } finally {
       setIsConnecting(false)
     }
-  }
+  }, [connectWallet])
 
-  const handleDisconnect = async () => {
+  const handleDisconnect = useCallback(async () => {
     try {
       await disconnectWallet()
     } catch (err) {
       console.error('Disconnection error:', err)
+      setError('Не удалось отключить кошелек')
     }
-  }
+  }, [disconnectWallet])
 
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = useCallback(async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
+      // Можно добавить toast уведомление
     } catch (err) {
       console.error('Failed to copy:', err)
+      setError('Не удалось скопировать адрес')
     }
-  }
+  }, [])
 
   if (connected && publicKey) {
     return (
@@ -128,10 +132,10 @@ export function WalletConnect({ className }: WalletConnectProps) {
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">SOL Balance</span>
               {balanceLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <LoadingSpinner size="sm" />
               ) : (
                 <span className="text-sm font-medium">
-                  {formatSol(balance || 0)}
+                  {formatSol ? formatSol(balance || 0) : (balance || 0).toFixed(4)}
                 </span>
               )}
             </div>
@@ -239,4 +243,4 @@ export function WalletConnect({ className }: WalletConnectProps) {
       </CardContent>
     </Card>
   )
-}
+})

@@ -333,7 +333,7 @@ export class SmartLimitOrderSystem {
    */
   private async executeSwap(order: SmartLimitOrder, execution: PartialExecution): Promise<void> {
     // Здесь должна быть интеграция с AdvancedAMM
-    console.log(`Executing swap: ${execution.amount} ${order.from} -> ${order.to} at rate ${execution.rate}`)
+    console.log('Executing swap:', execution.amount, order.from, '->', order.to, 'at rate', execution.rate)
     
     // Симуляция API вызова
     // await fetch('/api/dex/swap', {

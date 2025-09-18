@@ -1,150 +1,82 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { db } from '@/lib/db'
-import { z } from 'zod'
+import { validateTrackUpload, TrackUploadSchema } from '@/lib/data-validation'
+import { createSecureHandler, securityConfigs } from '@/lib/api-security'
 
-// Validation schema for creating/updating tracks
-const trackSchema = z.object({
-  title: z.string().min(1).max(100),
-  artistName: z.string().min(1).max(50),
-  genre: z.string().min(1).max(30),
-  duration: z.number().min(1),
-  ipfsHash: z.string().min(1),
-  metadata: z.object({}).optional(),
-  price: z.number().min(0).optional(),
-  isExplicit: z.boolean().default(false),
-  isPublished: z.boolean().default(false),
-})
+export const GET = createSecureHandler(securityConfigs.public)(
+  async (req: NextRequest) => {
+    const { searchParams } = new URL(req.url)
+    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100)
+    const offset = parseInt(searchParams.get('offset') || '0')
+    const search = searchParams.get('search')
+    const genre = searchParams.get('genre')
 
-// GET /api/tracks - Get all tracks (with pagination and filtering)
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url)
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '10')
-    const search = searchParams.get('search') || ''
-    const genre = searchParams.get('genre') || ''
-    const artistId = searchParams.get('artistId') || ''
-    const sortBy = searchParams.get('sortBy') || 'createdAt'
-    const sortOrder = searchParams.get('sortOrder') || 'desc'
-
-    const skip = (page - 1) * limit
-
-    const where = {
-      AND: [
-        search ? {
-          OR: [
-            { title: { contains: search, mode: 'insensitive' as const } },
-            { artistName: { contains: search, mode: 'insensitive' as const } },
-          ]
-        } : {},
-        genre ? { genre: { contains: genre, mode: 'insensitive' as const } } : {},
-        artistId ? { artistId: artistId } : {},
-        { isPublished: true }
+    const where: any = {}
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { artist: { contains: search, mode: 'insensitive' } }
       ]
     }
+    if (genre) {
+      where.genre = genre
+    }
 
-    const orderBy: any = {}
-    orderBy[sortBy] = sortOrder
-
-    const [tracks, total] = await Promise.all([
-      db.track.findMany({
-        where,
-        include: {
-          artist: {
-            select: {
-              id: true,
-              username: true,
-              displayName: true,
-              avatar: true,
-            }
-          },
-          _count: {
-            select: {
-              likes: true,
-              comments: true,
-            }
-          }
-        },
-        orderBy,
-        skip,
-        take: limit,
-      }),
-      db.track.count({ where })
-    ])
-
-    return NextResponse.json({
-      tracks,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      }
-    })
-  } catch (error) {
-    console.error('Error fetching tracks:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch tracks' },
-      { status: 500 }
-    )
-  }
-}
-
-// POST /api/tracks - Create a new track
-export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const validatedData = trackSchema.parse(body)
-
-    // For now, use a default artist ID - in real app this would come from auth context
-    const defaultArtistId = 'default-artist-id'
-
-    const track = await db.track.create({
-      data: {
-        ...validatedData,
-        artistId: defaultArtistId,
-      },
+    const tracks = await db.track.findMany({
+      where,
+      take: limit,
+      skip: offset,
+      orderBy: { createdAt: 'desc' },
       include: {
-        artist: {
-          select: {
-            id: true,
-            username: true,
-            displayName: true,
-            avatar: true,
-          }
+        user: {
+          select: { username: true, displayName: true, walletAddress: true }
         }
       }
     })
 
-    // Award upload reward to artist
-    await db.reward.create({
+    const total = await db.track.count({ where })
+
+    return Response.json({
+      tracks,
+      pagination: {
+        total,
+        limit,
+        offset,
+        hasMore: offset + limit < total
+      }
+    })
+  }
+)
+
+export const POST = createSecureHandler({
+  ...securityConfigs.upload,
+  validation: TrackUploadSchema,
+  sanitize: true
+})(
+  async (req: NextRequest, user: any, validatedData: any) => {
+    const track = await db.track.create({
       data: {
-        userId: defaultArtistId,
-        type: 'UPLOAD',
-        amount: 20, // 20 $NDT tokens for upload
-        reason: `Track upload reward: ${track.title}`
+        title: validatedData.metadata.title,
+        artist: validatedData.metadata.artist,
+        genre: validatedData.metadata.genre,
+        duration: validatedData.metadata.duration,
+        description: validatedData.metadata.description,
+        releaseDate: new Date(validatedData.metadata.releaseDate),
+        isExplicit: validatedData.metadata.isExplicit,
+        fileSize: validatedData.metadata.fileSize,
+        mimeType: validatedData.metadata.mimeType,
+        ipfsHash: validatedData.ipfsHash || '',
+        userId: user.id,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      include: {
+        user: {
+          select: { username: true, displayName: true, walletAddress: true }
+        }
       }
     })
 
-    // Update user balance
-    await db.user.update({
-      where: { id: defaultArtistId },
-      data: { balance: { increment: 20 } }
-    })
-
-    return NextResponse.json(track, { status: 201 })
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
-        { status: 400 }
-      )
-    }
-
-    console.error('Error creating track:', error)
-    return NextResponse.json(
-      { error: 'Failed to create track' },
-      { status: 500 }
-    )
+    return Response.json({ success: true, track })
   }
-}
+)

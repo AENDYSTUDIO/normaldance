@@ -89,7 +89,7 @@ export async function uploadToIPFS(
     const cid = ipfsResult.cid.toString()
     const size = ipfsResult.size
     
-    console.log(`IPFS upload successful: ${cid} (${size} bytes)`)
+    console.log('IPFS upload successful:', cid, '(' + size + ' bytes)')
     
     // Пинимаем через Pinata если доступно
     if (pinata) {
@@ -121,7 +121,7 @@ export async function uploadToIPFSWithProgress(
     let uploadedSize = 0
     
     if (file.size > CHUNK_SIZE) {
-      console.log(`Large file detected, using chunking (${file.size} bytes)`)
+      console.log('Large file detected, using chunking (' + file.size + ' bytes)')
       
       // Чанкуем файл
       const chunks: Uint8Array[] = []
@@ -190,7 +190,7 @@ export async function uploadToIPFSWithProgress(
 // Получение файла из IPFS
 export async function getFileFromIPFS(cid: string): Promise<Buffer> {
   try {
-    console.log(`Fetching file from IPFS: ${cid}`)
+    console.log('Fetching file from IPFS:', cid)
     
     const chunks: Buffer[] = []
     for await (const chunk of ipfsClient.cat(cid)) {
@@ -198,7 +198,7 @@ export async function getFileFromIPFS(cid: string): Promise<Buffer> {
     }
     
     const fileData = Buffer.concat(chunks)
-    console.log(`File retrieved successfully: ${fileData.length} bytes`)
+    console.log('File retrieved successfully:', fileData.length, 'bytes')
     
     return fileData
   } catch (error) {
@@ -210,7 +210,7 @@ export async function getFileFromIPFS(cid: string): Promise<Buffer> {
 // Получение метаданных из IPFS
 export async function getMetadataFromIPFS(cid: string): Promise<any> {
   try {
-    console.log(`Fetching metadata from IPFS: ${cid}`)
+    console.log('Fetching metadata from IPFS:', cid)
     
     const metadata = await ipfsClient.cat(cid)
     const metadataString = Buffer.from(metadata).toString()
@@ -229,12 +229,12 @@ export async function pinFile(cid: string): Promise<boolean> {
   try {
     if (pinata) {
       await pinata.pinFile(cid)
-      console.log(`File pinned successfully: ${cid}`)
+      console.log('File pinned successfully:', cid)
       return true
     } else {
       // Используем IPFS пиннинг
       await ipfsClient.pin.add(cid)
-      console.log(`File pinned via IPFS: ${cid}`)
+      console.log('File pinned via IPFS:', cid)
       return true
     }
   } catch (error) {
@@ -248,12 +248,12 @@ export async function unpinFile(cid: string): Promise<boolean> {
   try {
     if (pinata) {
       await pinata.unpin(cid)
-      console.log(`File unpinned successfully: ${cid}`)
+      console.log('File unpinned successfully:', cid)
       return true
     } else {
       // Используем IPFS unpin
       await ipfsClient.pin.rm(cid)
-      console.log(`File unpinned via IPFS: ${cid}`)
+      console.log('File unpinned via IPFS:', cid)
       return true
     }
   } catch (error) {
@@ -311,7 +311,7 @@ export async function cleanupUnpinnedFiles(): Promise<number> {
       pinnedFiles.push(cid.toString())
     }
     
-    console.log(`Found ${pinnedFiles.length} pinned files`)
+    console.log('Found', pinnedFiles.length, 'pinned files')
     
     // Здесь можно добавить логику для удаления старых или неиспользуемых файлов
     // Например, файлов старше 30 дней

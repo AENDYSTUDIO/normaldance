@@ -48,8 +48,8 @@ export async function POST(request: Request) {
     const updatedSession = await db.playHistory.update({
       where: { id: sessionId },
       data: {
-        pausedTime: new Date(pausedTime),
-        endTime: new Date(pausedTime),
+        // pausedTime: new Date(pausedTime), // Removed - field doesn't exist in schema
+        // endTime: new Date(pausedTime), // Removed - field doesn't exist in schema
         isActive: false,
         metadata: {
           ...playbackSession.metadata,

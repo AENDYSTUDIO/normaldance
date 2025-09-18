@@ -1,79 +1,67 @@
-// Минимальная главная страница для быстрого старта
-import { NFTMemorialMint } from '@/components/nft/nft-memorial-mint'
-import { StarsPayment } from '@/components/telegram/stars-payment'
+'use client'
 
 export default function HomePage() {
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900">
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center">
-          <h1 className="text-6xl font-bold text-white mb-8">
-            NORMAL DANCE
-          </h1>
-          <p className="text-2xl text-blue-200 mb-12">
-            Децентрализованная музыкальная платформа
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
+      color: 'white',
+      padding: '2rem',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+        <h1 style={{ fontSize: '4rem', fontWeight: 'bold', marginBottom: '2rem' }}>
+          NORMALDANCE
+        </h1>
+        <p style={{ fontSize: '1.5rem', marginBottom: '3rem', opacity: 0.8 }}>
+          Децентрализованная музыкальная платформа на Solana
+        </p>
+        
+        <div style={{
+          background: 'rgba(255,255,255,0.1)',
+          borderRadius: '20px',
+          padding: '2rem',
+          marginBottom: '2rem'
+        }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
+            🎵 Web3 музыкальная платформа
+          </h2>
+          <p style={{ fontSize: '1.2rem', marginBottom: '2rem', opacity: 0.9 }}>
+            Загружайте, продавайте и открывайте музыку в Web3 экосистеме
           </p>
           
-          <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-6">
-              🎵 Добро пожаловать в будущее музыки
-            </h2>
-            <p className="text-lg text-blue-100 mb-8">
-              Первая в мире Web3 музыкальная платформа с честной экономикой
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-2xl mb-2">🎧</div>
-                <h3 className="font-bold text-white">Слушай</h3>
-                <p className="text-sm text-blue-200">Высококачественная музыка</p>
-              </div>
-              <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-2xl mb-2">🎤</div>
-                <h3 className="font-bold text-white">Создавай</h3>
-                <p className="text-sm text-blue-200">Загружай свои треки</p>
-              </div>
-              <div className="bg-white/5 rounded-lg p-4">
-                <div className="text-2xl mb-2">💰</div>
-                <h3 className="font-bold text-white">Зарабатывай</h3>
-                <p className="text-sm text-blue-200">Получай доход от музыки</p>
-              </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🎵</div>
+              <h3 style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>Загружайте музыку</h3>
+              <p style={{ fontSize: '0.9rem', opacity: 0.8 }}>Загружайте треки в IPFS и продавайте как NFT</p>
             </div>
-            
-            <div className="space-y-4">
-              <button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-4 px-8 rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300">
-                Начать слушать
-              </button>
-              <button className="w-full bg-white/20 text-white font-bold py-4 px-8 rounded-lg hover:bg-white/30 transition-all duration-300">
-                Загрузить трек
-              </button>
+            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>💰</div>
+              <h3 style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>Зарабатывайте</h3>
+              <p style={{ fontSize: '0.9rem', opacity: 0.8 }}>Получайте донаты и продавайте музыку за SOL</p>
             </div>
-            
-            {/* Монетизация */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <NFTMemorialMint />
-              <div className="bg-white/5 rounded-lg p-6">
-                <h3 className="text-xl font-bold text-white mb-4">🎆 Telegram Stars</h3>
-                <p className="text-blue-200 mb-4">Оплачивай музыку через Telegram</p>
-                <StarsPayment 
-                  amount={100} 
-                  description="Подписка NORMAL DANCE" 
-                  onSuccess={() => alert('Подписка активирована!')} 
-                />
-              </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🌐</div>
+              <h3 style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>Децентрализация</h3>
+              <p style={{ fontSize: '0.9rem', opacity: 0.8 }}>Полный контроль над вашим контентом</p>
             </div>
           </div>
           
-          <div className="mt-16 text-center">
-            <p className="text-blue-300 text-lg">
-              🚀 <strong>Статус:</strong> Продакшен готов | 0 пользователей | Честный старт
-            </p>
-            <p className="text-blue-400 text-sm mt-2">
-              Версия 1.0.1 | SQLite | Solana | IPFS
+          <div style={{ textAlign: 'center', opacity: 0.7 }}>
+            <p style={{ fontSize: '1rem', marginBottom: '1rem' }}>
+              Подключите кошелек Phantom для начала работы
             </p>
           </div>
         </div>
+        
+        <div style={{ textAlign: 'center', opacity: 0.7 }}>
+          <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+            🚀 <strong>Статус:</strong> MVP готов | Solana | IPFS | Web3
+          </p>
+        </div>
       </div>
     </div>
-  );
+  )
 }

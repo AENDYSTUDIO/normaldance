@@ -2,6 +2,7 @@
 import { setupSocket } from '@/lib/socket';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import helmet from 'helmet';
 import next from 'next';
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -24,11 +25,33 @@ async function createCustomServer() {
 
     // Create HTTP server that will handle both Next.js and Socket.IO
     const server = createServer((req, res) => {
-      // Skip socket.io requests from Next.js handler
-      if (req.url?.startsWith('/api/socketio')) {
-        return;
-      }
-      handle(req, res);
+      // Apply helmet security middleware
+      helmet({
+        contentSecurityPolicy: {
+          directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-eval'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            imgSrc: ["'self'", "data:", "https:", "blob:"],
+            mediaSrc: ["'self'", "https:", "blob:"],
+            connectSrc: ["'self'", "https:", "wss:", "ws:"],
+            frameAncestors: ["'none'"]
+          }
+        },
+        crossOriginEmbedderPolicy: false, // Disable for compatibility
+        hsts: dev ? false : {
+          maxAge: 31536000,
+          includeSubDomains: true,
+          preload: true
+        }
+      })(req, res, () => {
+        // Skip socket.io requests from Next.js handler
+        if (req.url?.startsWith('/api/socketio')) {
+          return;
+        }
+        handle(req, res);
+      });
     });
 
     // Setup Socket.IO

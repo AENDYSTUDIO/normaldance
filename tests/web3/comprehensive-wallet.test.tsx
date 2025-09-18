@@ -22,6 +22,117 @@ jest.mock('@solana/wallet-adapter-react', () => ({
   ConnectionProvider: ({ children }: any) => <div>{children}</div>
 }))
 
+// Mock components
+jest.mock('@/components/wallet/wallet-provider', () => ({
+  WalletProvider: ({ children }: any) => <div data-testid="wallet-provider">{children}</div>
+}))
+
+jest.mock('@/components/donate/donate-button', () => ({
+  DonateButton: ({ artistWallet, artistName }: any) => {
+    const [showModal, setShowModal] = React.useState(false)
+    const [amount, setAmount] = React.useState('')
+    const [loading, setLoading] = React.useState(false)
+    
+    return (
+      <div>
+        <button onClick={() => setShowModal(true)}>📝 Донат</button>
+        {showModal && (
+          <div>
+            <h2>Поддержать {artistName}</h2>
+            <input 
+              placeholder="Сумма в SOL" 
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            <button 
+              disabled={!amount || parseFloat(amount) <= 0 || loading}
+              onClick={async () => {
+                setLoading(true)
+                try {
+                  await mockWallet.sendTransaction()
+                  if (global.gtag) global.gtag('event', 'donation_success', { artist: artistName, amount: parseFloat(amount), currency: 'SOL' })
+                } catch (error) {
+                  global.alert('Ошибка при отправке доната')
+                  if (global.gtag) global.gtag('event', 'donation_error', { error: error.message, artist: artistName })
+                }
+                setLoading(false)
+              }}
+            >
+              {loading ? 'Отправка...' : `Донат ${amount} SOL`}
+            </button>
+          </div>
+        )}
+      </div>
+    )
+  }
+}))
+
+jest.mock('@/components/nft/nft-memorial-mint', () => ({
+  NFTMemorialMint: () => {
+    const [name, setName] = React.useState('')
+    const [message, setMessage] = React.useState('')
+    
+    return (
+      <div>
+        <input 
+          placeholder="Имя для мемориала" 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <input 
+          placeholder="Сообщение или память..." 
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <button 
+          disabled={!name || !message}
+          onClick={async () => {
+            await mockWallet.sendTransaction()
+            await global.fetch('/api/grave/mint-memorial', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, message, owner: mockWallet.publicKey.toString() })
+            })
+          }}
+        >
+          🪦 Создать мемориал за 0.01 SOL
+        </button>
+      </div>
+    )
+  }
+}))
+
+jest.mock('@/components/telegram/stars-payment', () => ({
+  StarsPayment: ({ amount, description, onSuccess }: any) => {
+    return (
+      <button 
+        onClick={() => {
+          if (global.window?.Telegram?.WebApp?.showInvoice) {
+            global.window.Telegram.WebApp.showInvoice({
+              title: 'NORMAL DANCE',
+              description,
+              payload: JSON.stringify({ type: 'stars', amount }),
+              provider_token: '',
+              start_parameter: 'stars_payment',
+              currency: 'XTR',
+              prices: [{ label: description, amount }]
+            }, (status: string) => {
+              if (status === 'paid') {
+                onSuccess?.()
+                global.alert('Оплата Stars прошла успешно!')
+              }
+            })
+          } else {
+            global.alert('Доступно только в Telegram Mini App')
+          }
+        }}
+      >
+        ⭐ Оплатить {amount} Stars
+      </button>
+    )
+  }
+}))
+
 describe('🔥 ДЕТАЛЬНЫЕ WEB3 ТЕСТЫ', () => {
   beforeEach(() => {
     jest.clearAllMocks()

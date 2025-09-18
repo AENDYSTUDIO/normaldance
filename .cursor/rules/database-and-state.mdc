@@ -1,0 +1,9 @@
+---
+alwaysApply: true
+---
+# Database and State Management
+
+- **Prisma**: Import the global Prisma instance from [`src/lib/db.ts`](mdc:src/lib/db.ts) only. Never instantiate a new client.
+- **Migrations/Schema**: See [`prisma`](mdc:prisma) directory for schema and seeds.
+- **State**: Use Zustand for global state stores; avoid introducing alternative global state systems.
+- **Redis**: Use project Redis integration for session and cache layers per infra docs.

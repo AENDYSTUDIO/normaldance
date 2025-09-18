@@ -97,12 +97,21 @@ export async function POST(request: Request) {
       data: { balance: { increment: 20 } }
     })
 
+    // Sanitize track data before returning
+    const sanitizedTrack = {
+      ...track,
+      title: track.title.replace(/[<>"'&]/g, ''),
+      artistName: track.artistName.replace(/[<>"'&]/g, ''),
+      genre: track.genre.replace(/[<>"'&]/g, ''),
+      description: track.description?.replace(/[<>"'&]/g, '') || null
+    }
+
     return NextResponse.json({
       message: 'Track uploaded successfully',
-      track,
+      track: sanitizedTrack,
       files: {
-        audio: audioFileName,
-        image: imageFileName,
+        audio: audioFileName.replace(/[<>"'&]/g, ''),
+        image: imageFileName?.replace(/[<>"'&]/g, '') || null,
       }
     }, { status: 201 })
   } catch (error) {

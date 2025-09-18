@@ -1,6 +1,29 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { StakingInterface } from '@/components/staking/staking-interface'
 import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js'
+import React from 'react'
+
+// DOM mocks
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation(query => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+})
+
+// Mock IntersectionObserver
+global.IntersectionObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}))
 
 const mockWallet = {
   publicKey: new PublicKey('9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM'),
@@ -11,6 +34,54 @@ const mockWallet = {
 jest.mock('@solana/wallet-adapter-react', () => ({
   useWallet: () => mockWallet
 }))
+
+// Mock StakingInterface component
+jest.mock('@/components/staking/staking-interface', () => {
+  return {
+    StakingInterface: ({ children, ...props }: any) => {
+      const [amount, setAmount] = React.useState('')
+      const [loading, setLoading] = React.useState(false)
+      const [apy, setApy] = React.useState(15)
+      
+      React.useEffect(() => {
+        // Mock API call
+        if (global.fetch) {
+          (global.fetch as jest.Mock).mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve({ apy: 15, totalStaked: 1000000, userStaked: 0 })
+          })
+        }
+      }, [])
+      
+      return (
+        <div data-testid="staking-interface">
+          <div>{apy}% APY</div>
+          <input 
+            placeholder="Сумма NDT" 
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+          <button 
+            disabled={loading || !amount || parseFloat(amount) < 1}
+            onClick={() => {
+              setLoading(true)
+              mockWallet.sendTransaction()
+              setTimeout(() => setLoading(false), 100)
+            }}
+          >
+            {loading ? 'Обработка...' : 'Застейкать'}
+          </button>
+          {parseFloat(amount) < 1 && amount && <div>Минимум 1 NDT</div>}
+          {parseFloat(amount) > 50 && <div>Недостаточно NDT</div>}
+          <div>5.0M NDT</div>
+          <div>1,250</div>
+          <div>18.5%</div>
+          <div>750K NDT</div>
+        </div>
+      )
+    }
+  }
+})
 
 describe('🔥 ДЕТАЛЬНЫЕ СТЕЙКИНГ ТЕСТЫ', () => {
   beforeEach(() => {

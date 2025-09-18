@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+# CI/CD и Деплоймент
+
+- **Сборка/прод**: Next.js build отключён; используйте `tsx`. См. скрипты в [`package.json`](mdc:package.json), [`AGENTS.md`](mdc:AGENTS.md).
+- **Пути Socket.IO**: убедитесь, что `/api/socketio` проброшен в Nginx/K8s. См. [`nginx.conf`](mdc:nginx.conf), [`helm/normaldance`](mdc:helm/normaldance).
+- **CI утилиты**: `npm run check:imports`, `npm run check:detect`, `npm run check:detect:fix-icons` для валидации/автофиксов.
+- **Скрипты деплоя**: см. `deploy*.sh`/`.bat`, Dockerfiles (`Dockerfile*`), `docker-compose*.yml`, [`DEPLOYMENT_GUIDE.md`](mdc:DEPLOYMENT_GUIDE.md).
+- **MCP dev**: `npm run mcp:dev` (tsx watch); сервер: [`src/mcp/server.ts`](mdc:src/mcp/server.ts), конфиг [`mcp-config.json`](mdc:mcp-config.json).

@@ -1,0 +1,10 @@
+---
+globs: *.ts,*.tsx,programs/**/*.rs
+---
+# Web3 and Wallet Integration
+
+- **Adapter**: Use the custom wallet event system in [`src/components/wallet/wallet-adapter.tsx`](mdc:src/components/wallet/wallet-adapter.tsx).
+- **Fixed program IDs**: `NDT_PROGRAM_ID`, `TRACKNFT_PROGRAM_ID`, `STAKING_PROGRAM_ID` are hardcoded and must not change (see adapter and [`programs`](mdc:programs)).
+- **Deflationary model**: All token transfers must route through `DeflationaryModel` for 2% burn logic; see [`src/lib/deflationary-model.ts`](mdc:src/lib/deflationary-model.ts) if present and references in adapter.
+- **Error handling**: Wallet operations return `0` on error (silent failure); do not throw.
+- **SOL formatting**: Always format via project utilities using Russian locale conventions (e.g., `formatSol`).

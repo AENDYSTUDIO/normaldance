@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+# Server and Socket Rules
+
+- **Server entry**: All server logic is in [`server.ts`](mdc:server.ts). Do not rely on the default Next.js server.
+- **Socket.IO path**: Must be `/api/socketio`. Clients should connect to that exact path.
+- **Examples**: See [`examples/websocket`](mdc:examples/websocket) for client usage.
+- **Vercel/Prod adapters**: See [`server.vercel.ts`](mdc:server.vercel.ts) and infra configs in `deploy*` scripts.
+- **Build**: Use `npm run build` which runs `tsx` per [`AGENTS.md`](mdc:AGENTS.md).

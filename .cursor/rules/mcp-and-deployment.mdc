@@ -1,0 +1,10 @@
+---
+alwaysApply: true
+---
+# MCP Server and Deployment/Infra
+
+- **MCP dev**: Use `npm run mcp:dev` which runs `tsx watch`. See [`src/mcp/server.ts`](mdc:src/mcp/server.ts) and [`mcp-config.json`](mdc:mcp-config.json).
+- **Custom protocol URIs**: `track://`, `user://`, `nft://`, `staking://` handled by MCP providers.
+- **Deployment**: Next.js build is disabled; production uses `tsx` directly. See [`DEPLOYMENT_GUIDE.md`](mdc:DEPLOYMENT_GUIDE.md), [`deploy*.sh`](mdc:scripts), and Dockerfiles.
+- **Socket path in infra**: Ensure `/api/socketio` is exposed in Nginx/K8s. See [`nginx.conf`](mdc:nginx.conf) and [`helm/normaldance`](mdc:helm/normaldance).
+- **CI utilities**: `npm run check:imports`, `npm run check:detect`, and `npm run check:detect:fix-icons` are available for validation/fixes.

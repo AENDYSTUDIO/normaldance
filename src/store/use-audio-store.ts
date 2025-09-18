@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { createClientSideJSONStorage } from '@/lib/zustand-safe-storage'
 
 export interface Track {
   id: string
@@ -282,6 +283,7 @@ export const useAudioStore = create<AudioState>()(
     }),
     {
       name: 'audio-store',
+      storage: createClientSideJSONStorage(),
       partialize: (state) => ({
         volume: state.volume,
         isMuted: state.isMuted,
