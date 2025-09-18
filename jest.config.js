@@ -9,6 +9,10 @@ module.exports = {
     '<rootDir>/tests/performance/',
     '<rootDir>/tests/monitoring/',
   ],
+  testMatch: [
+    '<rootDir>/tests/**/*.test.{js,jsx,ts,tsx}',
+    '<rootDir>/src/**/*.test.{js,jsx,ts,tsx}'
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@/lib/redundancy$': '<rootDir>/src/lib/redundancy-service.ts',

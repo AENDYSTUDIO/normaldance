@@ -19,17 +19,12 @@ export async function GET(request: Request) {
     // Get all passes for the user
     const passes = await db.nFT.findMany({
       where: {
-        userId: session.user.id
+        ownerId: session.user.id
       },
       orderBy: {
         createdAt: 'desc'
       }
     })
-
-    // Filter active passes (not expired)
-    const activePasses = passes.filter(pass => 
-      pass.isActive && (!pass.expiresAt || pass.expiresAt > now)
-    )
 
     // Format passes for response
     const formattedPasses = passes.map(pass => ({
@@ -37,21 +32,16 @@ export async function GET(request: Request) {
       type: pass.type,
       name: pass.name,
       price: pass.price,
-      duration: pass.duration,
       description: pass.description,
-      benefits: pass.benefits,
-      icon: pass.icon,
-      color: pass.color,
-      isActive: pass.isActive && (!pass.expiresAt || pass.expiresAt > now),
-      expiresAt: pass.expiresAt?.getTime(),
+      status: pass.status,
+      tokenId: pass.tokenId,
       createdAt: pass.createdAt.getTime(),
       metadata: pass.metadata
     }))
 
     return NextResponse.json({
       success: true,
-      passes: formattedPasses,
-      activePasses: formattedPasses.filter(pass => pass.isActive)
+      passes: formattedPasses
     })
 
   } catch (error) {
@@ -97,18 +87,14 @@ export async function POST(request: Request) {
     // Create NFT pass
     const pass = await db.nFT.create({
       data: {
-        userId: session.user.id,
-        type,
+        ownerId: session.user.id,
+        tokenId: `pass_${Date.now()}`,
+        type: 'PASS',
         name,
-        price,
-        duration,
         description: description || '',
-        benefits: benefits || [],
-        icon: icon || '🎵',
-        color: color || 'text-blue-400',
-        isActive: true,
-        expiresAt: new Date(Date.now() + duration * 60 * 60 * 1000),
-        metadata: metadata || {}
+        price,
+        status: 'MINTED',
+        metadata: JSON.stringify(metadata || {})
       }
     })
 
@@ -119,13 +105,9 @@ export async function POST(request: Request) {
         type: pass.type,
         name: pass.name,
         price: pass.price,
-        duration: pass.duration,
         description: pass.description,
-        benefits: pass.benefits,
-        icon: pass.icon,
-        color: pass.color,
-        isActive: pass.isActive,
-        expiresAt: pass.expiresAt?.getTime(),
+        status: pass.status,
+        tokenId: pass.tokenId,
         createdAt: pass.createdAt.getTime(),
         metadata: pass.metadata
       }
