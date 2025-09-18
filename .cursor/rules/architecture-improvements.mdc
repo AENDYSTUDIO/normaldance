@@ -1,0 +1,91 @@
+---
+globs: src/lib/deflationary-model.ts,src/components/wallet/wallet-adapter.tsx,src/lib/api-security.ts,src/lib/ipfs-enhanced.ts,server.ts,package.json
+description: Правила для архитектурных улучшений и безопасности
+---
+
+# Архитектурные улучшения и безопасность
+
+## Дефляционная модель
+
+- **Константы**: Используйте `DEFLATIONARY_CONFIG` (не `DEFALATIONARY_CONFIG`)
+- **Формулы распределения**: 
+  - `burn = fee` (2% от суммы)
+  - `treasury = burn * 0.6` (60% от burn)
+  - `staking = burn * 0.4` (40% от burn)
+  - `net = amount - burn - treasury - staking`
+- **Валидация**: Все суммы должны быть положительными числами
+
+## Wallet Adapter
+
+- **Silent Fail**: Все операции кошелька должны возвращать 0/NULL вместо throw
+- **Event Emission**: Используйте `walletEmitter` для событий connect/disconnect/error
+- **Error Handling**: Логируйте ошибки, но не прерывайте выполнение
+- **Connection State**: Отслеживайте состояние подключения через события
+
+## API Security
+
+- **Rate Limiting**: Используйте `rateLimit()` middleware для всех API
+- **Authentication**: JWT/NextAuth через `createSecureHandler()`
+- **Authorization**: RBAC через `auth.roles` и `auth.permissions`
+- **Validation**: Zod схемы для всех входных данных
+- **Sanitization**: Санитизация пользовательского ввода
+- **Security Headers**: Helmet middleware в server.ts
+
+## IPFS Enhanced
+
+- **Environment Detection**: Проверяйте `isBrowser` и `isNode`
+- **Safe Fetch**: Используйте `safeFetch()` с таймаутами
+- **File Handling**: Поддержка File (browser) и Buffer (Node)
+- **Chunking**: Автоматическое чанкование файлов >10MB
+- **Gateway Fallback**: Множественные IPFS гейтвеи
+
+## Server Configuration
+
+- **Helmet**: Интегрирован для security headers
+- **Socket.IO**: Путь `/api/socketio` (не `/socket.io`)
+- **Custom Server**: Используйте `tsx` вместо Next.js сервера
+- **Production**: `npm run start` использует `tsx server.ts`
+
+## Build Scripts
+
+- **Development**: `npm run dev` = `tsx watch server.ts`
+- **Production**: `npm run start` = `tsx server.ts`
+- **Build**: `npm run build` = `next build` (для статики)
+- **Hot Reload**: Автоматический перезапуск при изменениях
+
+## Security Checklist
+
+- [ ] Rate limiting настроен
+- [ ] JWT токены валидны
+- [ ] RBAC роли проверены
+- [ ] Входные данные валидированы
+- [ ] SQL инъекции предотвращены
+- [ ] XSS защита активна
+- [ ] CSRF токены используются
+- [ ] Security headers установлены
+- [ ] Логирование настроено
+- [ ] Мониторинг активен
+
+## Error Handling
+
+- **API Errors**: Стандартизированные коды ошибок
+- **Wallet Errors**: Silent fail с логированием
+- **Network Errors**: Retry логика с экспоненциальной задержкой
+- **Validation Errors**: Детальные сообщения об ошибках
+- **Security Errors**: Логирование без раскрытия деталей
+
+## Performance
+
+- **Caching**: Redis для сессий и кэша
+- **Database**: Глобальный Prisma клиент
+- **State**: Zustand для глобального состояния
+- **CDN**: IPFS с множественными гейтвеями
+- **Monitoring**: Метрики производительности
+
+## Testing
+
+- **Unit Tests**: Jest для всех модулей
+- **Integration Tests**: API и Web3 интеграция
+- **Security Tests**: Валидация безопасности
+- **Performance Tests**: Нагрузочное тестирование
+- **E2E Tests**: Полные пользовательские сценарии

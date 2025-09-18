@@ -1,0 +1,110 @@
+---
+globs: src/lib/api-security.ts,src/lib/deflationary-validator.ts,src/lib/security-checklist.ts,src/lib/web3-security-audit.ts
+description: Правила для ветки с архитектурными улучшениями
+---
+
+# Правила ветки архитектурных улучшений
+
+## Новые модули безопасности
+
+### API Security (`src/lib/api-security.ts`)
+- **Rate Limiting**: Конфигурируемые лимиты с Redis fallback
+- **Authentication**: JWT и NextAuth интеграция
+- **Authorization**: RBAC с ролями и правами
+- **Validation**: Zod схемы для всех API
+- **Sanitization**: Автоматическая очистка входных данных
+- **Security Headers**: CSP, HSTS, X-Frame-Options
+
+### Deflationary Validator (`src/lib/deflationary-validator.ts`)
+- **Transaction Validation**: Проверка дефляционных транзакций
+- **Burn Calculation**: Валидация 2% burn
+- **Distribution Check**: Проверка распределения средств
+- **Audit Trail**: Логирование всех операций
+
+### Security Checklist (`src/lib/security-checklist.ts`)
+- **Compliance**: GDPR, CCPA, SOC2 проверки
+- **Vulnerability Scan**: Автоматическое сканирование
+- **Penetration Testing**: Регулярные тесты безопасности
+- **Incident Response**: План реагирования на инциденты
+
+### Web3 Security Audit (`src/lib/web3-security-audit.ts`)
+- **Smart Contract**: Аудит смарт-контрактов
+- **Wallet Security**: Проверка кошельков
+- **Transaction Security**: Валидация транзакций
+- **Key Management**: Безопасное управление ключами
+
+## Обновленные компоненты
+
+### Wallet Adapter
+- **Silent Fail**: Все операции возвращают 0/NULL
+- **Event System**: walletEmitter для событий
+- **Error Recovery**: Автоматическое восстановление
+- **State Management**: Отслеживание состояния
+
+### IPFS Enhanced
+- **Cross-Platform**: Node.js и Browser поддержка
+- **Chunking**: Автоматическое разбиение файлов
+- **Redundancy**: Множественные гейтвеи
+- **Health Monitoring**: Проверка доступности
+
+### Server Configuration
+- **Helmet**: Security headers middleware
+- **Custom Path**: `/api/socketio` для Socket.IO
+- **TypeScript**: tsx для production
+- **Monitoring**: Метрики и логирование
+
+## Правила разработки
+
+### Код стиль
+- **TypeScript**: Строгая типизация
+- **Error Handling**: Graceful degradation
+- **Logging**: Структурированные логи
+- **Documentation**: JSDoc для всех функций
+
+### Тестирование
+- **Unit Tests**: 100% покрытие новых модулей
+- **Integration Tests**: API и Web3 тесты
+- **Security Tests**: Валидация безопасности
+- **Performance Tests**: Нагрузочное тестирование
+
+### Деплоймент
+- **CI/CD**: Автоматические тесты и деплой
+- **Security Scan**: Проверка уязвимостей
+- **Performance Monitor**: Отслеживание производительности
+- **Rollback Plan**: План отката изменений
+
+## Чек-лист для коммитов
+
+### Перед коммитом
+- [ ] Все тесты проходят
+- [ ] Линтер не показывает ошибок
+- [ ] Security scan пройден
+- [ ] Документация обновлена
+- [ ] Performance тесты пройдены
+
+### После коммита
+- [ ] CI/CD pipeline успешен
+- [ ] Staging deployment работает
+- [ ] Monitoring показывает нормальные метрики
+- [ ] Security alerts отсутствуют
+- [ ] Performance не деградировала
+
+## Мониторинг
+
+### Метрики безопасности
+- **Failed Logins**: Количество неудачных входов
+- **Rate Limit Hits**: Превышения лимитов
+- **Security Events**: События безопасности
+- **Vulnerability Alerts**: Уведомления об уязвимостях
+
+### Метрики производительности
+- **Response Time**: Время отклика API
+- **Throughput**: Пропускная способность
+- **Error Rate**: Процент ошибок
+- **Resource Usage**: Использование ресурсов
+
+### Алерты
+- **Critical**: Немедленное уведомление
+- **Warning**: Уведомление в течение часа
+- **Info**: Ежедневный отчет
+- **Debug**: Логирование без уведомлений
