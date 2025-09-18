@@ -67,40 +67,33 @@ export async function POST(request: Request) {
       })
 
       // Create NFT pass
-      const pass = await tx.nftPass.create({
+      const pass = await tx.nFT.create({
         data: {
-          userId: session.user.id,
-          type: passTemplate.type,
+          ownerId: session.user.id,
+          tokenId: `pass_${Date.now()}`,
           name: passTemplate.name,
-          price: passPrice,
-          duration: passTemplate.duration,
           description: passTemplate.description,
-          benefits: passTemplate.benefits,
-          icon: passTemplate.icon,
-          color: passTemplate.color,
-          isActive: true,
-          expiresAt: new Date(Date.now() + (passTemplate.duration || 0) * 60 * 60 * 1000),
-          metadata: {
+          price: passPrice,
+          type: 'PASS',
+          status: 'MINTED',
+          metadata: JSON.stringify({
             deviceId,
             walletAddress,
             trackId: trackId || null,
             clubId: clubId || null,
             genreId: genreId || null,
             purchasedAt: new Date().toISOString()
-          }
+          })
         }
       })
 
       // Create purchase transaction record
-      await tx.passPurchase.create({
+      await tx.purchase.create({
         data: {
-          userId: session.user.id,
-          passId: pass.id,
-          templateId: passTemplate.id,
+          buyerId: session.user.id,
+          nftId: pass.id,
           price: passPrice,
-          deviceId,
-          walletAddress,
-          status: 'COMPLETED'
+          transaction: `pass_purchase_${Date.now()}`
         }
       })
 
@@ -108,19 +101,19 @@ export async function POST(request: Request) {
       if (trackId) {
         const track = await tx.track.findUnique({
           where: { id: trackId },
-          select: { userId: true }
+          select: { artistId: true }
         })
 
         if (track) {
           const artistReward = passPrice * 0.9
           await tx.user.update({
-            where: { id: track.userId },
+            where: { id: track.artistId },
             data: { tonBalance: { increment: artistReward } }
           })
 
           await tx.reward.create({
             data: {
-              userId: track.userId,
+              userId: track.artistId,
               type: 'PASS_PURCHASE',
               amount: artistReward,
               reason: `NFT pass purchase reward (90% of ${passPrice} TON)`
