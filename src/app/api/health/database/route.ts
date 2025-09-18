@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
  * Проводит глубокую проверку подключения к базе данных
  * и выполняет тестовые запросы для проверки производительности.
  */
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const startTime = Date.now();
     

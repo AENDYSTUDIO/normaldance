@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { smartLimitOrderSystem } from '@/lib/smart-limit-orders'
 
 // POST /api/dex/smart-orders - Create smart limit order
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -89,9 +88,9 @@ export async function POST(request: NextRequest) {
 }
 
 // GET /api/dex/smart-orders - Get user's smart limit orders
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -152,9 +151,9 @@ export async function GET(request: NextRequest) {
 }
 
 // DELETE /api/dex/smart-orders - Cancel smart limit order
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(

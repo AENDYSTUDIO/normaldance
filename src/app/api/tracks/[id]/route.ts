@@ -4,7 +4,7 @@ import { isAdmin } from '@/lib/rbac'
 
 // GET /api/tracks/[id] - Get a specific track
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -48,7 +48,7 @@ export async function GET(
 
 // PUT /api/tracks/[id] - Update a track
 export async function PUT(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -97,7 +97,7 @@ export async function PUT(
 
 // DELETE /api/tracks/[id] - Delete a track
 export async function DELETE(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -121,7 +121,7 @@ export async function DELETE(
 
 // POST /api/tracks/[id]/play - Record a play
 export async function POST(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params

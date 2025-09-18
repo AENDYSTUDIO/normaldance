@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 
 // POST /api/dex/liquidity - Add liquidity to pool
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -174,9 +173,9 @@ export async function POST(request: NextRequest) {
 }
 
 // DELETE /api/dex/liquidity - Remove liquidity from pool
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -287,9 +286,9 @@ export async function DELETE(request: NextRequest) {
 }
 
 // GET /api/dex/liquidity - Get liquidity positions
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(

@@ -4,7 +4,7 @@ import { isAdmin } from '@/lib/rbac'
 
 // GET /api/nft/[id] - Get a specific NFT
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -49,7 +49,7 @@ export async function GET(
 
 // PUT /api/nft/[id] - Update an NFT
 export async function PUT(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -102,7 +102,7 @@ export async function PUT(
 
 // DELETE /api/nft/[id] - Delete an NFT
 export async function DELETE(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -126,7 +126,7 @@ export async function DELETE(
 
 // POST /api/nft/[id]/purchase - Purchase an NFT
 export async function POST(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params

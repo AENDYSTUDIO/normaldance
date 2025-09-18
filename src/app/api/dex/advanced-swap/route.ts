@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { advancedAMM } from '@/lib/advanced-amm'
 import { volatilityProtectionSystem } from '@/lib/volatility-protection'
 
 // POST /api/dex/advanced-swap - Execute advanced swap with hybrid AMM
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(

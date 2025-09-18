@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 import { db } from '@/lib/db'
 
 export async function PATCH(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     // Только администраторы могут изменять роли
     if ((session?.user as any)?.level !== 'ADMIN') {
@@ -49,12 +48,12 @@ export async function PATCH(
 }
 
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     // Только администраторы могут просматривать роли
     if ((session?.user as any)?.level !== 'ADMIN') {

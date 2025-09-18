@@ -4,7 +4,7 @@ import { readFileSync, existsSync, createReadStream } from 'fs'
 import { join } from 'path'
 
 // GET /api/tracks/stream - Stream audio track
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/tracks/stream - Track play count and user listening
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { id, userId, duration, completed, position } = body
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
 }
 
 // HEAD /api/tracks/stream - Get track info without streaming
-export async function HEAD(request: NextRequest) {
+export async function HEAD(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')

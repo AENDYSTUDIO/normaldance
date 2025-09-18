@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { monitorFileHealth, getFileFromBestGateway } from '@/lib/ipfs-enhanced'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const cid = searchParams.get('cid')

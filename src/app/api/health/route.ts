@@ -11,7 +11,7 @@ import { db } from '@/lib/db';
  * - Балансировщиками нагрузки
  * - CI/CD пайплайнами
  */
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const startTime = Date.now();
     
@@ -132,7 +132,7 @@ export async function GET(request: NextRequest) {
 /**
  * POST метод для health check (может использоваться для более глубоких проверок)
  */
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { action, ...params } = body;

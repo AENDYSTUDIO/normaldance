@@ -56,7 +56,7 @@ if (process.env.VERCEL) {
 
       setupSocket(io);
 
-      server.listen(port, hostname, () => {
+      server.listen(Number(port), hostname, () => {
         console.log(`🚀 Server running on http://${hostname}:${port}`);
         console.log(`📡 Socket.IO available at http://${hostname}:${port}/api/socketio`);
       });

@@ -10,7 +10,7 @@ const mintSchema = z.object({
 })
 
 // POST /api/nft/mint - Mint NFT to a specific address
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { nftId, recipientAddress, quantity } = mintSchema.parse(body)

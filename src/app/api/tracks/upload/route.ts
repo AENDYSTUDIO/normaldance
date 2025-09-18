@@ -16,7 +16,7 @@ const uploadSchema = z.object({
 })
 
 // POST /api/tracks/upload - Upload a new track
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     // Parse form data
     const formData = await request.formData()
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET /api/tracks/upload - Get upload status and progress (for large files)
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const uploadId = searchParams.get('uploadId')

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { filecoinService } from '@/lib/filecoin-service'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { action, ipfsCid, options } = body
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const dealId = searchParams.get('dealId')
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const dealId = searchParams.get('dealId')

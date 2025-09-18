@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { telegramIntegration2025 } from '@/lib/telegram-integration-2025'
 
 // POST /api/telegram/webhook - Telegram webhook handler
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET /api/telegram/webhook - Webhook info
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   return NextResponse.json({
     status: 'active',
     integration: 'Telegram 2025',

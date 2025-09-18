@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { redundancyService } from '@/lib/redundancy-service'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const action = searchParams.get('action')
@@ -117,7 +117,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { action, nodeId, sourceCid, options } = body
@@ -209,7 +209,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: NextRequest) {
+export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const nodeId = searchParams.get('nodeId')

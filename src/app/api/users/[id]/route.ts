@@ -3,7 +3,7 @@ import { db } from '@/lib/db'
 
 // GET /api/users/[id] - Get a specific user
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -74,7 +74,7 @@ export async function GET(
 
 // PUT /api/users/[id] - Update a user
 export async function PUT(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
@@ -122,7 +122,7 @@ export async function PUT(
 
 // DELETE /api/users/[id] - Delete a user (soft delete)
 export async function DELETE(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params

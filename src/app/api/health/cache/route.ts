@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * Проверяет состояние Redis кэша и его производительность.
  * Работает только если настроен REDIS_URL.
  */
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const startTime = Date.now();
     
