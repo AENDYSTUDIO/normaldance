@@ -238,7 +238,8 @@ export function useSocketMetrics() {
         setMetrics(data)
       }
     } catch (error) {
-      console.error('Failed to fetch socket metrics:', error)
+      const sanitizedError = String(error).replace(/[\r\n]/g, ' ').substring(0, 200)
+      console.error('Failed to fetch socket metrics:', sanitizedError)
     }
   }, [])
 

@@ -13,13 +13,21 @@ export const GET = createSecureHandler(securityConfigs.public)(
 
     const where: any = {}
     if (search) {
-      where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { artist: { contains: search, mode: 'insensitive' } }
-      ]
+      // Санитизация поискового запроса
+      const sanitizedSearch = search.replace(/[<>"'&]/g, '').trim()
+      if (sanitizedSearch.length > 0) {
+        where.OR = [
+          { title: { contains: sanitizedSearch, mode: 'insensitive' } },
+          { artist: { contains: sanitizedSearch, mode: 'insensitive' } }
+        ]
+      }
     }
     if (genre) {
-      where.genre = genre
+      // Валидация жанра
+      const validGenres = ['electronic', 'hip-hop', 'rock', 'pop', 'jazz', 'classical', 'ambient', 'techno', 'house', 'other']
+      if (validGenres.includes(genre)) {
+        where.genre = genre
+      }
     }
 
     const tracks = await db.track.findMany({
