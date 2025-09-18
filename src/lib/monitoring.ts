@@ -296,7 +296,7 @@ export const metrics = new MetricsCollector('dnb1st');
 export const performance = new PerformanceMonitor('dnb1st');
 
 // Middleware для логирования запросов
-export function loggingMiddleware(request: NextRequest): void {
+export function loggingMiddleware(request: Request): void {
   const startTime = Date.now();
   const url = request.nextUrl.pathname;
   

@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 
 // GET /api/anti-pirate/passes - Get user's NFT passes
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -65,9 +64,9 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/anti-pirate/passes - Create new NFT pass
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(

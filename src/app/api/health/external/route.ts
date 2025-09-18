@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * - Analytics services
  * - Social media APIs
  */
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const startTime = Date.now();
     

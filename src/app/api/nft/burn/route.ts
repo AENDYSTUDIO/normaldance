@@ -10,7 +10,7 @@ const burnSchema = z.object({
 })
 
 // POST /api/nft/burn - Burn NFT (permanently remove from circulation)
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { nftId, ownerAddress, quantity } = burnSchema.parse(body)

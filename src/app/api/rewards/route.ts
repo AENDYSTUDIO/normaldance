@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
 // GET /api/rewards - Get rewards for a user
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const userId = searchParams.get('userId')
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/rewards - Create a new reward (admin only)
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     // Server-side RBAC: Only admins can create rewards
     const { getServerSession } = await import('next-auth')

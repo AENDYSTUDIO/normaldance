@@ -11,7 +11,7 @@ const transferSchema = z.object({
 })
 
 // POST /api/nft/transfer - Transfer NFT between addresses
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { nftId, fromAddress, toAddress, quantity } = transferSchema.parse(body)

@@ -17,7 +17,7 @@ const signupSchema = z.object({
   wallet: z.string().min(32).max(44), // Solana address validation
 })
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const validatedData = signupSchema.parse(body)

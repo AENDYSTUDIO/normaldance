@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { uploadWithReplication, checkFileAvailabilityOnMultipleGateways } from '@/lib/ipfs-enhanced'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const cid = searchParams.get('cid')

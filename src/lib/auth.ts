@@ -1,8 +1,8 @@
 import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import SpotifyProvider from 'next-auth/providers/spotify'
-import AppleProvider from 'next-auth/providers/apple'
+// import SpotifyProvider from 'next-auth/providers/spotify'
+// import AppleProvider from 'next-auth/providers/apple'
 import { SiweMessage } from 'siwe'
 import { db } from './db'
 import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js'
@@ -73,28 +73,15 @@ export const authOptions: NextAuthOptions = {
       },
     }),
 
-    // OAuth провайдеры
-    SpotifyProvider({
-      clientId: process.env.SPOTIFY_CLIENT_ID!,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          scope: 'user-read-email user-read-private user-top-read user-library-read',
-        },
-      },
-    }),
-
-    AppleProvider({
-      clientId: process.env.APPLE_CLIENT_ID!,
-      clientSecret: process.env.APPLE_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          scope: 'name email',
-          response_type: 'code',
-          response_mode: 'query',
-        },
-      },
-    }),
+    // OAuth провайдеры (временно отключены)
+    // SpotifyProvider({
+    //   clientId: process.env.SPOTIFY_CLIENT_ID!,
+    //   clientSecret: process.env.SPOTIFY_CLIENT_SECRET!,
+    // }),
+    // AppleProvider({
+    //   clientId: process.env.APPLE_CLIENT_ID!,
+    //   clientSecret: process.env.APPLE_CLIENT_SECRET!,
+    // }),
   ],
   session: {
     strategy: 'jwt',

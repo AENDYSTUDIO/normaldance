@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 
 // GET /api/tracks/[id]/progress - Get secret progress data
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     // Find the track
     const track = await db.track.findUnique({
@@ -124,12 +123,12 @@ export async function GET(
 
 // POST /api/tracks/[id]/progress/contribute - Contribute to progress
 export async function POST(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(

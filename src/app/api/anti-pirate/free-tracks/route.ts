@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth'
 
 // GET /api/anti-pirate/free-tracks - Check free tracks usage
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -31,25 +30,20 @@ export async function GET(request: NextRequest) {
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
 
     // Count free tracks used in the last 24 hours
-    const freeTracksUsed = await db.playbackSession.count({
+    const freeTracksUsed = await db.playHistory.count({
       where: {
-        deviceId,
-        walletAddress,
-        isFree: true,
-        startTime: {
+        userId: session.user.id,
+        createdAt: {
           gte: twentyFourHoursAgo
         }
       }
     })
 
     // Check if user has any active passes that would allow unlimited playback
-    const activePasses = await db.nftPass.findMany({
+    const activePasses = await db.nft.findMany({
       where: {
-        userId: session.user.id,
-        isActive: true,
-        expiresAt: {
-          gt: now
-        }
+        ownerId: session.user.id,
+        isActive: true
       }
     })
 
@@ -74,9 +68,9 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/anti-pirate/free-tracks - Record free track usage
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession()
     
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -99,12 +93,10 @@ export async function POST(request: NextRequest) {
     const now = new Date()
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
 
-    const freeTracksUsed = await db.playbackSession.count({
+    const freeTracksUsed = await db.playHistory.count({
       where: {
-        deviceId,
-        walletAddress,
-        isFree: true,
-        startTime: {
+        userId: session.user.id,
+        createdAt: {
           gte: twentyFourHoursAgo
         }
       }
@@ -117,18 +109,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create playback session record
-    const sessionRecord = await db.playbackSession.create({
+    // Create playback history record
+    const sessionRecord = await db.playHistory.create({
       data: {
         userId: session.user.id,
         trackId,
-        deviceId,
-        walletAddress,
-        startTime: now,
-        isFree: true,
-        isBackground: false,
-        isOffline: false,
-        hasLicense: false
+        duration: 0,
+        completed: false
       }
     })
 

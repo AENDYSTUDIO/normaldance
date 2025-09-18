@@ -16,7 +16,7 @@ const trackSchema = z.object({
 })
 
 // GET /api/tracks - Get all tracks (with pagination and filtering)
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const page = parseInt(searchParams.get('page') || '1')
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
 }
 
 // POST /api/tracks - Create a new track
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const body = await request.json()
     const validatedData = trackSchema.parse(body)
