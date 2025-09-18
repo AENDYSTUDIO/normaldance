@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     // Check if user has active passes
     const now = new Date()
-    const activePasses = await db.nftPass.findMany({
+    const activePasses = await db.nFT.findMany({
       where: {
         userId: session.user.id,
         isActive: true,
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
     // Check if user has used 7 free tracks in the last 24 hours
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000)
-    const freeTracksUsed = await db.playbackSession.count({
+    const freeTracksUsed = await db.playHistory.count({
       where: {
         deviceId,
         walletAddress,
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     }
 
     // Create playback session
-    const playbackSession = await db.playbackSession.create({
+    const playbackSession = await db.playHistory.create({
       data: {
         userId: session.user.id,
         trackId,

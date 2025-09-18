@@ -39,7 +39,7 @@ export async function GET(request: Request) {
       }),
       
       // Activity stats
-      db.playbackSession.count({
+      db.playHistory.count({
         where: {
           startTime: {
             gte: new Date(Date.now() - 24 * 60 * 60 * 1000) // Last 24 hours
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
           }
         }
       }),
-      db.nftPass.count({
+      db.nFT.count({
         where: {
           isActive: true,
           expiresAt: { gt: new Date() }

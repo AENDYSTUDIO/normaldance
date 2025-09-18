@@ -40,10 +40,9 @@ export async function GET(request: Request) {
     })
 
     // Check if user has any active passes that would allow unlimited playback
-    const activePasses = await db.nft.findMany({
+    const activePasses = await db.nFT.findMany({
       where: {
-        ownerId: session.user.id,
-        isActive: true
+        ownerId: session.user.id
       }
     })
 
@@ -124,8 +123,9 @@ export async function POST(request: Request) {
       session: {
         id: sessionRecord.id,
         trackId: sessionRecord.trackId,
-        startTime: sessionRecord.startTime.getTime(),
-        isFree: sessionRecord.isFree
+        createdAt: sessionRecord.createdAt.getTime(),
+        duration: sessionRecord.duration,
+        completed: sessionRecord.completed
       }
     })
 

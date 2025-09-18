@@ -101,7 +101,7 @@ export async function GET(request: Request) {
       db.club.count(),
       db.chatMessage.count(),
       db.swapTransaction.count(),
-      db.nftPass.count()
+      db.nFT.count()
     ])
 
     const profile = {
