@@ -6,11 +6,12 @@ import { join } from 'path'
 // GET /api/tracks/stream - Stream audio track
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const track = await db.track.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: {
         id: true,
         title: true,
@@ -77,15 +78,16 @@ export async function GET(
 // POST /api/tracks/stream - Track play count and user listening
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { userId, duration, completed, position } = body
 
     // Find the track
     const track = await db.track.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: {
         id: true,
         title: true,
@@ -103,7 +105,7 @@ export async function POST(
 
     // Increment play count
     await db.track.update({
-      where: { id: params.id },
+      where: { id },
       data: { playCount: { increment: 1 } }
     })
 
@@ -112,7 +114,7 @@ export async function POST(
       await db.playHistory.create({
         data: {
           userId,
-          trackId: params.id,
+          trackId: id,
           duration: duration || 0,
           completed: completed || false,
           position: position || 0,
@@ -140,7 +142,7 @@ export async function POST(
 
     return NextResponse.json({
       message: 'Play recorded successfully',
-      trackId: params.id,
+      trackId: id,
       playCount: track.playCount + 1,
     })
   } catch (error) {
@@ -155,11 +157,12 @@ export async function POST(
 // HEAD /api/tracks/stream - Get track info without streaming
 export async function HEAD(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const track = await db.track.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: {
         id: true,
         title: true,
