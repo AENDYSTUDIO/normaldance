@@ -132,13 +132,9 @@ export async function POST(request: Request) {
         type: result.type,
         name: result.name,
         price: result.price,
-        duration: result.duration,
         description: result.description,
-        benefits: result.benefits,
-        icon: result.icon,
-        color: result.color,
-        isActive: result.isActive,
-        expiresAt: result.expiresAt?.getTime(),
+        status: result.status,
+        tokenId: result.tokenId,
         createdAt: result.createdAt.getTime(),
         metadata: result.metadata
       }

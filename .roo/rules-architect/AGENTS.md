@@ -1,22 +1,7 @@
 # Architect Mode Rules (Non-Obvious Only)
 
-- **Architecture pattern**: Custom server setup with Socket.IO integration instead of standard Next.js server
-- **Communication layer**: Custom `/api/socketio` path for real-time communication
-- **Wallet architecture**: Custom event emitter system replacing standard wallet-adapter-react patterns
-- **Economic model**: Deflationary token system with 2% burn, 20% staking rewards, 30% treasury distribution
-- **Data layer**: Global Prisma instance with connection timeout and error format optimization
-- **Storage architecture**: Multi-gateway IPFS/Filecoin redundancy with automatic chunking and health monitoring
-- **Integration pattern**: MCP server with custom protocol system (track://, user://, nft://, staking://)
-- **Mobile architecture**: Separate React Native app with comprehensive mocking layer for testing
-- **TypeScript strategy**: Web3 code uses relaxed type settings for compatibility with Solana libraries
-- **Build optimization**: Production builds use `tsx` directly, Next.js build disabled for performance
-- **Testing strategy**: Dual Jest environments with extended timeouts and extensive mocking
-- **Security model**: Silent error handling in wallet operations with return 0 instead of throwing
-- **Transaction architecture**: Custom Solana transaction creation not following standard patterns
-- **Financial system**: Russian locale formatting for all SOL amounts and token calculations
-- **Performance optimization**: ESLint rules disabled for faster build times
-- **Socket.IO architecture**: Custom server handling both Next.js and Socket.IO simultaneously
-- **Smart contract integration**: Fixed program IDs create tight frontend-smart contract coupling
-- **File handling**: Large files automatically chunked with manifest-based reconstruction
-- **Event system**: Global wallet emitter for custom event handling across application
-- **Mocking strategy**: Extensive React Native module mocking for mobile app testing
+- **Custom server setup**: Socket.IO сервер вместо стандартного Next.js сервера в `server.ts`
+- **Global Prisma singleton**: Единый экземпляр для предотвращения утечек памяти
+- **Deflationary экономика**: Автоматическое распределение (2% burn, 20% staking, 30% treasury)
+- **Multi-gateway CDN fallback**: Автоматический fallback через несколько шлюзов
+- **Custom event emitter system**: Управление состоянием wallet через кастомные события
