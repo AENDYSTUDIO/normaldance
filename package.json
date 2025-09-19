@@ -35,7 +35,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^0.4.0",
+    "@modelcontextprotocol/sdk": "^1.18.1",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@pinata/sdk": "^2.1.0",
     "@prisma/client": "^5.0.0",
