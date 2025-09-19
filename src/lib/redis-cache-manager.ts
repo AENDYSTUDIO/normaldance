@@ -104,37 +104,48 @@ class RedisCacheManager {
   }
 
   private initializeRedis(): void {
-    const redisConfig: any = {
-      host: this.config.host,
-      port: this.config.port,
-      db: this.config.db,
-      retryDelayOnFailover: this.config.retryDelayOnFailover,
-      maxRetriesPerRequest: this.config.maxRetriesPerRequest,
-      lazyConnect: true,
-      keyPrefix: this.config.keyPrefix,
-      maxmemoryPolicy: 'allkeys-lru'
+    // Skip Redis initialization if not configured or in serverless environment
+    if (!process.env.REDIS_URL && (process.env.NODE_ENV === 'production' || process.env.VERCEL)) {
+      console.log('Redis disabled (no REDIS_URL in production/serverless)')
+      this.isConnected = false
+      return
     }
 
-    if (this.config.password) {
-      redisConfig.password = this.config.password
-    }
-
-    if (this.config.enableClustering) {
-      this.redis = new Redis.Cluster([
-        { host: this.config.host, port: this.config.port }
-      ], {
-        redisOptions: redisConfig,
-        enableOfflineQueue: false
+    // Use REDIS_URL if available (for external services like Upstash)
+    if (process.env.REDIS_URL) {
+      this.redis = new Redis(process.env.REDIS_URL, {
+        lazyConnect: true,
+        keyPrefix: this.config.keyPrefix,
+        maxRetriesPerRequest: this.config.maxRetriesPerRequest,
+        retryDelayOnFailover: this.config.retryDelayOnFailover
       })
     } else {
+      const redisConfig: any = {
+        host: this.config.host,
+        port: this.config.port,
+        db: this.config.db,
+        retryDelayOnFailover: this.config.retryDelayOnFailover,
+        maxRetriesPerRequest: this.config.maxRetriesPerRequest,
+        lazyConnect: true,
+        keyPrefix: this.config.keyPrefix
+      }
+      
+      if (this.config.password) {
+        redisConfig.password = this.config.password
+      }
+      
       this.redis = new Redis(redisConfig)
     }
+
+
 
     this.setupEventHandlers()
     this.connect()
   }
 
   private setupEventHandlers(): void {
+    if (!this.redis) return
+    
     this.redis.on('connect', () => {
       console.log('Redis connected')
       this.isConnected = true
@@ -164,6 +175,12 @@ class RedisCacheManager {
       await this.configureRedis()
     } catch (error) {
       console.error('Failed to connect to Redis:', error)
+      // In production/serverless, don't try to reconnect if Redis is not available
+      if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+        console.warn('Redis not available in production/serverless, using fallback')
+        this.isConnected = false
+        return
+      }
       this.handleReconnection()
     }
   }

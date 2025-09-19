@@ -9,6 +9,15 @@ export async function GET(request: NextRequest) {
 
     const results: any = {}
 
+    // Skip Redis operations in production if not available
+    if (process.env.NODE_ENV === 'production' && !process.env.REDIS_URL) {
+      return NextResponse.json({
+        success: true,
+        data: { message: 'Cache monitoring disabled in production' },
+        timestamp: new Date().toISOString()
+      })
+    }
+
     // Basic cache stats
     if (type === 'all' || type === 'basic') {
       const basicStats = await redisCache.getStats()
