@@ -1,33 +1,35 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useTracksStore } from '@/lib/stores/tracks-store'
-import { useAuthStore } from '@/lib/stores/auth-store'
-import { apiClient } from '@/lib/api-client'
+import { useEffect, useState } from 'react'
 
 export default function Dashboard() {
-  const { tracks, setTracks } = useTracksStore()
-  const { user } = useAuthStore()
+  const [tracks, setTracks] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const loadTracks = async () => {
       try {
-        const data = await apiClient.getTracks()
-        setTracks(data.tracks || [])
+        const response = await fetch('/api/tracks')
+        if (response.ok) {
+          const data = await response.json()
+          setTracks(data.tracks || [])
+        }
       } catch (error) {
         console.error('Failed to load tracks:', error)
+      } finally {
+        setLoading(false)
       }
     }
 
     loadTracks()
-  }, [setTracks])
+  }, [])
 
-  if (!user) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Welcome to NORMALDANCE</h1>
-          <p className="text-gray-600 mb-6">Connect your wallet to get started</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Загрузка...</p>
         </div>
       </div>
     )
@@ -38,7 +40,7 @@ export default function Dashboard() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600">Welcome back, {user.username || 'Artist'}</p>
+          <p className="text-gray-600">Welcome to NORMALDANCE</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

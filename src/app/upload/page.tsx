@@ -1,61 +1,46 @@
 'use client'
 
 import { useState } from 'react'
-import { useAuthStore } from '@/lib/stores/auth-store'
-import { apiClient } from '@/lib/api-client'
 import { useRouter } from 'next/navigation'
 
 export default function Upload() {
-  const { user } = useAuthStore()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    price: '',
+    artist: '',
   })
   const [audioFile, setAudioFile] = useState<File | null>(null)
-  const [coverFile, setCoverFile] = useState<File | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!audioFile || !user) return
+    if (!audioFile) return
 
     setLoading(true)
     try {
-      // Upload audio file
-      const audioUpload = await apiClient.uploadFile(audioFile)
-      
-      // Upload cover if provided
-      let coverUpload = null
-      if (coverFile) {
-        coverUpload = await apiClient.uploadFile(coverFile)
-      }
-
       // Create track
-      await apiClient.createTrack({
-        title: formData.title,
-        description: formData.description,
-        audioUrl: audioUpload.url,
-        coverUrl: coverUpload?.url,
-        price: formData.price ? parseFloat(formData.price) : null,
+      const response = await fetch('/api/tracks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          artist: formData.artist,
+        }),
       })
 
-      router.push('/dashboard')
+      if (response.ok) {
+        router.push('/dashboard')
+      } else {
+        alert('Upload failed. Please try again.')
+      }
     } catch (error) {
       console.error('Upload failed:', error)
       alert('Upload failed. Please try again.')
     } finally {
       setLoading(false)
     }
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg text-gray-600">Please connect your wallet to upload tracks</p>
-      </div>
-    )
   }
 
   return (
@@ -104,33 +89,20 @@ export default function Upload() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cover Image
+              Artist Name *
             </label>
             <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Price (SOL)
-            </label>
-            <input
-              type="number"
-              step="0.01"
-              min="0"
-              value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+              type="text"
+              required
+              value={formData.artist}
+              onChange={(e) => setFormData({ ...formData, artist: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <button
             type="submit"
-            disabled={loading || !audioFile}
+            disabled={loading || !formData.title || !formData.artist}
             className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
             {loading ? 'Uploading...' : 'Upload Track'}

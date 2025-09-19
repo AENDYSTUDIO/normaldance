@@ -1,79 +1,48 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Testing
+coverage/
 
-# testing
-/coverage
-/jest.config.js
-/jest.setup.js
+# Next.js
+.next/
+out/
 
-# next.js
-/.next/
-/out/
+# Production
+build/
+dist/
 
-# production
-/build
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# misc
-.DS_Store
-*.pem
-*.log
-*.tmp
-temp/
-tmp/
+# Vercel
+.vercel
 
-# debug
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Database
+prisma/db/
+*.db
+*.sqlite
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# Security - Never commit tokens or secrets
-*.token
-.secrets/
-ghp_*
-gh_*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-local-*
-.claude
-.z-ai-config
-dev.log
-test
-prompt
-
-# databases
-*.db
-*.sqlite
-*.sqlite3
-
-# backup directories
-backup/
-trash/
-
-# mobile app
-mobile-app/jest.config.js
-mobile-app/jest.setup.js
-mobile-app/node_modules/
-
-# Docker
-.dockerignore
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
 # IDE
 .vscode/
@@ -82,46 +51,9 @@ mobile-app/node_modules/
 *.swo
 
 # OS
+.DS_Store
 Thumbs.db
-Desktop.ini
 
-# scripts
-run-tests-simple.js
-scripts/port-manager.js
-
-# logs
-server.log
-logs/
-*.log
-
-# test artifacts
-test-results/
-test-results/
-.vercel
-
-# Large archives and binaries (prevent accidental commits)
-grafana.zip
-prometheus.zip
-prometheus-*/
-grafana/
-monitoring/grafana/
-monitoring/prometheus/
-*.exe
-*.tar
-*.tar.gz
-*.7z
-*.rar
-*.iso
-
-# Local keys and temp
-/tmp/
-*.pem
-*.key
-*.p12
-*.pfx
-*.jks
-/keys/
-reports/security-audit.json
- 
-# legal signed docs
-legal/IP-Assignment-SIGNED.pdf
+# Temporary files
+*.tmp
+*.temp
