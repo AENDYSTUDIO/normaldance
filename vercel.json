@@ -3,7 +3,8 @@
     "NODE_ENV": "production",
     "CACHE_ENABLED": "false",
     "REDIS_URL": "",
-    "JWT_SECRET": "nBkatOcmI5jagJfj4d3QyDUj"
+    "JWT_SECRET": "nBkatOcmI5jagJfj4d3QyDUj",
+    "DATABASE_URL": "file:./prisma/db/custom.db"
   },
   "functions": {
     "src/app/api/**/*.ts": {

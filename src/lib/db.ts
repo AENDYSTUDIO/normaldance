@@ -8,7 +8,11 @@ export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
     log: ['error'],
-    datasources: { db: { url: process.env.DATABASE_URL } },
+    datasources: { 
+      db: { 
+        url: process.env.DATABASE_URL || 'file:./prisma/db/custom.db' 
+      } 
+    },
     errorFormat: 'minimal'
   })
 
