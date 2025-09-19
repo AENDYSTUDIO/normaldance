@@ -579,7 +579,7 @@ export default function UnifiedDemo() {
                     <div className="text-sm text-gray-400">Клубов</div>
                   </div>
                   <div className="text-center p-4 bg-gray-700/30 rounded-lg">
-                    <DollarSign className="h-8 w-8 text-green-400 mx-auto mb-2" />
+                    <Coins className="h-8 w-8 text-green-400 mx-auto mb-2" />
                     <div className="text-2xl font-bold text-white mb-1">125K TON</div>
                     <div className="text-sm text-gray-400">Общий доход</div>
                   </div>
