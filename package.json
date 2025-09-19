@@ -108,7 +108,7 @@
     "react-hook-form": "^7.62.0",
     "react-resizable-panels": "^3.0.6",
     "recharts": "^3.2.1",
-    "redis": "^4.6.0",
+    "redis": "^5.8.2",
     "sharp": "^0.34.4",
     "siwe": "^3.0.0",
     "socket.io": "^4.8.1",
