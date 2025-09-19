@@ -2,7 +2,8 @@
   "env": {
     "NODE_ENV": "production",
     "CACHE_ENABLED": "false",
-    "REDIS_URL": ""
+    "REDIS_URL": "",
+    "JWT_SECRET": "nBkatOcmI5jagJfj4d3QyDUj"
   },
   "functions": {
     "src/app/api/**/*.ts": {
