@@ -1,10 +1,8 @@
 import { NextRequest } from 'next/server'
 import { db } from '@/lib/db'
-import { validateTrackUpload, TrackUploadSchema } from '@/lib/data-validation'
-import { createSecureHandler, securityConfigs } from '@/lib/api-security'
 
-export const GET = createSecureHandler(securityConfigs.public)(
-  async (req: NextRequest) => {
+export async function GET(req: NextRequest) {
+  try {
     const { searchParams } = new URL(req.url)
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100)
     const offset = parseInt(searchParams.get('offset') || '0')
@@ -53,38 +51,36 @@ export const GET = createSecureHandler(securityConfigs.public)(
         hasMore: offset + limit < total
       }
     })
+  } catch (error) {
+    console.error('Get tracks error:', error)
+    return Response.json({ error: 'Failed to fetch tracks' }, { status: 500 })
   }
-)
+}
 
-export const POST = createSecureHandler({
-  ...securityConfigs.upload,
-  validation: TrackUploadSchema,
-  sanitize: true
-})(
-  async (req: NextRequest, user: any, validatedData: any) => {
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json()
     const track = await db.track.create({
       data: {
-        title: validatedData.metadata.title,
-        artist: validatedData.metadata.artist,
-        genre: validatedData.metadata.genre,
-        duration: validatedData.metadata.duration,
-        description: validatedData.metadata.description,
-        releaseDate: new Date(validatedData.metadata.releaseDate),
-        isExplicit: validatedData.metadata.isExplicit,
-        fileSize: validatedData.metadata.fileSize,
-        mimeType: validatedData.metadata.mimeType,
-        ipfsHash: validatedData.ipfsHash || '',
-        userId: user.id,
+        title: body.title || 'Untitled',
+        artist: body.artist || 'Unknown',
+        genre: body.genre || 'other',
+        duration: body.duration || 0,
+        description: body.description || '',
+        releaseDate: new Date(),
+        isExplicit: false,
+        fileSize: body.fileSize || 0,
+        mimeType: body.mimeType || 'audio/mpeg',
+        ipfsHash: body.ipfsHash || '',
+        userId: 'default-user',
         createdAt: new Date(),
         updatedAt: new Date()
-      },
-      include: {
-        user: {
-          select: { username: true, displayName: true, walletAddress: true }
-        }
       }
     })
 
     return Response.json({ success: true, track })
+  } catch (error) {
+    console.error('Create track error:', error)
+    return Response.json({ error: 'Failed to create track' }, { status: 500 })
   }
-)
+}
