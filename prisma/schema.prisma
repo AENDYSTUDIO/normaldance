@@ -29,6 +29,14 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
+  // Индексы для оптимизации запросов
+  @@index([username])
+  @@index([walletAddress])
+  @@index([isArtist])
+  @@index([level])
+  @@index([createdAt])
+  @@index([isActive])
+  
   // Relations
   tracks        Track[]
   playlists     Playlist[]
@@ -68,6 +76,17 @@ model Track {
   publishedAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  // Индексы для оптимизации запросов
+  @@index([userId])
+  @@index([genre])
+  @@index([isPublished])
+  @@index([status])
+  @@index([playCount])
+  @@index([likeCount])
+  @@index([createdAt])
+  @@index([releaseDate])
+  @@index([artist])
   
   // Relations
   userId      String
@@ -129,6 +148,10 @@ model Like {
   trackId String
   track   Track    @relation(fields: [trackId], references: [id], onDelete: Cascade)
   
+  // Индексы для оптимизации
+  @@index([userId])
+  @@index([trackId])
+  @@index([createdAt])
   @@unique([userId, trackId])
   @@map("likes")
 }

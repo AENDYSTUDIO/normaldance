@@ -266,7 +266,7 @@ export function validateSearch(data: unknown) {
   }
 }
 
-// Middleware для Express API
+// Middleware для Next.js API
 export function createValidationMiddleware<T>(schema: z.ZodSchema<T>) {
   return (req: any, res: any, next: any) => {
     try {
@@ -296,6 +296,76 @@ export function createValidationMiddleware<T>(schema: z.ZodSchema<T>) {
     }
   }
 }
+
+// Валидация для Next.js API routes
+export function validateApiRequest<T>(
+  schema: z.ZodSchema<T>,
+  data: unknown
+): { success: true; data: T } | { success: false; errors: string[] } {
+  try {
+    const validatedData = schema.parse(data)
+    return { success: true, data: validatedData }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errors = error.errors.map(err => 
+        `${err.path.join('.')}: ${err.message}`
+      )
+      return { success: false, errors }
+    }
+    return { success: false, errors: ['Unknown validation error'] }
+  }
+}
+
+// Безопасная валидация с санитизацией
+export function safeValidateAndSanitize<T>(
+  schema: z.ZodSchema<T>,
+  data: unknown,
+  sanitizeOptions: {
+    maxLength?: number
+    allowHtml?: boolean
+    strictMode?: boolean
+  } = {}
+): { success: true; data: T } | { success: false; errors: string[] } {
+  try {
+    // Сначала санитизируем данные
+    const sanitizedData = sanitizeInputData(data, sanitizeOptions)
+    
+    // Затем валидируем
+    const validatedData = schema.parse(sanitizedData)
+    return { success: true, data: validatedData }
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const errors = error.errors.map(err => 
+        `${err.path.join('.')}: ${err.message}`
+      )
+      return { success: false, errors }
+    }
+    return { success: false, errors: ['Validation failed'] }
+  }
+}
+
+// Санитизация входных данных
+function sanitizeInputData(data: unknown, options: {
+  maxLength?: number
+  allowHtml?: boolean
+  strictMode?: boolean
+} = {}): unknown {
+  if (typeof data === 'string') {
+    return processUserInput(data, options)
+  } else if (Array.isArray(data)) {
+    return data.map(item => sanitizeInputData(item, options))
+  } else if (data && typeof data === 'object') {
+    const sanitized: any = {}
+    for (const [key, value] of Object.entries(data)) {
+      sanitized[key] = sanitizeInputData(value, options)
+    }
+    return sanitized
+  }
+  return data
+}
+
+// Импорт функции processUserInput из sanitizer
+import { processUserInput } from './sanitizer'
 
 // Экспорт всех схем
 export const schemas = {

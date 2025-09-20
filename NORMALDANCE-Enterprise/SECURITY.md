@@ -4,12 +4,12 @@
 
 We actively maintain security updates for the following versions:
 
-| Version | Supported |
-| ------- | --------- |
-| 1.x.x   | ✅ Yes    |
-| 0.9.x   | ✅ Yes    |
-| 0.8.x   | ❌ No     |
-| < 0.8   | ❌ No     |
+| Version | Supported          |
+| ------- | ------------------ |
+| 1.x.x   | ✅ Yes             |
+| 0.9.x   | ✅ Yes             |
+| 0.8.x   | ❌ No              |
+| < 0.8   | ❌ No              |
 
 ## 🚨 Reporting a Vulnerability
 
@@ -22,11 +22,9 @@ We take security vulnerabilities seriously. If you discover a security vulnerabi
 3. **DO** report it privately using one of these methods:
 
 #### Method 1: Email (Recommended)
-
 Send an email to: **security@normaldance.com**
 
 #### Method 2: GitHub Security Advisory
-
 Use GitHub's [Private Vulnerability Reporting](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability)
 
 ### 📋 What to Include
@@ -87,12 +85,12 @@ Contact Information:
 
 ### Severity Levels
 
-| Level        | Description                                 | Response Time |
-| ------------ | ------------------------------------------- | ------------- |
-| **Critical** | Remote code execution, data breach          | 24 hours      |
-| **High**     | Privilege escalation, authentication bypass | 72 hours      |
-| **Medium**   | Information disclosure, DoS                 | 1 week        |
-| **Low**      | Minor security issues                       | 2 weeks       |
+| Level | Description | Response Time |
+|-------|-------------|---------------|
+| **Critical** | Remote code execution, data breach | 24 hours |
+| **High** | Privilege escalation, authentication bypass | 72 hours |
+| **Medium** | Information disclosure, DoS | 1 week |
+| **Low** | Minor security issues | 2 weeks |
 
 ## 🏆 Security Recognition
 
@@ -107,14 +105,14 @@ We appreciate security researchers who help us improve our security posture. Con
 
 We offer monetary rewards for qualifying security vulnerabilities:
 
-| Severity | Reward Range    |
-| -------- | --------------- |
+| Severity | Reward Range |
+|----------|--------------|
 | Critical | $1,000 - $5,000 |
-| High     | $500 - $1,000   |
-| Medium   | $100 - $500     |
-| Low      | $50 - $100      |
+| High | $500 - $1,000 |
+| Medium | $100 - $500 |
+| Low | $50 - $100 |
 
-_Rewards are at our discretion and depend on the quality of the report and the impact of the vulnerability._
+*Rewards are at our discretion and depend on the quality of the report and the impact of the vulnerability.*
 
 ## 🔐 Security Best Practices
 
@@ -190,12 +188,12 @@ We conduct regular security audits:
 
 ### Security Incident Classification
 
-| Level  | Description              | Response                 |
-| ------ | ------------------------ | ------------------------ |
-| **P0** | Critical security breach | Immediate response       |
-| **P1** | High severity incident   | Response within 1 hour   |
-| **P2** | Medium severity incident | Response within 4 hours  |
-| **P3** | Low severity incident    | Response within 24 hours |
+| Level | Description | Response |
+|-------|-------------|----------|
+| **P0** | Critical security breach | Immediate response |
+| **P1** | High severity incident | Response within 1 hour |
+| **P2** | Medium severity incident | Response within 4 hours |
+| **P3** | Low severity incident | Response within 24 hours |
 
 ### Incident Response Team
 

@@ -13,37 +13,45 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
-      // TypeScript 相关规则
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": "off",
-      "@typescript-eslint/no-non-null-assertion": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
+      // КРИТИЧЕСКИЕ ПРАВИЛА БЕЗОПАСНОСТИ - ВКЛЮЧЕНЫ
+      "no-eval": "error",
+      "no-implied-eval": "error",
+      "no-new-func": "error",
+      "no-script-url": "error",
+      "no-alert": "warn",
+      "no-console": "warn", // Включено для продакшена
+      "no-debugger": "error",
+      
+      // TypeScript правила - частично включены для безопасности
+      "@typescript-eslint/no-explicit-any": "warn", // Включено с предупреждением
+      "@typescript-eslint/no-unused-vars": "warn", // Включено с предупреждением
+      "@typescript-eslint/no-non-null-assertion": "warn", // Включено с предупреждением
+      "@typescript-eslint/ban-ts-comment": "warn", // Включено с предупреждением
       "@typescript-eslint/prefer-as-const": "off",
       
-      // React 相关规则
-      "react-hooks/exhaustive-deps": "off",
-      "react/no-unescaped-entities": "off",
+      // React правила - включены критические
+      "react-hooks/exhaustive-deps": "warn", // Включено с предупреждением
+      "react/no-unescaped-entities": "error", // Включено для XSS защиты
       "react/display-name": "off",
       "react/prop-types": "off",
+      "react/jsx-no-target-blank": "error", // Включено для безопасности
       
-      // Next.js 相关规则
-      "@next/next/no-img-element": "off",
+      // Next.js правила
+      "@next/next/no-img-element": "warn", // Включено с предупреждением
       "@next/next/no-html-link-for-pages": "off",
       
-      // 一般JavaScript规则
-      "prefer-const": "off",  // 关闭prefer-const规则
-      "no-unused-vars": "off",
-      "no-console": "off",
-      "no-debugger": "off",
-      "no-empty": "off",
-      "no-irregular-whitespace": "off",
-      "no-case-declarations": "off",
-      "no-fallthrough": "off",
-      "no-mixed-spaces-and-tabs": "off",
-      "no-redeclare": "off",
-      "no-undef": "off",
-      "no-unreachable": "off",
-      "no-useless-escape": "off",
+      // JavaScript правила - включены критические
+      "prefer-const": "warn", // Включено с предупреждением
+      "no-unused-vars": "warn", // Включено с предупреждением
+      "no-empty": "warn", // Включено с предупреждением
+      "no-irregular-whitespace": "error", // Включено для безопасности
+      "no-case-declarations": "error", // Включено для безопасности
+      "no-fallthrough": "error", // Включено для безопасности
+      "no-mixed-spaces-and-tabs": "error", // Включено для консистентности
+      "no-redeclare": "error", // Включено для безопасности
+      "no-undef": "error", // Включено для безопасности
+      "no-unreachable": "warn", // Включено с предупреждением
+      "no-useless-escape": "warn", // Включено с предупреждением
     },
   },
 ];

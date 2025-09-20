@@ -1,48 +1,75 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { createSecureHandler } from '@/lib/api-security'
 import { db } from '@/lib/db'
+import { z } from 'zod'
 
-export async function GET(req: NextRequest) {
+// Define schema for track validation
+const trackSchema = z.object({
+  title: z.string().min(1).max(100),
+  artist: z.string().min(1).max(100),
+  genre: z.string().optional(),
+  duration: z.number().positive(),
+  price: z.number().min(0).optional(),
+  description: z.string().optional(),
+  imageUrl: z.string().url().optional(),
+  audioUrl: z.string().url(),
+  isExplicit: z.boolean().default(false),
+  releaseDate: z.string().datetime().optional(),
+})
+
+// Create secure handler with authentication
+const secureHandler = createSecureHandler({
+  rateLimit: { limit: 100, windowMs: 60000 },
+  auth: { required: true },
+  validation: trackSchema,
+})
+
+// GET /api/tracks - Get tracks with pagination and filtering
+export const GET = secureHandler(async (req, user, data) => {
   try {
     const { searchParams } = new URL(req.url)
     const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 100)
     const offset = parseInt(searchParams.get('offset') || '0')
-    const search = searchParams.get('search')
-    const genre = searchParams.get('genre')
+    const search = searchParams.get('search') || ''
+    const genre = searchParams.get('genre') || ''
+    const artistId = searchParams.get('artistId') || ''
 
+    // Build query
     const where: any = {}
+    
     if (search) {
-      // Санитизация поискового запроса
-      const sanitizedSearch = search.replace(/[<>"'&]/g, '').trim()
-      if (sanitizedSearch.length > 0) {
-        where.OR = [
-          { title: { contains: sanitizedSearch, mode: 'insensitive' } },
-          { artist: { contains: sanitizedSearch, mode: 'insensitive' } }
-        ]
-      }
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { artist: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } }
+      ]
     }
+    
     if (genre) {
-      // Валидация жанра
-      const validGenres = ['electronic', 'hip-hop', 'rock', 'pop', 'jazz', 'classical', 'ambient', 'techno', 'house', 'other']
-      if (validGenres.includes(genre)) {
-        where.genre = genre
-      }
+      where.genre = genre
+    }
+    
+    if (artistId) {
+      where.artistId = artistId
     }
 
-    const tracks = await db.track.findMany({
-      where,
-      take: limit,
-      skip: offset,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        user: {
-          select: { username: true, displayName: true, walletAddress: true }
-        }
-      }
-    })
+    // Get tracks
+    const [tracks, total] = await Promise.all([
+      db.track.findMany({
+        where,
+        include: {
+          user: {
+            select: { id: true, name: true, imageUrl: true }
+          }
+        },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        skip: offset
+      }),
+      db.track.count({ where })
+    ])
 
-    const total = await db.track.count({ where })
-
-    return Response.json({
+    return NextResponse.json({
       tracks,
       pagination: {
         total,
@@ -52,35 +79,55 @@ export async function GET(req: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Get tracks error:', error)
-    return Response.json({ error: 'Failed to fetch tracks' }, { status: 500 })
+    console.error('Error fetching tracks:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch tracks' },
+      { status: 500 }
+    )
   }
-}
+})
 
-export async function POST(req: NextRequest) {
+// POST /api/tracks - Create new track
+export const POST = secureHandler(async (req, user, data) => {
   try {
     const body = await req.json()
+    const validatedData = trackSchema.parse(body)
+
+    // Check if user has permission to create tracks
+    if (!user.permissions?.includes('CREATE_TRACK')) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions' },
+        { status: 403 }
+      )
+    }
+
+    // Create track
     const track = await db.track.create({
       data: {
-        title: body.title || 'Untitled',
-        artist: body.artist || 'Unknown',
-        genre: body.genre || 'other',
-        duration: body.duration || 0,
-        description: body.description || '',
-        releaseDate: new Date(),
-        isExplicit: false,
-        fileSize: body.fileSize || 0,
-        mimeType: body.mimeType || 'audio/mpeg',
-        ipfsHash: body.ipfsHash || '',
-        userId: 'default-user',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        ...validatedData,
+        artistId: user.id, // Assuming user is an artist
+        status: 'PENDING'
+      },
+      include: {
+        artist: {
+          select: { id: true, name: true, imageUrl: true }
+        }
       }
     })
 
-    return Response.json({ success: true, track })
+    return NextResponse.json(track, { status: 201 })
   } catch (error) {
-    console.error('Create track error:', error)
-    return Response.json({ error: 'Failed to create track' }, { status: 500 })
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Validation failed', details: error.errors },
+        { status: 400 }
+      )
+    }
+    
+    console.error('Error creating track:', error)
+    return NextResponse.json(
+      { error: 'Failed to create track' },
+      { status: 500 }
+    )
   }
-}
+})

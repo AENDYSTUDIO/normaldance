@@ -132,6 +132,8 @@ async function uploadLargeFileToIPFS(
     const totalChunks = Math.ceil(fileSize / chunkSize)
     const chunks: Uint8Array[] = []
 
+    console.log(`Starting chunked upload: ${fileSize} bytes, ${totalChunks} chunks`)
+
     // Чанкуем файл
     for (let i = 0; i < totalChunks; i++) {
       const start = i * chunkSize
@@ -155,37 +157,73 @@ async function uploadLargeFileToIPFS(
     const { ipfsClient } = ipfsResult
     const chunkCIDs: string[] = []
     
-    for (const chunk of chunks) {
-      const chunkResult = await ipfsClient.add(chunk)
-      chunkCIDs.push(chunkResult.cid.toString())
+    // Параллельная загрузка чанков для улучшения производительности
+    const uploadPromises = chunks.map(async (chunk, index) => {
+      try {
+        const chunkResult = await ipfsClient.add(chunk, {
+          pin: true,
+          progress: (progress: number) => {
+            console.log(`Chunk ${index + 1}/${totalChunks} upload progress: ${progress}%`)
+          }
+        })
+        return chunkResult.cid.toString()
+      } catch (error) {
+        console.error(`Failed to upload chunk ${index + 1}:`, error)
+        throw error
+      }
+    })
+
+    // Ждем загрузки всех чанков
+    const results = await Promise.allSettled(uploadPromises)
+    
+    // Проверяем результаты
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i]
+      if (result.status === 'fulfilled') {
+        chunkCIDs.push(result.value)
+      } else {
+        console.error(`Chunk ${i + 1} upload failed:`, result.reason)
+        throw new Error(`Failed to upload chunk ${i + 1}: ${result.reason}`)
+      }
     }
 
     // Создаем манифест для чанков
     const manifest = {
       chunks: chunkCIDs,
       totalChunks,
-      totalSize: file.size,
+      totalSize: fileSize,
       metadata,
       type: 'chunked-audio',
       timestamp: new Date().toISOString(),
-      compression: 'none'
+      compression: 'none',
+      version: '1.0',
+      checksum: await calculateChecksum(file)
     }
 
     // Загружаем манифест
-    const manifestResult = await ipfsClient.add(JSON.stringify(manifest))
+    const manifestResult = await ipfsClient.add(JSON.stringify(manifest), {
+      pin: true
+    })
     const manifestCID = manifestResult.cid.toString()
 
-    // Пинимаем через Pinata
+    // Пинимаем через Pinata с retry логикой
     try {
       const pinataResult = await import('./ipfs')
       const { pinata } = pinataResult
-      await pinata.pinFile(manifestCID)
-      for (const chunkCID of chunkCIDs) {
-        await pinata.pinFile(chunkCID)
-      }
+      
+      // Пинаем манифест
+      await retryOperation(() => pinata.pinFile(manifestCID), 3)
+      
+      // Пинаем чанки параллельно
+      const pinPromises = chunkCIDs.map(cid => 
+        retryOperation(() => pinata.pinFile(cid), 3)
+      )
+      await Promise.allSettled(pinPromises)
+      
       console.log('File pinned successfully via Pinata')
     } catch (pinError) {
       console.warn('Pinata pinning failed:', pinError)
+      // Не прерываем процесс, если пининг не удался
     }
 
     return {
@@ -198,6 +236,43 @@ async function uploadLargeFileToIPFS(
     console.error('Chunked IPFS upload failed:', error)
     throw new Error(`Failed to upload large file to IPFS: ${error}`)
   }
+}
+
+// Функция для расчета checksum
+async function calculateChecksum(file: File | Buffer): Promise<string> {
+  if (isBrowser) {
+    const buffer = await (file as File).arrayBuffer()
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+  } else {
+    const crypto = await import('crypto')
+    return crypto.createHash('sha256').update(file as Buffer).digest('hex')
+  }
+}
+
+// Функция для retry операций
+async function retryOperation<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = 3,
+  delay: number = 1000
+): Promise<T> {
+  let lastError: Error
+  
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await operation()
+    } catch (error) {
+      lastError = error as Error
+      if (i < maxRetries - 1) {
+        console.warn(`Operation failed, retrying in ${delay}ms... (${i + 1}/${maxRetries})`)
+        await new Promise(resolve => setTimeout(resolve, delay))
+        delay *= 2 // Exponential backoff
+      }
+    }
+  }
+  
+  throw lastError!
 }
 
 // Репликация на несколько шлюзов
@@ -341,6 +416,73 @@ export async function getFileFromBestGateway(cid: string): Promise<Response> {
   }
 
   throw new Error('Failed to retrieve file from any gateway')
+}
+
+// Восстановление файла из чанков
+export async function reconstructFileFromChunks(manifestCid: string): Promise<Blob> {
+  try {
+    // Получаем манифест
+    const manifestResponse = await getFileFromBestGateway(manifestCid)
+    const manifestText = await manifestResponse.text()
+    const manifest = JSON.parse(manifestText)
+
+    if (manifest.type !== 'chunked-audio') {
+      throw new Error('Invalid manifest type')
+    }
+
+    console.log(`Reconstructing file from ${manifest.totalChunks} chunks`)
+
+    // Получаем все чанки параллельно
+    const chunkPromises = manifest.chunks.map(async (chunkCid: string, index: number) => {
+      try {
+        const chunkResponse = await getFileFromBestGateway(chunkCid)
+        const chunkData = await chunkResponse.arrayBuffer()
+        console.log(`Retrieved chunk ${index + 1}/${manifest.totalChunks}`)
+        return new Uint8Array(chunkData)
+      } catch (error) {
+        console.error(`Failed to retrieve chunk ${index + 1}:`, error)
+        throw error
+      }
+    })
+
+    const chunks = await Promise.all(chunkPromises)
+
+    // Объединяем чанки
+    const totalSize = chunks.reduce((sum, chunk) => sum + chunk.length, 0)
+    const reconstructedFile = new Uint8Array(totalSize)
+    
+    let offset = 0
+    for (const chunk of chunks) {
+      reconstructedFile.set(chunk, offset)
+      offset += chunk.length
+    }
+
+    // Проверяем checksum если доступен
+    if (manifest.checksum) {
+      const actualChecksum = await calculateChecksum(reconstructedFile.buffer)
+      if (actualChecksum !== manifest.checksum) {
+        console.warn('Checksum mismatch - file may be corrupted')
+      }
+    }
+
+    console.log(`File reconstructed successfully: ${totalSize} bytes`)
+    return new Blob([reconstructedFile], { type: manifest.metadata.mimeType })
+  } catch (error) {
+    console.error('Failed to reconstruct file from chunks:', error)
+    throw new Error(`File reconstruction failed: ${error}`)
+  }
+}
+
+// Функция для расчета checksum для Uint8Array
+async function calculateChecksum(buffer: ArrayBuffer): Promise<string> {
+  if (isBrowser) {
+    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+  } else {
+    const crypto = await import('crypto')
+    return crypto.createHash('sha256').update(Buffer.from(buffer)).digest('hex')
+  }
 }
 
 // Генерация CDN URL для быстрой доставки

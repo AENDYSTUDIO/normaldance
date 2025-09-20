@@ -10,7 +10,7 @@ const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 interface RateLimitOptions {
   limit: number
   windowMs: number
-  keyGenerator?: (req: NextRequest) => string
+  keyGenerator?: (req: typeof NextRequest) => string
 }
 
 interface AuthOptions {
@@ -28,7 +28,7 @@ interface SecurityOptions {
 
 // Rate limiting middleware
 export function rateLimit(options: RateLimitOptions) {
-  return async (req: NextRequest): Promise<NextResponse | null> => {
+  return async (req: any): Promise<any> => {
     const key = options.keyGenerator ? options.keyGenerator(req) : getClientIP(req)
     const now = Date.now()
     const record = rateLimitMap.get(key)
@@ -51,7 +51,7 @@ export function rateLimit(options: RateLimitOptions) {
 }
 
 // Authentication middleware
-export async function authenticate(req: NextRequest, options: AuthOptions = {}): Promise<{ user: any; error?: NextResponse }> {
+export async function authenticate(req: any, options: AuthOptions = {}): Promise<{ user: any; error?: any }> {
   if (!options.required) {
     return { user: null }
   }
@@ -64,9 +64,15 @@ export async function authenticate(req: NextRequest, options: AuthOptions = {}):
     }
 
     // Fallback to JWT token
-    const authHeader = req.headers.get('authorization')
+    console.log('DEBUG: authenticate called with headers:', {
+      hasHeaders: !!req.headers,
+      authHeader: req.headers?.get('authorization')
+    })
+    
+    const authHeader = req.headers?.get('authorization')
     if (!authHeader?.startsWith('Bearer ')) {
-      return { 
+      return {
+        user: null,
         error: NextResponse.json({ error: 'Unauthorized - No token provided' }, { status: 401 })
       }
     }
@@ -76,7 +82,8 @@ export async function authenticate(req: NextRequest, options: AuthOptions = {}):
     
     if (!JWT_SECRET) {
       console.error('JWT_SECRET not configured')
-      return { 
+      return {
+        user: null,
         error: NextResponse.json({ error: 'Server configuration error' }, { status: 500 })
       }
     }
@@ -99,7 +106,8 @@ export async function authenticate(req: NextRequest, options: AuthOptions = {}):
     })
 
     if (!user || !user.isActive) {
-      return { 
+      return {
+        user: null,
         error: NextResponse.json({ error: 'User not found or inactive' }, { status: 401 })
       }
     }
@@ -107,14 +115,15 @@ export async function authenticate(req: NextRequest, options: AuthOptions = {}):
     return { user }
   } catch (error) {
     console.error('Authentication error:', error)
-    return { 
+    return {
+      user: null,
       error: NextResponse.json({ error: 'Invalid token' }, { status: 401 })
     }
   }
 }
 
 // Authorization middleware
-export async function authorize(user: any, options: AuthOptions): Promise<NextResponse | null> {
+export async function authorize(user: any, options: AuthOptions): Promise<any> {
   if (!options.roles && !options.permissions) {
     return null
   }
@@ -156,7 +165,7 @@ export async function authorize(user: any, options: AuthOptions): Promise<NextRe
 
 // Input validation middleware
 export function validateInput(schema: z.ZodSchema) {
-  return async (req: NextRequest): Promise<{ data: any; error?: NextResponse }> => {
+  return async (req: any): Promise<{ data: any; error?: any }> => {
     try {
       const body = await req.json()
       const validatedData = schema.parse(body)
@@ -170,6 +179,7 @@ export function validateInput(schema: z.ZodSchema) {
         }))
         
         return {
+          data: null,
           error: NextResponse.json({
             error: 'Validation failed',
             details: errors
@@ -178,6 +188,7 @@ export function validateInput(schema: z.ZodSchema) {
       }
       
       return {
+        data: null,
         error: NextResponse.json({
           error: 'Invalid JSON'
         }, { status: 400 })
@@ -212,7 +223,7 @@ export function sanitizeInput(data: any): any {
 }
 
 // Security headers middleware
-export function securityHeaders(response: NextResponse): NextResponse {
+export function securityHeaders(response: any): any {
   // Content Security Policy
   response.headers.set(
     'Content-Security-Policy',
@@ -244,7 +255,7 @@ export function securityHeaders(response: NextResponse): NextResponse {
 
 // Main security middleware factory
 export function createSecureHandler(options: SecurityOptions = {}) {
-  return async (req: NextRequest, handler: (req: NextRequest, user?: any, data?: any) => Promise<NextResponse>) => {
+  return async (req: any, handler: (req: any, user?: any, data?: any) => Promise<any>) => {
     try {
       // Rate limiting
       if (options.rateLimit) {
@@ -292,10 +303,31 @@ export function createSecureHandler(options: SecurityOptions = {}) {
 }
 
 // Utility functions
-export function getClientIP(req: NextRequest): string {
-  return req.ip || 
-         req.headers.get('x-forwarded-for')?.split(',')[0] || 
-         req.headers.get('x-real-ip') || 
+export function getClientIP(req: any): string {
+  // DEBUG: Добавляем логи для диагностики проблемы
+  console.log('DEBUG: getClientIP called with req:', {
+    hasIp: !!req.ip,
+    ip: req.ip,
+    hasHeaders: !!req.headers,
+    headers: req.headers
+  })
+  
+  if (!req.headers) {
+    console.error('DEBUG: req.headers is undefined!')
+    return '127.0.0.1'
+  }
+  
+  const xForwardedFor = req.headers.get('x-forwarded-for')
+  const xRealIp = req.headers.get('x-real-ip')
+  
+  console.log('DEBUG: Header values:', {
+    xForwardedFor,
+    xRealIp
+  })
+  
+  return req.ip ||
+         xForwardedFor?.split(',')[0] ||
+         xRealIp ||
          '127.0.0.1'
 }
 

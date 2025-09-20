@@ -48,9 +48,10 @@ export function useSolanaWallet() {
   const connectWallet = useCallback(async () => {
     if (!wallet.connected) {
       if (!wallet.connect) {
+        const error = new Error('Wallet does not support connection')
         console.warn('Wallet does not support connection')
-        walletEmitter.emit('error', { type: 'connect', message: 'unsupported' })
-        return 0 as any
+        walletEmitter.emit('error', { type: 'connect', message: 'unsupported', error })
+        throw error
       }
       try {
         await wallet.connect()
@@ -60,7 +61,7 @@ export function useSolanaWallet() {
         console.error('Connection failed:', error)
         Sentry.captureException(error)
         walletEmitter.emit('error', { type: 'connect', error })
-        return 0 as any
+        throw new Error(`Failed to connect wallet: ${error instanceof Error ? error.message : 'Unknown error'}`)
       }
     }
     return wallet.publicKey?.toString() || null
@@ -108,25 +109,28 @@ export function useSolanaWallet() {
     }
   }, [wallet])
 
-  const sendTransaction = useCallback(async (transaction: Transaction): Promise<any> => {
+  const sendTransaction = useCallback(async (transaction: Transaction): Promise<string> => {
     if (!wallet.connected) {
+      const error = new Error('Wallet not connected')
       console.warn('sendTransaction: wallet not connected')
-      walletEmitter.emit('error', { type: 'sendTransaction', message: 'not_connected' })
-      return 0 as any
+      walletEmitter.emit('error', { type: 'sendTransaction', message: 'not_connected', error })
+      throw error
     }
     if (!wallet.sendTransaction) {
+      const error = new Error('Wallet does not support transaction sending')
       console.warn('Wallet does not support transaction sending')
-      walletEmitter.emit('error', { type: 'sendTransaction', message: 'unsupported' })
-      return 0 as any
+      walletEmitter.emit('error', { type: 'sendTransaction', message: 'unsupported', error })
+      throw error
     }
     try {
       const signature = await wallet.sendTransaction(transaction, memoizedConnection)
+      walletEmitter.emit('transactionSent', { signature, transaction })
       return signature
     } catch (error) {
       console.error('Error sending transaction:', error)
       Sentry.captureException(error)
       walletEmitter.emit('error', { type: 'sendTransaction', error })
-      return 0 as any
+      throw new Error(`Transaction failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
     }
   }, [wallet, memoizedConnection])
 
@@ -144,19 +148,37 @@ export function useSolanaWallet() {
   }, [wallet.publicKey, memoizedConnection])
 
   const getTokenBalance = useCallback(async (mintAddress: string): Promise<number> => {
-    if (!wallet.publicKey) return 0
+    if (!wallet.publicKey) {
+      console.warn('getTokenBalance: wallet not connected')
+      walletEmitter.emit('error', { type: 'getTokenBalance', message: 'not_connected' })
+      return 0
+    }
     
     try {
       const mintPublicKey = new PublicKey(mintAddress)
-      // Здесь нужно реализовать логику получения баланса токена
-      // Для этого потребуется SPL Token program
-      return 0
+      
+      // Получаем все токен аккаунты пользователя
+      const tokenAccounts = await memoizedConnection.getTokenAccountsByOwner(
+        wallet.publicKey,
+        { mint: mintPublicKey }
+      )
+      
+      if (tokenAccounts.value.length === 0) {
+        return 0
+      }
+      
+      // Получаем баланс первого найденного аккаунта
+      const tokenAccount = tokenAccounts.value[0]
+      const balance = await memoizedConnection.getTokenAccountBalance(tokenAccount.pubkey)
+      
+      return parseFloat(balance.value.amount) / Math.pow(10, balance.value.decimals)
     } catch (error) {
       console.error('Error getting token balance:', error)
       Sentry.captureException(error)
+      walletEmitter.emit('error', { type: 'getTokenBalance', error })
       return 0
     }
-  }, [wallet.publicKey])
+  }, [wallet.publicKey, memoizedConnection])
 
   return {
     ...wallet,
@@ -181,14 +203,15 @@ export function WalletAdapter({ wallet, balance }: { wallet?: any; balance?: num
 }
 
 // Функции для работы с токенами NDT
-export const NDT_PROGRAM_ID = new PublicKey('NDT111111111111111111111111111111111111111')
-export const NDT_MINT_ADDRESS = new PublicKey('11111111111111111111111111111111') // Заменить на реальный адрес
+// ВНИМАНИЕ: Замените на реальные адреса развернутых программ!
+export const NDT_PROGRAM_ID = new PublicKey(process.env.NEXT_PUBLIC_NDT_PROGRAM_ID || 'NDT111111111111111111111111111111111111111')
+export const NDT_MINT_ADDRESS = new PublicKey(process.env.NEXT_PUBLIC_NDT_MINT_ADDRESS || '11111111111111111111111111111111')
 
 // Функции для работы с TrackNFT
-export const TRACKNFT_PROGRAM_ID = new PublicKey('TRACKNFT111111111111111111111111111111111111111')
+export const TRACKNFT_PROGRAM_ID = new PublicKey(process.env.NEXT_PUBLIC_TRACKNFT_PROGRAM_ID || 'TRACKNFT111111111111111111111111111111111111111')
 
 // Функции для работы со стейкингом
-export const STAKING_PROGRAM_ID = new PublicKey('STAKING111111111111111111111111111111111111111')
+export const STAKING_PROGRAM_ID = new PublicKey(process.env.NEXT_PUBLIC_STAKING_PROGRAM_ID || 'STAKING111111111111111111111111111111111111111')
 
 // Хелпер для создания транзакции
 export async function createTransaction(

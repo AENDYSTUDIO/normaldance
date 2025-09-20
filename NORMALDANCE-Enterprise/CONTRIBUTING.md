@@ -67,6 +67,7 @@ This project adheres to a [Code of Conduct](CODE_OF_CONDUCT.md). By participatin
    ```
 
 7. **Start development server**
+
    ```bash
    pnpm dev
    ```
@@ -327,39 +328,84 @@ Contributors are recognized in:
 
 ## 📚 Resources
 
-### Documentation
+### Internal Documentation
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://reactjs.org/docs)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs)
-- [Solana Documentation](https://docs.solana.com)
-- [IPFS Documentation](https://docs.ipfs.io)
+- [Security Architecture](docs/security/security-architecture.md)
+- [Secure Coding Guidelines](docs/security/secure-coding.md)
+- [Incident Response Plan](docs/security/incident-response.md)
+- [Compliance Checklist](docs/security/compliance-checklist.md)
 
-### Learning Resources
+### External Resources
 
-- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app)
-- [Next.js Learn Course](https://nextjs.org/learn)
-- [Web3 Development Guide](https://ethereum.org/en/developers)
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)
+- [CIS Controls](https://www.cisecurity.org/controls/)
+- [OWASP Application Security Verification Standard](https://owasp.org/www-project-application-security-verification-standard/)
 
-## 🎯 Contribution Areas
+## 🚨 Incident Response
 
-We welcome contributions in these areas:
+### Security Incident Classification
 
-- 🐛 **Bug Fixes** - Fix existing issues
-- ✨ **New Features** - Add new functionality
-- 📚 **Documentation** - Improve docs and guides
-- 🧪 **Testing** - Add or improve tests
-- 🎨 **UI/UX** - Improve user interface
-- ⚡ **Performance** - Optimize performance
-- 🔒 **Security** - Enhance security
-- 🌐 **Internationalization** - Add language support
+| Level | Description | Response |
+|-------|-------------|----------|
+| **P0** | Critical security breach | Immediate response |
+| **P1** | High severity incident | Response within 1 hour |
+| **P2** | Medium severity incident | Response within 4 hours |
+| **P3** | Low severity incident | Response within 24 hours |
+
+### Incident Response Team
+
+- **Security Lead** - Overall incident coordination
+- **Technical Lead** - Technical investigation and remediation
+- **Communications Lead** - Public communication and notifications
+- **Legal Counsel** - Legal and compliance guidance
+
+### Contact Information
+
+- **Security Team**: security@normaldance.com
+- **Emergency Contact**: +1-XXX-XXX-XXXX
+- **Legal Team**: legal@normaldance.com
+
+## 📋 Security Checklist
+
+### For Contributors
+
+- [ ] Code follows secure coding practices
+- [ ] Input validation implemented
+- [ ] Output encoding applied
+- [ ] Authentication and authorization properly implemented
+- [ ] Sensitive data properly protected
+- [ ] Dependencies are up to date
+- [ ] Security tests included
+- [ ] No hardcoded secrets in code
+
+### For Maintainers
+
+- [ ] Security review completed
+- [ ] Vulnerability scan passed
+- [ ] Dependencies audited
+- [ ] Security tests passing
+- [ ] Documentation updated
+- [ ] Security advisory published (if needed)
+
+## 🔄 Security Updates
+
+We regularly publish security updates:
+
+- **Security Advisories** - Published for all security fixes
+- **Release Notes** - Include security-related changes
+- **Security Bulletins** - Monthly security updates
+- **Newsletter** - Security tips and updates
 
 ## 📞 Contact
 
-- **Discord**: [Join our community](https://discord.gg/normaldance)
-- **Email**: contributors@normaldance.com
-- **Twitter**: [@normaldance](https://twitter.com/normaldance)
+- **Security Team**: security@normaldance.com
+- **General Inquiries**: info@normaldance.com
+- **Emergency**: security-emergency@normaldance.com
 
 ---
 
-Thank you for contributing to NORMALDANCE! 🎵
+**Last Updated**: December 2024  
+**Next Review**: March 2025
+
+Thank you for helping keep NORMALDANCE secure! 🛡️
