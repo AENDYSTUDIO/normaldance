@@ -319,17 +319,28 @@ export function useSolanaWallet() {
         publicKey: wallet.publicKey?.toBase58(),
       });
       Sentry.captureException(error);
-      
+
       // If network is down, try to get from fallback state
-      if (!navigator.onLine) {
+      if (
+        !navigator.onLine ||
+        (error instanceof Error && error.message.includes("network"))
+      ) {
         const stateManager = FallbackStateManager.getInstance();
         const localState = await stateManager.getLocalState();
-        if (localState && localState.publicKey === wallet.publicKey.toBase58()) {
+        if (
+          localState &&
+          localState.publicKey === wallet.publicKey.toBase58()
+        ) {
+          logger.info("Returning fallback balance for offline user");
           return localState.balance;
         }
       }
-      
-      return 0;
+
+      // For all other errors, re-throw a specific wallet error
+      throw new WalletTransactionError(error as Error, {
+        action: "getBalance",
+        publicKey: wallet.publicKey?.toBase58(),
+      });
     }
   };
 
@@ -392,17 +403,31 @@ export function useSolanaWallet() {
         publicKey: wallet.publicKey?.toBase58(),
       });
       Sentry.captureException(error);
-      
+
       // If network is down, try to get from fallback state
-      if (!navigator.onLine) {
+      if (
+        !navigator.onLine ||
+        (error instanceof Error && error.message.includes("network"))
+      ) {
         const stateManager = FallbackStateManager.getInstance();
         const localState = await stateManager.getLocalState();
-        if (localState && localState.publicKey === wallet.publicKey.toBase58()) {
+        if (
+          localState &&
+          localState.publicKey === wallet.publicKey.toBase58()
+        ) {
+          logger.info("Returning fallback token balance for offline user", {
+            mintAddress,
+          });
           return localState.tokens[mintAddress] || 0;
         }
       }
-      
-      return 0;
+
+      // For all other errors, re-throw a specific wallet error
+      throw new WalletTransactionError(error as Error, {
+        action: "getTokenBalance",
+        mintAddress,
+        publicKey: wallet.publicKey?.toBase58(),
+      });
     }
   };
 
@@ -426,9 +451,18 @@ export function useSolanaWallet() {
   const getStarsBalance = async () => {
     const adapter = wallet.adapter as any;
     if (adapter?.getStarsBalance) {
-      return await adapter.getStarsBalance();
+      try {
+        return await adapter.getStarsBalance();
+      } catch (error) {
+        logger.error("Error getting Stars balance", error as Error);
+        Sentry.captureException(error);
+        throw new WalletTransactionError(error as Error, {
+          action: "getStarsBalance",
+        });
+      }
     }
-    return 0;
+    // If the adapter does not support the feature, throw an error
+    throw new ValidationError("Stars balance not supported by this wallet");
   };
 
   return {

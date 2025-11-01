@@ -1,7 +1,8 @@
-import { MainLayout } from '@/components/layout/main-layout'
-import { AudioPlayer } from '@/components/audio/audio-player'
-import { TrackCard } from '@/components/audio/track-card'
-import { Button, Badge, Card, CardContent, CardHeader, CardTitle, Avatar, AvatarFallback, AvatarImage, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'
+import { ArtistAnalytics } from '@/components/profile/ArtistAnalytics';
+import { MainLayout } from '@/components/layout/main-layout';
+import { AudioPlayer } from '@/components/audio/audio-player';
+import { TrackCard } from '@/components/audio/track-card';
+import { Button, Badge, Card, CardContent, CardHeader, CardTitle, Avatar, AvatarFallback, AvatarImage, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui';
 import { 
   Edit, 
   Music, 
@@ -11,8 +12,8 @@ import {
   Settings,
   Trophy,
   TrendingUp
-} from '@/components/icons'
-import { formatNumber, formatDate } from '@/lib/utils'
+} from '@/components/icons';
+import { formatNumber, formatDate } from '@/lib/utils';
 
 // Mock user data
 const mockUser = {
@@ -223,9 +224,10 @@ export default function ProfilePage() {
 
         {/* Content tabs */}
         <Tabs defaultValue="tracks" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className={`grid w-full ${mockUser.isArtist ? 'grid-cols-4' : 'grid-cols-3'}`}>
             <TabsTrigger value="tracks">Треки</TabsTrigger>
             <TabsTrigger value="playlists">Плейлисты</TabsTrigger>
+            {mockUser.isArtist && <TabsTrigger value="analytics">Аналитика</TabsTrigger>}
             <TabsTrigger value="about">О себе</TabsTrigger>
           </TabsList>
           
@@ -256,6 +258,12 @@ export default function ProfilePage() {
               <p>Плейлисты пока не созданы</p>
             </div>
           </TabsContent>
+
+          {mockUser.isArtist && (
+            <TabsContent value="analytics">
+              <ArtistAnalytics artistId={mockUser.id} />
+            </TabsContent>
+          )}
           
           <TabsContent value="about" className="space-y-4">
             <Card>
