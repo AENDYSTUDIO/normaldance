@@ -1,3 +1,4 @@
+import { EthereumConnectButton } from '@/components/wallet/EthereumConnectButton';
 'use client'
 
 import { useState } from 'react'
@@ -159,11 +160,20 @@ export default function SignInPage() {
                       size="lg"
                     >
                       <Wallet className="h-4 w-4 mr-2" />
-                      Подключить кошелек
+                      Подключить Solana кошелек
                     </Button>
-                    <p className="text-sm text-gray-500 text-center">
-                      Подключите ваш Solana кошелек для входа
-                    </p>
+
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300" />
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">Или</span>
+                      </div>
+                    </div>
+
+                    <EthereumConnectButton />
+
                   </div>
                 ) : (
                   <div className="space-y-4">

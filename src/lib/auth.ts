@@ -20,6 +20,69 @@ if (!authConfig) {
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
+    // Web3 аутентификация через Ethereum кошелек
+    CredentialsProvider({
+      id: "ethereum",
+      name: "Ethereum",
+      credentials: {
+        message: {
+          label: "Message",
+          type: "text",
+          placeholder: "0x0",
+        },
+        signature: {
+          label: "Signature",
+          type: "text",
+          placeholder: "0x0",
+        },
+      },
+      async authorize(credentials, req) {
+        try {
+          if (!credentials?.message || !credentials?.signature) {
+            return null;
+          }
+
+          const siweMessage = new SiweMessage(credentials.message);
+          const result = await siweMessage.verify({
+            signature: credentials.signature as `0x${string}`,
+          });
+
+          if (result.success) {
+            const address = result.data.address;
+            let user = await db.user.findFirst({
+              where: { wallet: address },
+            });
+
+            if (!user) {
+              user = await db.user.create({
+                data: {
+                  wallet: address,
+                  username: `user_${address.slice(0, 8)}`,
+                  email: `${address}@ethereum.local`,
+                  isArtist: false,
+                  level: "BRONZE",
+                },
+              });
+            }
+
+            return {
+              id: user.id,
+              wallet: user.wallet,
+              username: user.username,
+              email: user.email,
+              isArtist: user.isArtist,
+              level: user.level,
+            };
+          }
+
+          return null;
+        } catch (error) {
+          logger.error("Ethereum Auth error", error as Error);
+          return null;
+        }
+      },
+    }),
+
     // Web3 аутентификация через Solana кошелек
     CredentialsProvider({
       id: "solana",
@@ -115,11 +178,15 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user, account, profile }) {
       // Обработка Web3 аутентификации
-      if (account?.provider === "solana" && user) {
-        token.wallet = (user as any).wallet;
-        token.username = (user as any).username;
+      if (user) {
         token.isArtist = (user as any).isArtist;
         token.level = (user as any).level;
+        token.username = (user as any).username;
+
+        if (account?.provider === "solana" || account?.provider === "ethereum") {
+          token.wallet = (user as any).wallet;
+          token.walletType = account.provider;
+        }
       }
 
       // Обработка OAuth аутентификации
@@ -138,10 +205,14 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.sub!;
-        session.user.wallet = token.wallet as string;
-        session.user.username = token.username as string;
         session.user.isArtist = token.isArtist as boolean;
         session.user.level = token.level as string;
+        session.user.username = token.username as string;
+
+        if (token.wallet) {
+          session.user.wallet = token.wallet as string;
+          session.user.walletType = token.walletType as 'solana' | 'ethereum';
+        }
 
         // Добавляем OAuth данные в сессию
         session.user.spotifyId = token.spotifyId as string;
@@ -164,6 +235,7 @@ export const authOptions: NextAuthOptions = {
 export interface AppSessionUser {
   id: string;
   wallet?: string;
+  walletType?: "solana" | "ethereum";
   username?: string;
   isArtist?: boolean;
   level?: string;
