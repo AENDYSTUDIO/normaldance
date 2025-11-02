@@ -1,3 +1,4 @@
+import { Recommendations } from '@/components/tracks/Recommendations';
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -430,35 +431,7 @@ export default function TrackDetailPage() {
         </TabsContent>
         
         <TabsContent value="related">
-          <Card>
-            <CardHeader>
-              <CardTitle>Похожие треки</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {track.relatedTracks.map((relatedTrack) => (
-                  <div key={relatedTrack.id} className="flex items-center gap-4 p-3 hover:bg-accent rounded-lg">
-                    <Avatar className="h-12 w-12">
-                      <AvatarImage src={relatedTrack.coverImage} />
-                      <AvatarFallback>{relatedTrack.title.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <p className="font-medium">{relatedTrack.title}</p>
-                      <p className="text-sm text-muted-foreground">{relatedTrack.artistName}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <span className="text-sm text-muted-foreground">
-                        {Math.floor(relatedTrack.duration / 60)}:{(relatedTrack.duration % 60).toString().padStart(2, '0')}
-                      </span>
-                      <Button size="sm" variant="ghost">
-                        <Play className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <Recommendations trackId={trackId} />
         </TabsContent>
         
         <TabsContent value="details">
