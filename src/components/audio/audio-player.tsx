@@ -225,34 +225,11 @@ export function AudioPlayer() {
 
   // Адаптивный URL для аудио
   const audioSrc = useCallback(() => {
-    if (!currentTrack) return ''
-    
-    // Определяем качество звука
-    let quality = audioQualities.find(q => q.id === selectedQuality)
-    if (!quality || selectedQuality === 'auto') {
-      quality = audioQualities[1] // Среднее качество по умолчанию
-    }
-    
-    // Адаптируем под сеть
-    const useLowQualityAudio = effectiveType === 'slow-2g' || effectiveType === '2g'
-    
-    if (useLowQualityAudio && quality.id !== 'low') {
-      const lowQuality = audioQualities[0] // Низкое качество
-      const parts = currentTrack.audioUrl.split('.')
-      const extension = parts.pop()
-      return `${parts.join('.')}_low.${extension}`
-    }
-    
-    // Для lossless качества проверяем поддержку браузера
-    if (quality.id === 'lossless' && !audioRef.current?.canPlayType('audio/flac')) {
-      const highQuality = audioQualities[2] // Высокое качество mp3
-      const parts = currentTrack.audioUrl.split('.')
-      const extension = parts.pop()
-      return `${parts.join('.')}_high.${extension}`
-    }
-    
-    return currentTrack.audioUrl
-  }, [currentTrack, selectedQuality, effectiveType])
+    if (!currentTrack?.ipfsHash) return ''
+
+    // Use the new streaming API endpoint
+    return `/api/tracks/stream/${currentTrack.ipfsHash}`
+  }, [currentTrack])
 
   // Загрузка плейлистов
   useEffect(() => {
