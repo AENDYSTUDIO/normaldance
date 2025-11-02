@@ -1,3 +1,4 @@
+import { DownloadButton } from '../components/DownloadButton';
 import React, { useState, useEffect } from 'react'
 import {
   View,
@@ -161,6 +162,7 @@ const HomeScreen: React.FC<{ navigation?: any }> = ({ navigation }) => {
                     {track.likeCount}
                   </Text>
                 </View>
+                <DownloadButton track={track} />
                 <TouchableOpacity style={styles.playButton}>
                   <Ionicons name="play" size={20} color="#4CAF50" />
                 </TouchableOpacity>

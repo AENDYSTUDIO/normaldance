@@ -1,3 +1,4 @@
+import DownloadsScreen from './src/screens/DownloadsScreen';
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
@@ -60,6 +61,8 @@ const App: React.FC = () => {
               iconName = 'search'
             } else if (route.name === 'Upload') {
               iconName = 'add-circle'
+            } else if (route.name === 'Downloads') {
+              iconName = 'cloud-download-outline'
             } else if (route.name === 'Profile') {
               iconName = 'person'
             } else if (route.name === 'Settings') {
@@ -97,6 +100,13 @@ const App: React.FC = () => {
           component={UploadScreen}
           options={{
             title: 'Upload'
+          }}
+        />
+        <Tab.Screen 
+          name="Downloads" 
+          component={DownloadsScreen}
+          options={{
+            title: 'Downloads'
           }}
         />
         <Tab.Screen 
