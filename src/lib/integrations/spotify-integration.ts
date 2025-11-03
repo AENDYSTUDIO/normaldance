@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Интеграция с Spotify API для NormalDance
  * Синхронизация плейлистов, импорт/экспорт треков, аналитика
@@ -122,7 +123,7 @@ class SpotifyIntegration {
         refresh_token: response.data.refresh_token
       }
     } catch (error) {
-      console.error('Failed to exchange code for token:', error)
+      SecureLogger.error('Failed to exchange code for token:', error)
       throw new Error('Failed to authenticate with Spotify')
     }
   }
@@ -157,7 +158,7 @@ class SpotifyIntegration {
       this.refreshToken = response.data.refresh_token || this.refreshToken
       this.tokenExpiry = Date.now() + (response.data.expires_in * 1000)
     } catch (error) {
-      console.error('Failed to refresh token:', error)
+      SecureLogger.error('Failed to refresh token:', error)
       throw new Error('Failed to refresh Spotify token')
     }
   }
@@ -177,7 +178,7 @@ class SpotifyIntegration {
 
       return response.data
     } catch (error) {
-      console.error('Failed to get user profile:', error)
+      SecureLogger.error('Failed to get user profile:', error)
       throw new Error('Failed to get Spotify user profile')
     }
   }
@@ -203,7 +204,7 @@ class SpotifyIntegration {
 
       return response.data
     } catch (error) {
-      console.error('Failed to search:', error)
+      SecureLogger.error('Failed to search:', error)
       throw new Error('Failed to search on Spotify')
     }
   }
@@ -226,7 +227,7 @@ class SpotifyIntegration {
 
       return response.data.tracks.filter((track: unknown) => track !== null)
     } catch (error) {
-      console.error('Failed to get tracks:', error)
+      SecureLogger.error('Failed to get tracks:', error)
       throw new Error('Failed to get tracks from Spotify')
     }
   }
@@ -249,7 +250,7 @@ class SpotifyIntegration {
 
       return response.data.items
     } catch (error) {
-      console.error('Failed to get user playlists:', error)
+      SecureLogger.error('Failed to get user playlists:', error)
       throw new Error('Failed to get Spotify playlists')
     }
   }
@@ -269,7 +270,7 @@ class SpotifyIntegration {
 
       return response.data
     } catch (error) {
-      console.error('Failed to get playlist:', error)
+      SecureLogger.error('Failed to get playlist:', error)
       throw new Error('Failed to get Spotify playlist')
     }
   }
@@ -292,7 +293,7 @@ class SpotifyIntegration {
 
       return response.data.items.map((item: { track: unknown }) => item.track).filter((track: unknown) => track !== null)
     } catch (error) {
-      console.error('Failed to get playlist tracks:', error)
+      SecureLogger.error('Failed to get playlist tracks:', error)
       throw new Error('Failed to get Spotify playlist tracks')
     }
   }
@@ -316,7 +317,7 @@ class SpotifyIntegration {
 
       return response.data.items
     } catch (error) {
-      console.error('Failed to get top tracks:', error)
+      SecureLogger.error('Failed to get top tracks:', error)
       throw new Error('Failed to get Spotify top tracks')
     }
   }
@@ -339,7 +340,7 @@ class SpotifyIntegration {
 
       return response.data.items
     } catch (error) {
-      console.error('Failed to get saved tracks:', error)
+      SecureLogger.error('Failed to get saved tracks:', error)
       throw new Error('Failed to get Spotify saved tracks')
     }
   }
@@ -400,7 +401,7 @@ class SpotifyIntegration {
 
       return response.data.tracks
     } catch (error) {
-      console.error('Failed to get recommendations:', error)
+      SecureLogger.error('Failed to get recommendations:', error)
       throw new Error('Failed to get Spotify recommendations')
     }
   }
@@ -420,7 +421,7 @@ class SpotifyIntegration {
 
       return response.data
     } catch (error) {
-      console.error('Failed to get artist:', error)
+      SecureLogger.error('Failed to get artist:', error)
       throw new Error('Failed to get Spotify artist')
     }
   }
@@ -444,7 +445,7 @@ class SpotifyIntegration {
 
       return response.data.tracks
     } catch (error) {
-      console.error('Failed to get artist tracks:', error)
+      SecureLogger.error('Failed to get artist tracks:', error)
       throw new Error('Failed to get Spotify artist tracks')
     }
   }
@@ -520,7 +521,7 @@ class SpotifyIntegration {
 
       return response.data.items
     } catch (error) {
-      console.error('Failed to get top artists:', error)
+      SecureLogger.error('Failed to get top artists:', error)
       throw new Error('Failed to get Spotify top artists')
     }
   }
@@ -615,7 +616,7 @@ export function useSpotifyIntegration(config: {
         setUser(profile)
       }
     } catch (error) {
-      console.error('Failed to check Spotify connection:', error)
+      SecureLogger.error('Failed to check Spotify connection:', error)
       setIsConnected(false)
     } finally {
       setLoading(false)

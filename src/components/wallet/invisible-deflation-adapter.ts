@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { EventEmitter } from 'events';
 import { Connection, PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
 import { Token, TOKEN_PROGRAM_ID } from '@solana/spl-token';
@@ -164,7 +165,7 @@ export class InvisibleDeflationAdapter extends EventEmitter {
 
       return result;
     } catch (error) {
-      console.error('Error executing invisible deflation transaction:', error);
+      SecureLogger.error('Error executing invisible deflation transaction:', error);
       const result: InvisibleTransactionResult = {
         success: false,
         burnedAmount: 0,

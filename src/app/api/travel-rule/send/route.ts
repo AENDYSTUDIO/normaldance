@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🌍 Travel Rule Send API
  *
@@ -143,7 +144,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error) {
-    console.error("Error in Travel Rule send API:", error);
+    SecureLogger.error("Error in Travel Rule send API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -188,7 +189,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.error("Error in Travel Rule send GET API:", error);
+    SecureLogger.error("Error in Travel Rule send GET API:", error);
     return NextResponse.json(
       {
         success: false,

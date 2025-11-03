@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Environment Variables Validation
  * Validates all required environment variables at application startup
@@ -132,7 +133,7 @@ function validateEnv(): Env {
         errors: errorMessages
       })
       
-      console.error('❌ Environment Validation Errors:\n', errorMessages)
+      SecureLogger.error('❌ Environment Validation Errors:\n', errorMessages)
       
       // In development, continue with warnings
       if (process.env.NODE_ENV === 'development') {

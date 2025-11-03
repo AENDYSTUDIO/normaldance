@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 // Note: This file needs full type refactoring - tracked in GitHub issue #XXX
@@ -158,7 +159,7 @@ export function DualCurrencySystem({ className }: DualCurrencySystemProps) {
       const received = (amount - fee) * rate
 
       // Здесь будет API вызов для выполнения свопа
-      console.log('Swapping:', { amount, rate, fee, received, direction: swapDirection })
+      SecureLogger.log('Swapping:', { amount, rate, fee, received, direction: swapDirection })
       
       // Симуляция успешного свопа
       setTimeout(() => {
@@ -166,7 +167,7 @@ export function DualCurrencySystem({ className }: DualCurrencySystemProps) {
         setSwapAmount('')
       }, 2000)
     } catch (error) {
-      console.error('Error swapping:', error)
+      SecureLogger.error('Error swapping:', error)
       setIsLoading(false)
     }
   }
@@ -174,18 +175,18 @@ export function DualCurrencySystem({ className }: DualCurrencySystemProps) {
   const handleAddLiquidity = async (tonAmount: number, ndtAmount: number) => {
     try {
       // Здесь будет API вызов для добавления ликвидности
-      console.log('Adding liquidity:', { tonAmount, ndtAmount })
+      SecureLogger.log('Adding liquidity:', { tonAmount, ndtAmount })
     } catch (error) {
-      console.error('Error adding liquidity:', error)
+      SecureLogger.error('Error adding liquidity:', error)
     }
   }
 
   const handleCreateLimitOrder = async (order: Omit<LimitOrder, 'id' | 'createdAt'>) => {
     try {
       // Здесь будет API вызов для создания лимит-ордера
-      console.log('Creating limit order:', order)
+      SecureLogger.log('Creating limit order:', order)
     } catch (error) {
-      console.error('Error creating limit order:', error)
+      SecureLogger.error('Error creating limit order:', error)
     }
   }
 
@@ -783,7 +784,7 @@ export function useDualCurrencySystem() {
       }
       return null
     } catch (error) {
-      console.error('Error swapping:', error)
+      SecureLogger.error('Error swapping:', error)
       return null
     } finally {
       setIsLoading(false)
@@ -805,7 +806,7 @@ export function useDualCurrencySystem() {
       }
       return null
     } catch (error) {
-      console.error('Error adding liquidity:', error)
+      SecureLogger.error('Error adding liquidity:', error)
       return null
     }
   }

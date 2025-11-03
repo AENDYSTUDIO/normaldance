@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -55,7 +56,7 @@ const TelegramStarsButton: React.FC<TelegramStarsButtonProps> = ({
       }
 
       // Simulate API call to initiate purchase
-      console.log("Initiating Telegram Stars purchase:", {
+      SecureLogger.log("Initiating Telegram Stars purchase:", {
         amount,
         itemId,
         itemName,
@@ -75,7 +76,7 @@ const TelegramStarsButton: React.FC<TelegramStarsButtonProps> = ({
       // Call success callback
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error("Stars purchase error:", error);
+      SecureLogger.error("Stars purchase error:", error);
       onError?.(error as Error);
     } finally {
       setIsProcessing(false);

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Библиотека для отправки метрик через Telegram Bot API
  *
@@ -12,7 +13,7 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
 // Проверяем, что токен бота установлен
 if (!TELEGRAM_BOT_TOKEN) {
-  console.warn("TELEGRAM_BOT_TOKEN is not set. Metrics will not be sent.");
+  SecureLogger.warn("TELEGRAM_BOT_TOKEN is not set. Metrics will not be sent.");
 }
 
 /**
@@ -59,7 +60,7 @@ export async function sendEvent(
 
     // Проверяем успешность запроса
     if (!response.ok) {
-      console.error(
+      SecureLogger.error(
         "Failed to send event to Telegram Bot API:",
         response.statusText
       );
@@ -68,7 +69,7 @@ export async function sendEvent(
 
     return true;
   } catch (error) {
-    console.error("Error sending event to Telegram Bot API:", error);
+    SecureLogger.error("Error sending event to Telegram Bot API:", error);
     return false;
   }
 }

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useInvisibleWallet } from './invisible-wallet-provider';
 import { WalletNotification } from './minimal-wallet-ui';
@@ -99,7 +100,7 @@ export const InvisibleTransactionUI: React.FC = () => {
       
       walletEmitter.emit('invisibleWallet:transactionConfirmed', confirmedStatus);
     } catch (error) {
-      console.error('Transaction failed:', error);
+      SecureLogger.error('Transaction failed:', error);
       
       const errorStatus: TransactionStatus = {
         id: request.id,
@@ -214,7 +215,7 @@ export const useInvisibleTransaction = () => {
     onError?: (error: any) => void
   ) => {
     if (!(window as any).invisibleWalletTransactions) {
-      console.error('InvisibleTransactionUI not initialized');
+      SecureLogger.error('InvisibleTransactionUI not initialized');
       return null;
     }
     

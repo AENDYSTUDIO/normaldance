@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
@@ -93,7 +94,7 @@ export async function GET(request: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Error fetching NFTs:', error)
+    SecureLogger.error('Error fetching NFTs:', error)
     return NextResponse.json(
       { error: 'Failed to fetch NFTs' },
       { status: 500 }
@@ -157,7 +158,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.error('Error creating NFT:', error)
+    SecureLogger.error('Error creating NFT:', error)
     return NextResponse.json(
       { error: 'Failed to create NFT' },
       { status: 500 }

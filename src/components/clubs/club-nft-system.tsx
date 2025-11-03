@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -186,20 +187,20 @@ export function ClubNFTSystem({ className }: ClubNFTSystemProps) {
   const handleJoinClub = async (clubId: string) => {
     try {
       // Здесь будет API вызов для присоединения к клубу
-      console.log('Joining club:', clubId)
+      SecureLogger.log('Joining club:', clubId)
       setShowJoinModal(false)
     } catch (error) {
-      console.error('Error joining club:', error)
+      SecureLogger.error('Error joining club:', error)
     }
   }
 
   const handleLeaveClub = async () => {
     try {
       // Здесь будет API вызов для выхода из клуба
-      console.log('Leaving club')
+      SecureLogger.log('Leaving club')
       setUserMembership(null)
     } catch (error) {
-      console.error('Error leaving club:', error)
+      SecureLogger.error('Error leaving club:', error)
     }
   }
 
@@ -629,7 +630,7 @@ export function useClubNFTSystem() {
         setClubs(data.clubs)
       }
     } catch (error) {
-      console.error('Error loading clubs:', error)
+      SecureLogger.error('Error loading clubs:', error)
     } finally {
       setIsLoading(false)
     }
@@ -649,7 +650,7 @@ export function useClubNFTSystem() {
       }
       return false
     } catch (error) {
-      console.error('Error joining club:', error)
+      SecureLogger.error('Error joining club:', error)
       return false
     }
   }
@@ -669,7 +670,7 @@ export function useClubNFTSystem() {
       }
       return false
     } catch (error) {
-      console.error('Error leaving club:', error)
+      SecureLogger.error('Error leaving club:', error)
       return false
     }
   }

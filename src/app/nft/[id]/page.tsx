@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -75,10 +76,10 @@ export default function NFTDetailPage() {
         const data = await response.json()
         setNft(data)
       } else {
-        console.error('Failed to fetch NFT details')
+        SecureLogger.error('Failed to fetch NFT details')
       }
     } catch (error) {
-      console.error('Error fetching NFT details:', error)
+      SecureLogger.error('Error fetching NFT details:', error)
     } finally {
       setLoading(false)
     }
@@ -94,7 +95,7 @@ export default function NFTDetailPage() {
 
   const handleAddToWatchlist = () => {
     // Implement add to watchlist functionality
-    console.log('Add to watchlist')
+    SecureLogger.log('Add to watchlist')
   }
 
   const handleShare = () => {

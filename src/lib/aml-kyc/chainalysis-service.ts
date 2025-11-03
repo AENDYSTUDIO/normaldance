@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔗 Chainalysis Service - Blockchain Analytics Integration
  *
@@ -75,7 +76,7 @@ export class ChainalysisService {
 
       return response;
     } catch (error) {
-      console.error("Error analyzing address:", error);
+      SecureLogger.error("Error analyzing address:", error);
       return {
         success: false,
         error: {
@@ -106,7 +107,7 @@ export class ChainalysisService {
 
       return response;
     } catch (error) {
-      console.error("Error analyzing transaction:", error);
+      SecureLogger.error("Error analyzing transaction:", error);
       return {
         success: false,
         error: {
@@ -139,7 +140,7 @@ export class ChainalysisService {
 
       return response;
     } catch (error) {
-      console.error("Error analyzing portfolio:", error);
+      SecureLogger.error("Error analyzing portfolio:", error);
       return {
         success: false,
         error: {
@@ -179,7 +180,7 @@ export class ChainalysisService {
         confidence: 0,
       };
     } catch (error) {
-      console.error("Error getting address risk:", error);
+      SecureLogger.error("Error getting address risk:", error);
       return {
         risk: "MEDIUM",
         score: 50,
@@ -253,7 +254,7 @@ export class ChainalysisService {
         shouldReport: riskScore >= 70,
       };
     } catch (error) {
-      console.error("Error integrating with AML:", error);
+      SecureLogger.error("Error integrating with AML:", error);
       return {
         riskScore: 50,
         riskLevel: "MEDIUM",
@@ -305,7 +306,7 @@ export class ChainalysisService {
         };
       }
     } catch (error) {
-      console.error("Error creating monitoring rule:", error);
+      SecureLogger.error("Error creating monitoring rule:", error);
       return {
         success: false,
         message: `Failed to create monitoring rule: ${
@@ -353,7 +354,7 @@ export class ChainalysisService {
 
       return [];
     } catch (error) {
-      console.error("Error getting monitoring events:", error);
+      SecureLogger.error("Error getting monitoring events:", error);
       return [];
     }
   }
@@ -405,7 +406,7 @@ export class ChainalysisService {
         };
       }
     } catch (error) {
-      console.error("Error creating report:", error);
+      SecureLogger.error("Error creating report:", error);
       return {
         success: false,
         message: `Failed to create report: ${
@@ -727,7 +728,7 @@ export class ChainalysisService {
         },
       });
     } catch (error) {
-      console.error("Error saving address analysis:", error);
+      SecureLogger.error("Error saving address analysis:", error);
     }
   }
 
@@ -778,7 +779,7 @@ export class ChainalysisService {
         },
       });
     } catch (error) {
-      console.error("Error saving transaction analysis:", error);
+      SecureLogger.error("Error saving transaction analysis:", error);
     }
   }
 }

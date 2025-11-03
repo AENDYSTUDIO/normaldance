@@ -1,42 +1,39 @@
-import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth'
-import { advancedAnalyticsSystem } from '@/lib/advanced-analytics'
-import { volatilityProtectionSystem } from '@/lib/volatility-protection'
-import { smartLimitOrderSystem } from '@/lib/smart-limit-orders'
-import { dashboardGetSchema } from '@/lib/schemas'
-import { handleApiError } from '@/lib/errors/errorHandler'
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
+import { advancedAnalyticsSystem } from "@/lib/advanced-analytics";
+import { volatilityProtectionSystem } from "@/lib/volatility-protection";
+import { smartLimitOrderSystem } from "@/lib/smart-limit-orders";
+import { analyticsDashboardGetSchema } from "@/lib/schemas/analytics";
+import { handleApiError } from "@/lib/errors/errorHandler";
 
 // GET /api/analytics/dashboard - Get comprehensive dashboard data
-<<<<<<< HEAD
-export async function GET() {
-=======
 export async function GET(request: Request) {
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
   try {
-    const session = (await getServerSession(authOptions)) as any
-    
+    const session = (await getServerSession(authOptions)) as any;
+
     if (!session?.user?.id) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { searchParams } = new URL(request.url)
-    const query = Object.fromEntries(searchParams.entries())
-    const { timeframe, metric } = dashboardGetSchema.parse(query)
+    const { searchParams } = new URL(request.url);
+    const query = Object.fromEntries(searchParams.entries());
+    analyticsDashboardGetSchema.parse(query);
+
+    // Default params
+    const timeframe = (searchParams.get("timeframe") || "24h") as
+      | "1h"
+      | "24h"
+      | "7d"
+      | "30d";
+    const metric = searchParams.get("metric") || "all";
 
     // Получаем данные от всех систем
-    const [
-      analyticsData,
-      protectionStats,
-      orderStats
-    ] = await Promise.all([
-      advancedAnalyticsSystem.getFullAnalytics(timeframe, metric), // Pass timeframe and metric
+    const [analyticsData, protectionStats, orderStats] = await Promise.all([
+      advancedAnalyticsSystem.getFullAnalytics(timeframe, metric),
       volatilityProtectionSystem.getProtectionStats(),
-      smartLimitOrderSystem.getOrderStats(session.user.id)
-    ])
+      smartLimitOrderSystem.getOrderStats(session.user.id),
+    ]);
 
     // Формируем полный ответ dashboard
     const dashboardData = {
@@ -47,39 +44,38 @@ export async function GET(request: Request) {
       risk: analyticsData.risk,
       predictions: analyticsData.predictions,
       arbitrage: analyticsData.arbitrage,
-      
+
       // Данные защиты от волатильности
       protection: {
         stabilityReserve: protectionStats.stabilityReserve,
         mechanisms: protectionStats.mechanisms,
         interventions: protectionStats.interventions,
-        currentMetrics: protectionStats.currentMetrics
+        currentMetrics: protectionStats.currentMetrics,
       },
-      
+
       // Данные умных ордеров
       orders: {
         stats: orderStats,
-        userOrders: smartLimitOrderSystem.getUserOrders(session.user.id)
+        userOrders: smartLimitOrderSystem.getUserOrders(session.user.id),
       },
-      
+
       // ИИ-рекомендации
       recommendations: advancedAnalyticsSystem.getOptimizationRecommendations(),
-      
+
       // Метаданные
       timestamp: Date.now(),
-      version: '2025.1.0',
+      version: "2025.1.0",
       features: [
-        'hybrid_amm',
-        'volatility_protection',
-        'smart_limit_orders',
-        'ml_predictions',
-        'advanced_analytics'
-      ]
-    }
+        "hybrid_amm",
+        "volatility_protection",
+        "smart_limit_orders",
+        "ml_predictions",
+        "advanced_analytics",
+      ],
+    };
 
-    return NextResponse.json(dashboardData)
-
+    return NextResponse.json(dashboardData);
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error);
   }
 }

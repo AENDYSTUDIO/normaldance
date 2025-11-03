@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client';
 
 import React, { useState } from 'react';
@@ -30,7 +31,7 @@ export default function ATRDemoPage() {
   };
 
   const handlePaymentSelect = (method: ATRPaymentMethod) => {
-    console.log('Selected payment method:', method);
+    SecureLogger.log('Selected payment method:', method);
   };
 
   const marketStats = [

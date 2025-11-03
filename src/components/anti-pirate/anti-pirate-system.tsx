@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
@@ -204,7 +205,7 @@ export function AntiPirateSystem({ className }: AntiPirateSystemProps) {
         setActivePasses(data.passes)
       }
     } catch (error) {
-      console.error('Error loading passes:', error)
+      SecureLogger.error('Error loading passes:', error)
     }
   }
 
@@ -217,7 +218,7 @@ export function AntiPirateSystem({ className }: AntiPirateSystemProps) {
         setFreeTracksUsed(data.used)
       }
     } catch (error) {
-      console.error('Error checking free tracks:', error)
+      SecureLogger.error('Error checking free tracks:', error)
     }
   }
 
@@ -300,7 +301,7 @@ export function AntiPirateSystem({ className }: AntiPirateSystemProps) {
         setFreeTracksUsed(prev => prev + 1)
       }
     } catch (error) {
-      console.error('Error recording playback start:', error)
+      SecureLogger.error('Error recording playback start:', error)
     }
   }
 
@@ -318,10 +319,10 @@ export function AntiPirateSystem({ className }: AntiPirateSystemProps) {
       const data = await response.json()
       
       if (data.success) {
-        console.log('Playback paused successfully')
+        SecureLogger.log('Playback paused successfully')
       }
     } catch (error) {
-      console.error('Error recording playback pause:', error)
+      SecureLogger.error('Error recording playback pause:', error)
     }
   }
 
@@ -355,7 +356,7 @@ export function AntiPirateSystem({ className }: AntiPirateSystemProps) {
         setShowPasses(false)
       }
     } catch (error) {
-      console.error('Error purchasing pass:', error)
+      SecureLogger.error('Error purchasing pass:', error)
     }
   }
 
@@ -719,7 +720,7 @@ export function useAntiPirateSystem() {
       }
       return false
     } catch (error) {
-      console.error('Error checking free tracks limit:', error)
+      SecureLogger.error('Error checking free tracks limit:', error)
       return false
     }
   }
@@ -741,7 +742,7 @@ export function useAntiPirateSystem() {
       }
       return false
     } catch (error) {
-      console.error('Error purchasing pass:', error)
+      SecureLogger.error('Error purchasing pass:', error)
       return false
     } finally {
       setIsLoading(false)
@@ -757,7 +758,7 @@ export function useAntiPirateSystem() {
         setActivePasses(data.passes)
       }
     } catch (error) {
-      console.error('Error loading active passes:', error)
+      SecureLogger.error('Error loading active passes:', error)
     }
   }
 

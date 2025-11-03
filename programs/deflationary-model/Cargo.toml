@@ -1,0 +1,21 @@
+[package]
+name = "deflationary-model"
+version = "0.1.0"
+edition = "2021"
+description = "Deflationary Model Program for NormalDance"
+license = "MIT"
+
+[features]
+no-entrypoint = []
+test-bpf = []
+
+[dependencies]
+solana-program = "~1.16.0"
+borsh = "0.9.3"
+
+[dev-dependencies]
+solana-program-test = "~1.16.0"
+solana-sdk = "~1.16.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]

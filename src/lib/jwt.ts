@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Функции для работы с JWT-токенами
  *
@@ -6,17 +7,12 @@
  */
 
 import { SignJWT, jwtVerify } from "jose";
+import { env } from "@/config/env";
 
-<<<<<<< HEAD
-const JWT_SECRET =
-  process.env.JWT_SECRET || "fallback_secret_key_for_development";
-=======
-const JWT_SECRET = process.env.JWT_SECRET;
-
+const JWT_SECRET = env.JWT_SECRET;
 if (!JWT_SECRET) {
-  throw new Error('JWT_SECRET environment variable is required');
+  throw new Error("JWT_SECRET environment variable is required");
 }
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
 
 // Ключ для подписи токенов
 const encoder = new TextEncoder();
@@ -36,7 +32,7 @@ export async function signJWT(payload: Record<string, unknown>): Promise<string>
       .setExpirationTime(exp)
       .sign(SIGNING_KEY);
   } catch (error) {
-    console.error("Error signing JWT:", error);
+    SecureLogger.error("Error signing JWT:", error);
     throw new Error("Failed to create JWT token");
   }
 }
@@ -49,7 +45,7 @@ export async function verifyJWT(token: string): Promise<any> {
     const verified = await jwtVerify(token, SIGNING_KEY);
     return verified.payload;
   } catch (error) {
-    console.error("Error verifying JWT:", error);
+    SecureLogger.error("Error verifying JWT:", error);
     throw new Error("Invalid or expired token");
   }
 }

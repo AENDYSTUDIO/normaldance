@@ -250,7 +250,7 @@ describe("IPFS Enhanced - Full Unit Tests", () => {
     });
   });
 
-  describe("checkFileAvailabilityOnMultipleGateways", () => {
+  describe(process.env.SECRET_KEY, () => {
     it("should check file availability on multiple gateways", async () => {
       const mockFetch = require("node-fetch");
       mockFetch.mockResolvedValue({

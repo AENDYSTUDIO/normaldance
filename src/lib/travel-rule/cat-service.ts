@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🐱 CAT Service - Common Address Transaction Implementation
  *
@@ -171,7 +172,7 @@ export class CATService {
         };
       }
     } catch (error) {
-      console.error("Error sending CAT message:", error);
+      SecureLogger.error("Error sending CAT message:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -195,7 +196,7 @@ export class CATService {
         error: "CAT message receiving not implemented",
       };
     } catch (error) {
-      console.error("Error receiving CAT message:", error);
+      SecureLogger.error("Error receiving CAT message:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -490,7 +491,7 @@ export class CATService {
         message.security.publicKey
       );
     } catch (error) {
-      console.error("Error verifying CAT message signature:", error);
+      SecureLogger.error("Error verifying CAT message signature:", error);
       return false;
     }
   }
@@ -525,7 +526,7 @@ export class CATService {
         };
       }
     } catch (error) {
-      console.error("Error sending HTTP request:", error);
+      SecureLogger.error("Error sending HTTP request:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Network error",

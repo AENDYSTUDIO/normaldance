@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 interface LoggerConfig {
@@ -35,19 +36,19 @@ class Logger {
 
   debug(message: string, data?: unknown): void {
     if (this.shouldLog('debug')) {
-      console.log(this.formatMessage('debug', message, data));
+      SecureLogger.log(this.formatMessage('debug', message, data));
     }
   }
 
   info(message: string, data?: unknown): void {
     if (this.shouldLog('info')) {
-      console.info(this.formatMessage('info', message, data));
+      SecureLogger.info(this.formatMessage('info', message, data));
     }
   }
 
   warn(message: string, data?: unknown): void {
     if (this.shouldLog('warn')) {
-      console.warn(this.formatMessage('warn', message, data));
+      SecureLogger.warn(this.formatMessage('warn', message, data));
     }
   }
 
@@ -56,7 +57,7 @@ class Logger {
       const errorData = error instanceof Error 
         ? { message: error.message, stack: error.stack }
         : error;
-      console.error(this.formatMessage('error', message, errorData));
+      SecureLogger.error(this.formatMessage('error', message, errorData));
     }
   }
 }

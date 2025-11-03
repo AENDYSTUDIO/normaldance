@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { AlertCircle, CheckCircle, Wallet } from "@/components/icons";
@@ -84,7 +85,7 @@ export function WalletConnect({ className }: WalletConnectProps) {
       setShowQR(false);
     } catch (err) {
       setError("Failed to connect wallet");
-      console.error("Connection error:", err);
+      SecureLogger.error("Connection error:", err);
     } finally {
       setIsConnecting(false);
     }
@@ -94,7 +95,7 @@ export function WalletConnect({ className }: WalletConnectProps) {
     try {
       await disconnectWallet();
     } catch (err) {
-      console.error("Disconnection error:", err);
+      SecureLogger.error("Disconnection error:", err);
     }
   };
 
@@ -102,7 +103,7 @@ export function WalletConnect({ className }: WalletConnectProps) {
     try {
       await navigator.clipboard.writeText(text);
     } catch (err) {
-      console.error("Failed to copy:", err);
+      SecureLogger.error("Failed to copy:", err);
     }
   };
 
@@ -118,7 +119,7 @@ export function WalletConnect({ className }: WalletConnectProps) {
   const initWalletConnectForTMA = async () => {
     try {
       // В TMA используем WalletConnect Universal или deeplink
-      console.log("Initializing WalletConnect for Telegram Mini App");
+      SecureLogger.log("Initializing WalletConnect for Telegram Mini App");
 
       // Проверяем, что мы в браузере
       if (typeof window === "undefined") {
@@ -130,7 +131,7 @@ export function WalletConnect({ className }: WalletConnectProps) {
       // Для TMA используем QR-код или deeplink
       if (showQR) {
         // Показываем QR-код для сканирования пользователем
-        console.log("Show QR code for WalletConnect");
+        SecureLogger.log("Show QR code for WalletConnect");
         // В реальном приложении здесь будет отображение QR-кода
         // и установка соединения через WalletConnect
       } else {
@@ -148,7 +149,7 @@ export function WalletConnect({ className }: WalletConnectProps) {
       // Пока просто вызываем стандартное подключение
       await connectWallet();
     } catch (err) {
-      console.error("WalletConnect initialization error:", err);
+      SecureLogger.error("WalletConnect initialization error:", err);
       throw new Error(
         "Failed to initialize WalletConnect. Please try again or use another wallet."
       );

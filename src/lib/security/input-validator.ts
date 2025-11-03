@@ -1,9 +1,9 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Input Validation and Sanitization
  * Prevents injection attacks and validates user input
  */
 
-<<<<<<< HEAD
 import {
   isValidEmail as isValidEmailLegacy,
   isValidSolanaAddress as isValidSolanaAddressLegacy,
@@ -23,7 +23,7 @@ const LEGACY_SECURITY_MODULE_IV = "src/lib/security/input-validator.ts";
 let __legacyInputValidatorWarned = false;
 function __warnLegacyInputValidator(): void {
   // tslint:disable-next-line:no-console
-  console.warn(
+  SecureLogger.warn(
     "[NORMALDANCE][SECURITY] Используется легаси-модуль 'src/lib/security/input-validator.ts'. " +
       "Легаси-реализации будут удалены в v2.0.0 (2026-03-31). " +
       "Переходите на импорты из '@/lib/security' и новые API BaseValidator/SecurityManager."
@@ -43,9 +43,6 @@ function __warnLegacyInputValidator(): void {
     }
   }
 })();
-=======
-import DOMPurify from 'isomorphic-dompurify';
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
 
 export interface ValidationResult {
   isValid: boolean;
@@ -56,7 +53,6 @@ export interface ValidationResult {
 export class InputValidator {
   // Sanitize HTML content to prevent XSS
   static sanitizeHtml(input: string): string {
-<<<<<<< HEAD
     if (typeof input !== "string") return "";
     return escapeHTML(stripDangerousHtml(input));
   }
@@ -80,53 +76,16 @@ export class InputValidator {
     }
 
     return { isValid: true, sanitized: cleaned };
-=======
-    return DOMPurify.sanitize(input, {
-      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br'],
-      ALLOWED_ATTR: []
-    });
-  }
-
-  // Validate and sanitize text input
-  static validateText(input: string, maxLength: number = 1000): ValidationResult {
-    if (!input || typeof input !== 'string') {
-      return { isValid: false, errors: ['Input must be a non-empty string'] };
-    }
-
-    if (input.length > maxLength) {
-      return { isValid: false, errors: [`Input exceeds maximum length of ${maxLength}`] };
-    }
-
-    // Remove potential script tags and dangerous characters
-    const sanitized = input
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      .replace(/javascript:/gi, '')
-      .replace(/on\w+\s*=/gi, '')
-      .trim();
-
-    return { isValid: true, sanitized };
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
   }
 
   // Validate email format
   static validateEmail(email: string): ValidationResult {
-<<<<<<< HEAD
     if (!email || typeof email !== "string") {
       return { isValid: false, errors: ["Email is required"] };
     }
 
     if (!isValidEmailLegacy(email)) {
       return { isValid: false, errors: ["Invalid email format"] };
-=======
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
-    if (!email || typeof email !== 'string') {
-      return { isValid: false, errors: ['Email is required'] };
-    }
-
-    if (!emailRegex.test(email)) {
-      return { isValid: false, errors: ['Invalid email format'] };
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
     }
 
     return { isValid: true, sanitized: email.toLowerCase().trim() };
@@ -134,31 +93,18 @@ export class InputValidator {
 
   // Validate wallet address
   static validateWalletAddress(address: string): ValidationResult {
-<<<<<<< HEAD
     if (!address || typeof address !== "string") {
       return { isValid: false, errors: ["Wallet address is required"] };
     }
 
     if (!isValidSolanaAddressLegacy(address)) {
       return { isValid: false, errors: ["Invalid wallet address format"] };
-=======
-    if (!address || typeof address !== 'string') {
-      return { isValid: false, errors: ['Wallet address is required'] };
-    }
-
-    // Basic Solana address validation (base58, 32-44 chars)
-    const solanaRegex = /^[1-9A-HJ-NP-Za-km-z]{32,44}$/;
-    
-    if (!solanaRegex.test(address)) {
-      return { isValid: false, errors: ['Invalid wallet address format'] };
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
     }
 
     return { isValid: true, sanitized: address.trim() };
   }
 
   // Validate numeric input
-<<<<<<< HEAD
   static validateNumber(
     input: unknown,
     min?: number,
@@ -168,13 +114,6 @@ export class InputValidator {
 
     if (isNaN(num)) {
       return { isValid: false, errors: ["Input must be a valid number"] };
-=======
-  static validateNumber(input: unknown, min?: number, max?: number): ValidationResult {
-    const num = Number(input);
-    
-    if (isNaN(num)) {
-      return { isValid: false, errors: ['Input must be a valid number'] };
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
     }
 
     if (min !== undefined && num < min) {
@@ -189,7 +128,6 @@ export class InputValidator {
   }
 
   // Validate file upload
-<<<<<<< HEAD
   static validateFile(
     file: File,
     allowedTypes: string[],
@@ -204,15 +142,6 @@ export class InputValidator {
         isValid: false,
         errors: [`File type ${file.type} is not allowed`],
       };
-=======
-  static validateFile(file: File, allowedTypes: string[], maxSize: number): ValidationResult {
-    if (!file) {
-      return { isValid: false, errors: ['File is required'] };
-    }
-
-    if (!allowedTypes.includes(file.type)) {
-      return { isValid: false, errors: [`File type ${file.type} is not allowed`] };
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
     }
 
     if (file.size > maxSize) {
@@ -224,11 +153,7 @@ export class InputValidator {
 
   // Prevent SQL injection by escaping special characters
   static escapeSql(input: string): string {
-<<<<<<< HEAD
     return sanitizeSQLLegacy(input);
-=======
-    return input.replace(/'/g, "''").replace(/;/g, '\\;');
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
   }
 
   // Validate JSON input
@@ -237,7 +162,6 @@ export class InputValidator {
       const parsed = JSON.parse(input);
       return { isValid: true, sanitized: JSON.stringify(parsed) };
     } catch (error) {
-<<<<<<< HEAD
       return { isValid: false, errors: ["Invalid JSON format"] };
     }
   }
@@ -264,9 +188,3 @@ export class InputValidator {
     return InputValidator.validateJson(input);
   }
 }
-=======
-      return { isValid: false, errors: ['Invalid JSON format'] };
-    }
-  }
-}
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337

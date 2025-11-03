@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -59,7 +60,7 @@ export default function MonitoringDashboard() {
         setLastUpdate(new Date());
       }
     } catch (error) {
-      console.error('Failed to fetch metrics:', error);
+      SecureLogger.error('Failed to fetch metrics:', error);
     } finally {
       setLoading(false);
     }

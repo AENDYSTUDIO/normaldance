@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import * as fs from "fs";
 
 // const execAsync = promisify(exec); // Закомментируем неиспользуемую переменную
@@ -97,19 +98,19 @@ export class CodeRefactorAgent {
     // Проверяем контекст проекта на специфические особенности
     if (this.params.projectContext) {
       if (this.params.projectContext.usesSocketIO) {
-        console.log("Обнаружен проект с использованием Socket.IO");
+        SecureLogger.log("Обнаружен проект с использованием Socket.IO");
       }
       if (this.params.projectContext.usesWalletAdapter) {
-        console.log("Обнаружен проект с кастомным wallet adapter");
+        SecureLogger.log("Обнаружен проект с кастомным wallet adapter");
       }
       if (this.params.projectContext.usesDeflationaryModel) {
-        console.log("Обнаружен проект с дефляционной моделью токенов");
+        SecureLogger.log("Обнаружен проект с дефляционной моделью токенов");
       }
       if (this.params.projectContext.usesPrisma) {
-        console.log("Обнаружен проект с использованием Prisma");
+        SecureLogger.log("Обнаружен проект с использованием Prisma");
       }
       if (this.params.projectContext.customTypeScriptConfig) {
-        console.log(
+        SecureLogger.log(
           "Обнаружен проект со специфическими настройками TypeScript"
         );
       }

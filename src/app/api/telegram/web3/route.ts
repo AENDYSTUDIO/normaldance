@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { db } from "@/lib/db";
 import { verifyJWT } from "@/lib/jwt";
 import { NextResponse } from "next/server";
@@ -59,7 +60,7 @@ export async function GET(request: NextRequest) {
 <<<<<<< HEAD
     return NextResponse.json(web3Info);
   } catch (error) {
-    console.error("Error in Telegram Web3 API:", error);
+    SecureLogger.error("Error in Telegram Web3 API:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -126,7 +127,7 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
 <<<<<<< HEAD
-    console.error("Error in Telegram Web3 API:", error);
+    SecureLogger.error("Error in Telegram Web3 API:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

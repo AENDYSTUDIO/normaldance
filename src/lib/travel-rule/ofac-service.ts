@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🛡️ OFAC Service - Office of Foreign Assets Control Integration
  *
@@ -174,7 +175,7 @@ export class OFACService {
         };
       }
     } catch (error) {
-      console.error("Error sending OFAC message:", error);
+      SecureLogger.error("Error sending OFAC message:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -220,7 +221,7 @@ export class OFACService {
 
       return result;
     } catch (error) {
-      console.error("Error performing OFAC screening:", error);
+      SecureLogger.error("Error performing OFAC screening:", error);
       return {
         matches: [],
         recommendation: "REVIEW",
@@ -669,9 +670,9 @@ export class OFACService {
         this.sanctionsCache.set(listName, list);
       }
 
-      console.log("Sanctions cache updated successfully");
+      SecureLogger.log("Sanctions cache updated successfully");
     } catch (error) {
-      console.error("Error updating sanctions cache:", error);
+      SecureLogger.error("Error updating sanctions cache:", error);
     }
   }
 
@@ -719,7 +720,7 @@ export class OFACService {
         };
       }
     } catch (error) {
-      console.error("Error sending HTTP request:", error);
+      SecureLogger.error("Error sending HTTP request:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Network error",

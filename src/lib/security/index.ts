@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Единая точка входа для модулей безопасности NORMALDANCE.
  * Публичные экспорты: санитизация, XSS/CSRF, интерфейсы, менеджер, валидаторы, rate-limiter, телеграм-валидатор.
@@ -111,4 +112,4 @@ export type { ValidationResult as InputValidationResult } from "./input-validato
  */
 export const LEGACY_IMPORT_WARNING = "Используйте импорты из '@/lib/security' вместо прямых импортов из файлов";
 
-console.warn("[NORMALDANCE][SECURITY] Использование прямых импортов из файлов безопасности устарело. Используйте '@/lib/security' вместо этого.");
+SecureLogger.warn("[NORMALDANCE][SECURITY] Использование прямых импортов из файлов безопасности устарело. Используйте '@/lib/security' вместо этого.");

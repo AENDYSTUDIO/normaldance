@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔗 Chainalysis Monitor API
  *
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis monitor API:", error);
+    SecureLogger.error("Error in Chainalysis monitor API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -73,7 +74,7 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis monitor GET API:", error);
+    SecureLogger.error("Error in Chainalysis monitor GET API:", error);
     return NextResponse.json(
       {
         success: false,

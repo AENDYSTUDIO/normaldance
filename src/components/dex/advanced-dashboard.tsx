@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 📊 Advanced Analytics Dashboard 2025
  * 
@@ -60,7 +61,7 @@ export function AdvancedDashboard() {
       const dashboardData = await response.json()
       setData(dashboardData)
     } catch (error) {
-      console.error('Error fetching dashboard data:', error)
+      SecureLogger.error('Error fetching dashboard data:', error)
     } finally {
       setIsLoading(false)
     }

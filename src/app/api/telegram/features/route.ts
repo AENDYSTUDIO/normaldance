@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { db } from "@/lib/db";
 import { verifyJWT } from "@/lib/jwt";
 import { telegramIntegration2025 } from "@/lib/telegram-integration-2025";
@@ -100,7 +101,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 <<<<<<< HEAD
     return NextResponse.json(features);
   } catch (error) {
-    console.error("Error in Telegram features API:", error);
+    SecureLogger.error("Error in Telegram features API:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -162,7 +163,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
   } catch (error) {
 <<<<<<< HEAD
-    console.error("Error in Telegram features API:", error);
+    SecureLogger.error("Error in Telegram features API:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

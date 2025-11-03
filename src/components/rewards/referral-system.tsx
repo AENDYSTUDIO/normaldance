@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -115,7 +116,7 @@ export function ReferralSystem({ className }: ReferralSystemProps) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      console.error('Failed to copy:', err)
+      SecureLogger.error('Failed to copy:', err)
     }
   }
 

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -31,7 +32,7 @@ export function TelegramStarsDisplay({
         description: "Информация скопирована в буфер обмена",
       });
     } catch (err) {
-      console.error("Failed to copy:", err);
+      SecureLogger.error("Failed to copy:", err);
       toast({
         title: "Ошибка",
         description: "Не удалось скопировать в буфер обмена",

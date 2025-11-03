@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { type Helia } from '@helia/interface';
 import { unixfs } from '@helia/unixfs';
 import { createHelia } from 'helia';
@@ -155,7 +156,7 @@ export async function uploadToIPFSHeliaWithProgress(
     const totalSize = file.size;
     
     if (file.size > CHUNK_SIZE) {
-      console.log(`Large file detected, using chunking (${file.size} bytes)`);
+      SecureLogger.log(`Large file detected, using chunking (${file.size} bytes)`);
       
       // For large files, we'll process in chunks but upload as a single unit for now
       // Helia handles chunking internally, so we can just upload the whole file
@@ -185,7 +186,7 @@ export async function uploadToIPFSHeliaWithProgress(
       return result;
     }
   } catch (error) {
-    console.error('Helia IPFS upload with progress failed:', error);
+    SecureLogger.error('Helia IPFS upload with progress failed:', error);
     throw new Error(`Failed to upload to Helia IPFS with progress: ${error}`);
   }
 }
@@ -246,16 +247,16 @@ export async function getFileFromIPFSHelia(cid: string): Promise<Buffer> {
  */
 export async function getMetadataFromIPFSHelia(cid: string): Promise<any> {
   try {
-    console.log(`Fetching metadata from Helia IPFS: ${cid}`);
+    SecureLogger.log(`Fetching metadata from Helia IPFS: ${cid}`);
     
     const fileData = await getFileFromIPFSHelia(cid);
     const metadataString = fileData.toString();
     const metadataJson = JSON.parse(metadataString);
     
-    console.log('Metadata retrieved successfully');
+    SecureLogger.log('Metadata retrieved successfully');
     return metadataJson;
   } catch (error) {
-    console.error('Failed to fetch metadata from Helia IPFS:', error);
+    SecureLogger.error('Failed to fetch metadata from Helia IPFS:', error);
     throw new Error(`Failed to fetch metadata from Helia IPFS: ${error}`);
   }
 }
@@ -269,11 +270,11 @@ export async function pinFileHelia(cid: string): Promise<boolean> {
     
     // Pin the CID using Helia's pinning functionality
     await helia.pins.add(cid);
-    console.log(`File pinned successfully via Helia: ${cid}`);
+    SecureLogger.log(`File pinned successfully via Helia: ${cid}`);
     
     return true;
   } catch (error) {
-    console.error('Failed to pin file via Helia:', error);
+    SecureLogger.error('Failed to pin file via Helia:', error);
     return false;
   }
 }
@@ -287,11 +288,11 @@ export async function unpinFileHelia(cid: string): Promise<boolean> {
     
     // Remove pin for the CID
     await helia.pins.rm(cid);
-    console.log(`File unpinned successfully via Helia: ${cid}`);
+    SecureLogger.log(`File unpinned successfully via Helia: ${cid}`);
     
     return true;
   } catch (error) {
-    console.error('Failed to unpin file via Helia:', error);
+    SecureLogger.error('Failed to unpin file via Helia:', error);
     return false;
  }
 }

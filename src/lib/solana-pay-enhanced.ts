@@ -1,7 +1,11 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { 
   createQR, 
   encodeURL, 
-  TransactionRequestURLFields
+  TransactionRequestURLFields,
+  validateTransfer, 
+  findReference, 
+  ValidateTransferParams
 } from '@solana/pay'
 import { 
   Connection, 
@@ -11,6 +15,7 @@ import {
   SystemProgram
 } from '@solana/web3.js'
 import BigNumber from 'bignumber.js'
+import * as Sentry from '@sentry/nextjs'
 
 export interface EnhancedSolanaPayConfig {
   recipient: string;
@@ -108,112 +113,53 @@ export class EnhancedSolanaPayService {
   async verifyPayment(
     reference: string,
     recipient: string,
-    expectedAmount?: number
+    expectedAmount?: number,
+    splToken?: string
   ): Promise<PaymentResult> {
     try {
-      // Find the transaction using the reference
-      const foundSignature = await this.findTransactionByReference(
-        reference,
-        recipient
-      );
+      const span = Sentry.startSpan({ name: 'solanaPay.verifyPayment' })
+      // Use reference to find a confirmed transaction
+      const referenceKey = new PublicKey(reference)
+      const recipientKey = new PublicKey(recipient)
 
-      if (!foundSignature) {
-        return {
-          success: false,
-          error: 'Transaction not found'
-        };
+      const { signature } = await findReference(this.connection, referenceKey, { finality: 'confirmed' })
+
+      // Validate transfer against expected parameters
+      const params: ValidateTransferParams = {
+        recipient: recipientKey,
+        amount: expectedAmount ? new BigNumber(expectedAmount) : undefined,
+        reference: referenceKey,
+        splToken: splToken ? new PublicKey(splToken) : undefined,
       }
+      await validateTransfer(this.connection, signature, params)
 
-      // Get transaction details
-      const transaction = await this.connection.getTransaction(foundSignature);
-      
-      if (transaction.meta.err) {
-        return {
-          success: false,
-          error: `Transaction failed: ${transaction.meta.err}`,
-          signature: foundSignature
-        };
-      }
+      // Optionally fetch transaction details
+      const transaction = await this.connection.getTransaction(signature, { maxSupportedTransactionVersion: 0 })
 
-      // Verify recipient if specified
-      if (recipient && transaction.transaction.message.instructions[0]) {
-        const transferInstruction = transaction.transaction.message.instructions[0];
-        if (transferInstruction.programId.toBase58() === "11111111111111111111111111111111111111111111111111111") {
-          const transferInfo = transferInstruction.parsed;
-          if (transferInfo.info.destination !== recipient) {
-            return {
-              success: false,
-              error: 'Invalid recipient',
-              signature: foundSignature
-            };
-          }
-
-          // Verify amount if specified
-          if (expectedAmount) {
-            const transferAmount = new BigNumber(transferInfo.info.lamports).div(
-              new BigNumber(10).pow(transferInfo.info.decimals || 9)
-            );
-            if (transferAmount.isLessThan(new BigNumber(expectedAmount).times(0.95))) {
-              return {
-                success: false,
-                error: 'Amount mismatch',
-                signature: foundSignature
-              };
-            }
-          }
-        }
-      }
-
-      // Send webhook notification if configured
       if (this.webhookUrl) {
         await this.sendWebhookNotification({
           type: 'payment_verified',
-          signature: foundSignature,
+          signature,
           recipient,
           amount: expectedAmount,
           timestamp: new Date().toISOString()
-        });
+        })
       }
 
-      return {
-        success: true,
-        signature: foundSignature,
-        transaction
-      };
+      const result = { success: true, signature, transaction: (transaction as any) || undefined }
+      span.end()
+      return result
     } catch (error) {
-      console.error('Payment verification failed:', error);
-      return {
-        success: false,
-        error: (error as Error).message
-      };
+      SecureLogger.error('Payment verification failed:', error)
+      return { success: false, error: (error as Error).message }
     }
   }
 
   /**
    * Find transaction by reference
    */
-  private async findTransactionByReference(
-    reference: string,
-    recipient: string
-  ): Promise<string> {
-    try {
-      const info = await this.connection.getAccountInfo(
-        new PublicKey(recipient)
-      );
-      
-      // Get recent signatures
-      const signatures = await this.connection.getSignaturesForAddress(
-        new PublicKey(recipient),
-        { limit: 10 }
-      );
-
-      // In a production environment, you would use a transaction indexing service
-      // For now, we'll return a mock signature for demonstration
-      return "mock_transaction_signature";
-    } catch (error) {
-      console.error('Error finding transaction:', error);
-      throw error;
-    }
+  private async findTransactionByReference(): Promise<string> {
+    throw new Error('Deprecated: use verifyPayment which uses @solana/pay findReference')
   }
 
   /**
@@ -235,7 +181,7 @@ export class EnhancedSolanaPayService {
         throw new Error(`Webhook failed: ${response.statusText}`);
       }
     } catch (error) {
-      console.error('Webhook notification failed:', error);
+      SecureLogger.error('Webhook notification failed:', error);
       // Don't throw error to avoid blocking payment flow
     }
   }
@@ -281,7 +227,7 @@ export class EnhancedSolanaPayService {
         attempts++;
         await new Promise(resolve => setTimeout(resolve, pollingInterval));
       } catch (error) {
-        console.error(`Payment verification attempt ${attempts} failed:`, error);
+        SecureLogger.error(`Payment verification attempt ${attempts} failed:`, error);
         
         // Return failure after too many attempts
         if (attempts >= maxAttempts) {
@@ -310,7 +256,7 @@ export class EnhancedSolanaPayService {
       const fee = amount * 0.000005; // 0.05% of amount in SOL
       return fee.toFixed(6);
     } catch (error) {
-      console.error('Fee calculation failed:', error);
+      SecureLogger.error('Fee calculation failed:', error);
       return '0.000005';
     }
   }
@@ -336,6 +282,6 @@ export class EnhancedSolanaPayService {
 
 export const enhancedSolanaPayService = new EnhancedSolanaPayService(
   process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com",
-  process.env.NEXT_PUBLIC_PLATFORM_WALLET || "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9ReYzd4",
+  process.env.NEXT_PUBLIC_PLATFORM_WALLET || process.env.SECRET_KEY,
   process.env.SOLANA_PAY_WEBHOOK_URL
 );

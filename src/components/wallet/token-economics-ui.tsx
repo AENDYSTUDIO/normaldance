@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import React, { useState, useEffect } from 'react';
 import { PublicKey } from '@solana/web3.js';
 import { InvisibleDeflationAdapter } from './invisible-deflation-adapter';
@@ -37,7 +38,7 @@ const TokenEconomicsUI: React.FC<TokenEconomicsProps> = ({
       setStats(stats);
       setError(null);
     } catch (err) {
-      console.error('Error fetching deflation stats:', err);
+      SecureLogger.error('Error fetching deflation stats:', err);
       setError('Failed to fetch token economics data');
     } finally {
       setLoading(false);

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🛡️ KYC Service - Know Your Customer Verification System
  *
@@ -158,7 +159,7 @@ export class KYCService {
         message: "KYC profile created successfully",
       };
     } catch (error) {
-      console.error("Error creating KYC profile:", error);
+      SecureLogger.error("Error creating KYC profile:", error);
       return {
         success: false,
         status: "REJECTED",
@@ -245,7 +246,7 @@ export class KYCService {
             : "KYC profile rejected",
       };
     } catch (error) {
-      console.error("Error updating KYC status:", error);
+      SecureLogger.error("Error updating KYC status:", error);
       return {
         success: false,
         status: "REJECTED",
@@ -272,7 +273,7 @@ export class KYCService {
       // Преобразование из базы данных в тип
       return this.mapDbToKYCProfile(profile);
     } catch (error) {
-      console.error("Error fetching KYC profile by user ID:", error);
+      SecureLogger.error("Error fetching KYC profile by user ID:", error);
       return null;
     }
   }
@@ -292,7 +293,7 @@ export class KYCService {
 
       return this.mapDbToKYCProfile(profile);
     } catch (error) {
-      console.error("Error fetching KYC profile by wallet address:", error);
+      SecureLogger.error("Error fetching KYC profile by wallet address:", error);
       return null;
     }
   }
@@ -310,7 +311,7 @@ export class KYCService {
 
       return this.mapDbToKYCProfile(profile);
     } catch (error) {
-      console.error("Error fetching KYC profile by ID:", error);
+      SecureLogger.error("Error fetching KYC profile by ID:", error);
       return null;
     }
   }
@@ -374,7 +375,7 @@ export class KYCService {
         message: "Document uploaded successfully",
       };
     } catch (error) {
-      console.error("Error uploading document:", error);
+      SecureLogger.error("Error uploading document:", error);
       return {
         success: false,
         message:
@@ -391,7 +392,7 @@ export class KYCService {
       const profile = await this.getKYCProfileByUserId(userId);
       return profile ? profile.documents : [];
     } catch (error) {
-      console.error("Error fetching user documents:", error);
+      SecureLogger.error("Error fetching user documents:", error);
       return [];
     }
   }
@@ -404,7 +405,7 @@ export class KYCService {
       const profile = await this.getKYCProfileByUserId(userId);
       return profile ? profile.status === "VERIFIED" : false;
     } catch (error) {
-      console.error("Error checking user verification status:", error);
+      SecureLogger.error("Error checking user verification status:", error);
       return false;
     }
   }
@@ -417,7 +418,7 @@ export class KYCService {
       const profile = await this.getKYCProfileByUserId(userId);
       return profile ? profile.level : "BASIC";
     } catch (error) {
-      console.error("Error getting user KYC level:", error);
+      SecureLogger.error("Error getting user KYC level:", error);
       return "BASIC";
     }
   }
@@ -436,7 +437,7 @@ export class KYCService {
 
       return profiles.map((profile) => this.mapDbToKYCProfile(profile));
     } catch (error) {
-      console.error("Error fetching profiles for review:", error);
+      SecureLogger.error("Error fetching profiles for review:", error);
       return [];
     }
   }
@@ -567,7 +568,7 @@ export class KYCService {
   private async saveKYCProfile(profile: KYCProfile): Promise<void> {
     // В реальной реализации будет сохранение в базу данных
     // Здесь используем заглушку
-    console.log(
+    SecureLogger.log(
       `Saving KYC profile: ${profile.id} for user: ${profile.userId}`
     );
 
@@ -648,7 +649,7 @@ export class KYCService {
    * Создание события AML/KYC
    */
   private async createEvent(event: AMLKYCEvent): Promise<void> {
-    console.log(
+    SecureLogger.log(
       `Creating AML/KYC event: ${event.type} for user: ${event.userId}`
     );
     // В реальной реализации сохранение события в базу данных
@@ -659,21 +660,21 @@ export class KYCService {
    */
   private async updateMusicIdentity(profile: KYCProfile): Promise<void> {
     if (!this.musicIdentitySystem) {
-      console.log("Music Identity System not available, skipping update");
+      SecureLogger.log("Music Identity System not available, skipping update");
       return;
     }
 
     try {
       // В реальной системе обновляем DID с подтвержденными данными
-      console.log(`Updating music identity for user: ${profile.userId}`);
+      SecureLogger.log(`Updating music identity for user: ${profile.userId}`);
 
       // Обновляем уровень верификации в DID системе
       if (profile.did) {
         // Здесь будет логика обновления DID профиля с подтвержденными данными
-        console.log(`Updated DID profile: ${profile.did} with verified status`);
+        SecureLogger.log(`Updated DID profile: ${profile.did} with verified status`);
       }
     } catch (error) {
-      console.error("Error updating music identity:", error);
+      SecureLogger.error("Error updating music identity:", error);
     }
   }
 }

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🎵 Music Dashboard 2025
  * 
@@ -63,7 +64,7 @@ export function MusicDashboard() {
       const musicData = await response.json()
       setData(musicData)
     } catch (error) {
-      console.error('Error fetching music data:', error)
+      SecureLogger.error('Error fetching music data:', error)
     } finally {
       setIsLoading(false)
     }

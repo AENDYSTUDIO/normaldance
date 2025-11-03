@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -139,7 +140,7 @@ export default function DigitalLegacySystem() {
 
   const createMemorial = async (memorialData: Partial<DigitalMemorial>) => {
     // Создание NFT-мемориала на блокчейне
-    console.log('Создание мемориала:', memorialData)
+    SecureLogger.log('Создание мемориала:', memorialData)
     setIsCreating(true)
     
     try {
@@ -148,9 +149,9 @@ export default function DigitalLegacySystem() {
       // 3. Настраиваем вечное хранение
       // 4. Регистрируем в блокчейн-архиве
       
-      console.log('✅ Мемориал создан успешно')
+      SecureLogger.log('✅ Мемориал создан успешно')
     } catch (error) {
-      console.error('❌ Ошибка создания мемориала:', error)
+      SecureLogger.error('❌ Ошибка создания мемориала:', error)
     } finally {
       setIsCreating(false)
     }

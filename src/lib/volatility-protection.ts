@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🛡️ Volatility Protection System 2025
  * 
@@ -151,7 +152,7 @@ export class VolatilityProtectionSystem {
       await this.checkProtectionTriggers(metrics)
       
     } catch (error) {
-      console.error('Error monitoring volatility:', error)
+      SecureLogger.error('Error monitoring volatility:', error)
     }
   }
 
@@ -261,7 +262,7 @@ export class VolatilityProtectionSystem {
       return
     }
     
-    console.log(`🛡️ Triggering protection mechanism: ${mechanism.type}`)
+    SecureLogger.log(`🛡️ Triggering protection mechanism: ${mechanism.type}`)
     
     let intervention: MarketIntervention | null = null
     
@@ -304,7 +305,7 @@ export class VolatilityProtectionSystem {
     
     const targetRate = 42.7 * 0.95 // Целевой курс на 5% ниже среднего
     
-    console.log(`💰 Executing auto buyback: ${buybackAmount} TON at rate ${targetRate}`)
+    SecureLogger.log(`💰 Executing auto buyback: ${buybackAmount} TON at rate ${targetRate}`)
     
     // Симуляция выкупа
     const success = Math.random() > 0.1 // 90% успешность
@@ -330,7 +331,7 @@ export class VolatilityProtectionSystem {
       metrics.currentVolatility * 100 // Пропорционально волатильности
     )
     
-    console.log(`💧 Executing liquidity injection: ${injectionAmount} TON`)
+    SecureLogger.log(`💧 Executing liquidity injection: ${injectionAmount} TON`)
     
     // Симуляция инъекции
     const success = Math.random() > 0.05 // 95% успешность
@@ -357,7 +358,7 @@ export class VolatilityProtectionSystem {
     
     const targetRate = 42.7 // Возврат к среднему курсу
     
-    console.log(`⚖️ Executing rate stabilization: ${stabilizationAmount} TON at rate ${targetRate}`)
+    SecureLogger.log(`⚖️ Executing rate stabilization: ${stabilizationAmount} TON at rate ${targetRate}`)
     
     // Симуляция стабилизации
     const success = Math.random() > 0.02 // 98% успешность
@@ -378,7 +379,7 @@ export class VolatilityProtectionSystem {
    * 🚨 Аварийная остановка
    */
   private async executeCircuitBreaker(metrics: VolatilityMetrics): Promise<MarketIntervention> {
-    console.log(`🚨 Executing circuit breaker - Market stress: ${metrics.marketStress}`)
+    SecureLogger.log(`🚨 Executing circuit breaker - Market stress: ${metrics.marketStress}`)
     
     // Временно приостанавливаем торговлю
     // В реальной системе здесь должна быть интеграция с DEX
@@ -419,7 +420,7 @@ export class VolatilityProtectionSystem {
     this.stabilityReserve.totalValue = this.calculateReserveValue()
     this.stabilityReserve.lastRebalance = Date.now()
     
-    console.log(`🔄 Reserve replenished: +${amount} ${currency}`)
+    SecureLogger.log(`🔄 Reserve replenished: +${amount} ${currency}`)
   }
 
   /**

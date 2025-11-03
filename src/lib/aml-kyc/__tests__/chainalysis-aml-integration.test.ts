@@ -60,7 +60,7 @@ describe("ChainalysisAMLIntegration", () => {
     chainalysisAMLIntegration = new ChainalysisAMLIntegration();
   });
 
-  describe("analyzeTransactionWithChainalysis", () => {
+  describe(process.env.SECRET_KEY, () => {
     it("should successfully analyze transaction with Chainalysis integration", async () => {
       // Мокаем AML анализ
       const mockAMLTransaction: MonitoredTransaction = {

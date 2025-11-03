@@ -83,66 +83,59 @@ export const authOptions: NextAuthOptions = {
       },
     }),
 
-    // Web3 аутентификация через Solana кошелек
+    // Web3 аутентификация через Solana кошелек (SIS-like)
     CredentialsProvider({
       id: "solana",
       name: "Solana",
       credentials: {
-        message: {
-          label: "Message",
-          type: "text",
-          placeholder: "0x0",
-        },
-        signature: {
-          label: "Signature",
-          type: "text",
-          placeholder: "0x0",
-        },
+        publicKey: { label: "PublicKey (base58)", type: "text" },
+        message: { label: "Message (utf8)", type: "text" },
+        signature: { label: "Signature (base64)", type: "text" },
       },
       async authorize(credentials, req) {
         try {
-          if (!credentials?.message || !credentials?.signature) {
-            return null;
-          }
+          const publicKeyBase58 = credentials?.publicKey as string | undefined;
+          const message = credentials?.message as string | undefined;
+          const signatureBase64 = credentials?.signature as string | undefined;
+          if (!publicKeyBase58 || !message || !signatureBase64) return null;
 
-          const siweMessage = new SiweMessage(credentials.message);
-          const message = await siweMessage.verify({
-            signature: credentials.signature,
-          });
+          const { PublicKey } = await import("@solana/web3.js");
+          const nacl = await import("tweetnacl");
 
-          if (message.success) {
-            // Проверяем, существует ли пользователь, и создаем при необходимости
-            let user = await db.user.findFirst({
-              where: {
-                wallet: message.data.address,
+          const pubKey = new PublicKey(publicKeyBase58);
+          const messageBytes = new TextEncoder().encode(message);
+          const signatureBytes = Buffer.from(signatureBase64, "base64");
+
+          const verified = nacl.sign.detached.verify(
+            messageBytes,
+            signatureBytes,
+            pubKey.toBytes()
+          );
+          if (!verified) return null;
+
+          let user = await db.user.findFirst({ where: { wallet: publicKeyBase58 } });
+          if (!user) {
+            user = await db.user.create({
+              data: {
+                wallet: publicKeyBase58,
+                username: `user_${publicKeyBase58.slice(0, 8)}`,
+                email: `${publicKeyBase58}@solana.local`,
+                isArtist: true,
+                level: "BRONZE",
               },
             });
-
-            if (!user) {
-              user = await db.user.create({
-                data: {
-                  wallet: message.data.address,
-                  username: `user_${message.data.address.slice(0, 8)}`,
-                  email: `${message.data.address}@solana.local`,
-                  isArtist: false,
-                  level: "BRONZE",
-                },
-              });
-            }
-
-            return {
-              id: user.id,
-              wallet: user.wallet,
-              username: user.username,
-              email: user.email,
-              isArtist: user.isArtist,
-              level: user.level,
-            };
           }
 
-          return null;
+          return {
+            id: user.id,
+            wallet: user.wallet,
+            username: user.username,
+            email: user.email,
+            isArtist: user.isArtist,
+            level: user.level,
+          } as any;
         } catch (error) {
-          logger.error("Auth error", error as Error);
+          logger.error("Solana Auth error", error as Error);
           return null;
         }
       },

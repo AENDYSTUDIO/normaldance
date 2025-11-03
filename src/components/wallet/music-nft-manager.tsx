@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 
 'use client'
 
@@ -124,7 +125,7 @@ export function MusicNFTManager({ className }: NFTManagerProps) {
       // Здесь нужно запросить NFT из смарт-контракта
       setNfts(MOCK_NFTS)
     } catch (err) {
-      console.error('Error loading NFTs:', err)
+      SecureLogger.error('Error loading NFTs:', err)
     }
   }
 
@@ -188,7 +189,7 @@ export function MusicNFTManager({ className }: NFTManagerProps) {
         royaltyPercentage: 10
       })
     } catch (err) {
-      console.error('Error creating NFT:', err)
+      SecureLogger.error('Error creating NFT:', err)
     } finally {
       setIsCreating(false)
     }

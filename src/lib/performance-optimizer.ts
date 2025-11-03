@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 // Performance optimization utilities
 import { ComponentType, lazy } from "react";
 
@@ -21,7 +22,7 @@ export const optimizeImage = (src: string, width?: number) => {
 // Bundle size analyzer
 export const trackBundleSize = () => {
   if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
-    console.log("Bundle loaded:", performance.now());
+    SecureLogger.log("Bundle loaded:", performance.now());
   }
 };
 

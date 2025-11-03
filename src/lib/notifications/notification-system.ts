@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Система уведомлений для NormalDance
  * Поддержка push-уведомлений, email, in-app уведомлений
@@ -141,7 +142,7 @@ export class NotificationSystem extends EventEmitter {
    */
   private async sendInAppNotification(notification: Notification): Promise<void> {
     // В реальном приложении здесь будет логика отправки через WebSocket или SSE
-    console.log(`In-app notification sent to user ${notification.userId}:`, notification)
+    SecureLogger.log(`In-app notification sent to user ${notification.userId}:`, notification)
     
     // Эмитирование события для frontend
     this.emit('notification.inapp', notification)
@@ -152,7 +153,7 @@ export class NotificationSystem extends EventEmitter {
    */
   private async sendPushNotification(notification: Notification): Promise<void> {
     // В реальном приложении здесь будет интеграция с FCM, APN или другим сервисом
-    console.log(`Push notification sent to user ${notification.userId}:`, notification)
+    SecureLogger.log(`Push notification sent to user ${notification.userId}:`, notification)
     
     // Эмитирование события для frontend
     this.emit('notification.push', notification)
@@ -163,7 +164,7 @@ export class NotificationSystem extends EventEmitter {
    */
   private async sendEmailNotification(notification: Notification): Promise<void> {
     // В реальном приложении здесь будет интеграция с SendGrid, Mailgun или другим сервисом
-    console.log(`Email notification sent to user ${notification.userId}:`, notification)
+    SecureLogger.log(`Email notification sent to user ${notification.userId}:`, notification)
     
     // Эмитирование события для frontend
     this.emit('notification.email', notification)
@@ -514,7 +515,7 @@ export function useNotifications(userId: string) {
       setUnreadCount(unread)
       setSettings(userSettings)
     } catch (error) {
-      console.error('Failed to load notifications:', error)
+      SecureLogger.error('Failed to load notifications:', error)
     } finally {
       setLoading(false)
     }

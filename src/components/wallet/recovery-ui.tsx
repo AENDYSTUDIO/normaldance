@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -859,7 +860,7 @@ export function RecoveryManager() {
         <TabsContent value="recover">
           <RecoveryProcess
             onRecoveryComplete={(encryptedKey) => {
-              console.log('Recovery completed:', encryptedKey);
+              SecureLogger.log('Recovery completed:', encryptedKey);
               setCurrentView('manage');
             }}
             onCancel={() => setCurrentView('manage')}

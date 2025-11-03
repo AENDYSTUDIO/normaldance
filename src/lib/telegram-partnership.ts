@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { TelegramWebApp } from '@twa-dev/types'
 
 export interface TelegramUser {
@@ -112,7 +113,7 @@ export class TelegramPartnership {
       // Для демонстрации возвращаем true
       return true
     } catch (error) {
-      console.error('Error validating Telegram data:', error)
+      SecureLogger.error('Error validating Telegram data:', error)
       return false
     }
   }
@@ -149,7 +150,7 @@ export class TelegramPartnership {
       const result = await response.json()
       return { success: true, telegramUserId: telegramUser.id }
     } catch (error) {
-      console.error('Error syncing user with Telegram:', error)
+      SecureLogger.error('Error syncing user with Telegram:', error)
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error' 
@@ -170,7 +171,7 @@ export class TelegramPartnership {
 
       return true
     } catch (error) {
-      console.error('Error setting up Telegram Stars:', error)
+      SecureLogger.error('Error setting up Telegram Stars:', error)
       return false
     }
   }
@@ -205,7 +206,7 @@ export class TelegramPartnership {
 
       return { success: true, transactionId }
     } catch (error) {
-      console.error('Error purchasing with Telegram Stars:', error)
+      SecureLogger.error('Error purchasing with Telegram Stars:', error)
       return { 
         success: false, 
         error: error instanceof Error ? error.message : 'Unknown error' 
@@ -240,7 +241,7 @@ export class TelegramPartnership {
 
       return response.ok
     } catch (error) {
-      console.error('Error sending Telegram notification:', error)
+      SecureLogger.error('Error sending Telegram notification:', error)
       return false
     }
   }
@@ -262,7 +263,7 @@ export class TelegramPartnership {
         this.metrics = await response.json()
       }
     } catch (error) {
-      console.error('Error loading Telegram metrics:', error)
+      SecureLogger.error('Error loading Telegram metrics:', error)
     }
   }
 
@@ -293,7 +294,7 @@ export class TelegramPartnership {
         body: JSON.stringify(this.metrics)
       })
     } catch (error) {
-      console.error('Error updating Telegram metrics:', error)
+      SecureLogger.error('Error updating Telegram metrics:', error)
     }
   }
 

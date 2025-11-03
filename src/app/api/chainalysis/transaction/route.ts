@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔗 Chainalysis Transaction Analysis API
  *
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    console.error("Error in Chainalysis transaction analysis API:", error);
+    SecureLogger.error("Error in Chainalysis transaction analysis API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -85,7 +86,7 @@ export async function GET(request: NextRequest) {
       { status: 501 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis transaction GET API:", error);
+    SecureLogger.error("Error in Chainalysis transaction GET API:", error);
     return NextResponse.json(
       {
         success: false,

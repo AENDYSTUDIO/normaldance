@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🎯 Smart Limit Orders System 2025
  * 
@@ -204,7 +205,7 @@ export class SmartLimitOrderSystem {
       try {
         await this.checkOrderTrigger(order)
       } catch (error) {
-        console.error(`Error processing order ${order.id}:`, error)
+        SecureLogger.error(`Error processing order ${order.id}:`, error)
       }
     }
   }
@@ -333,7 +334,7 @@ export class SmartLimitOrderSystem {
    */
   private async executeSwap(order: SmartLimitOrder, execution: PartialExecution): Promise<void> {
     // Здесь должна быть интеграция с AdvancedAMM
-    console.log(`Executing swap: ${execution.amount} ${order.from} -> ${order.to} at rate ${execution.rate}`)
+    SecureLogger.log(`Executing swap: ${execution.amount} ${order.from} -> ${order.to} at rate ${execution.rate}`)
     
     // Симуляция API вызова
     // await fetch('/api/dex/swap', {

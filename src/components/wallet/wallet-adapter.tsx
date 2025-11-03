@@ -73,7 +73,6 @@ export class WalletSignMessageError extends AppError {
 
 // Конфигурация сети
 const NETWORK = WalletAdapterNetwork.Devnet;
-const LAMPORTS_PER_SOL = 1000000000;
 const RPC_URL =
   process.env.NEXT_PUBLIC_SOLANA_RPC_URL || "https://api.devnet.solana.com";
 

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -85,7 +86,7 @@ export function WalletProviderWrapper({ children }: { children: ReactNode }) {
           new SolflareWalletAdapter(),
         ]);
       } catch (error) {
-        console.error("Failed to load wallet adapters:", error);
+        SecureLogger.error("Failed to load wallet adapters:", error);
         logger.error("Failed to load wallet adapters", error as Error);
         // В случае ошибки используем пустой массив адаптеров
         setWalletAdapters([]);
@@ -146,7 +147,7 @@ function WalletInnerProvider({
           const balance = await connection.getBalance(publicKey);
           setBalance(balance / 1e9); // Конвертация в SOL
         } catch (err) {
-          console.error("Error getting balance:", err);
+          SecureLogger.error("Error getting balance:", err);
           setBalance(null);
         }
       } else {
@@ -289,7 +290,7 @@ function WalletInnerProvider({
         try {
           await getStarsBalance();
         } catch (error) {
-          console.error("Failed to load Stars balance:", error);
+          SecureLogger.error("Failed to load Stars balance:", error);
         }
       };
       
@@ -306,7 +307,7 @@ function WalletInnerProvider({
           // const setup = await wallet.adapter.isRecoverySetup?.();
           // setRecoverySetup(setup || false);
         } catch (error) {
-          console.error("Failed to check recovery setup:", error);
+          SecureLogger.error("Failed to check recovery setup:", error);
         }
       };
       
@@ -474,7 +475,7 @@ export function useTransactions() {
 
       return signature;
     } catch (error: unknown) {
-      console.error("Transaction error:", error);
+      SecureLogger.error("Transaction error:", error);
       // Более детальная обработка ошибок
       if (error.message.includes("Transaction was not confirmed")) {
         throw new Error(

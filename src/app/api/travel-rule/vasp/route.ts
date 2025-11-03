@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🏛️ Travel Rule VASP Registry API
  *
@@ -62,7 +63,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error in VASP registry GET API:", error);
+    SecureLogger.error("Error in VASP registry GET API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -118,7 +119,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error in VASP registry POST API:", error);
+    SecureLogger.error("Error in VASP registry POST API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -175,7 +176,7 @@ export async function PUT(
       },
     });
   } catch (error) {
-    console.error("Error in VASP registry PUT API:", error);
+    SecureLogger.error("Error in VASP registry PUT API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -238,7 +239,7 @@ export async function POST(
       },
     });
   } catch (error) {
-    console.error("Error in VASP reputation POST API:", error);
+    SecureLogger.error("Error in VASP reputation POST API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -266,7 +267,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error in VASP registry statistics API:", error);
+    SecureLogger.error("Error in VASP registry statistics API:", error);
     return NextResponse.json(
       {
         success: false,

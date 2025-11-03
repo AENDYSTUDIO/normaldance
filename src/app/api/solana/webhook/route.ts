@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { SolanaPayService } from '@/lib/solana-pay';
 import { NextResponse } from 'next/server';
 import { solanaWebhookPostSchema } from '@/lib/schemas';
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
       // In a real implementation, you would update user's balance, mark order as paid, etc.
       
       // For now, just log the successful payment
-      console.log(`Valid payment received: signature=${signature}, recipient=${recipient}, amount=${amount}`);
+      SecureLogger.log(`Valid payment received: signature=${signature}, recipient=${recipient}, amount=${amount}`);
       
       return NextResponse.json(
         { 
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
       );
     } else {
       // Payment validation failed
-      console.log(`Invalid payment: signature=${signature}, recipient=${recipient}, amount=${amount}`);
+      SecureLogger.log(`Invalid payment: signature=${signature}, recipient=${recipient}, amount=${amount}`);
       
       return NextResponse.json(
         { 

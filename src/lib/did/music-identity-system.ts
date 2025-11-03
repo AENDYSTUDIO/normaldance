@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🆔 Music Industry DID System - Decentralized Identity for Music Professionals
  * 
@@ -607,12 +608,12 @@ export class MusicIdentitySystem {
 
   private async registerDIDOnChain(did: MusicDID): Promise<void> {
     // Запись DID в блокчейн
-    console.log('Registering DID on chain:', did.did)
+    SecureLogger.log('Registering DID on chain:', did.did)
   }
 
   private async registerCredentialOnChain(credential: VerifiableCredential): Promise<void> {
     // Запись credential в блокчейн
-    console.log('Registering credential on chain:', credential.type)
+    SecureLogger.log('Registering credential on chain:', credential.type)
   }
 
   private async createCredentialProof(
@@ -650,17 +651,17 @@ export class MusicIdentitySystem {
 
   private async updateReputationOnChain(did: string, reputation: ReputationScore): Promise<void> {
     // Обновление репутации в блокчейн
-    console.log('Updating reputation on chain for:', did)
+    SecureLogger.log('Updating reputation on chain for:', did)
   }
 
   private async registerProposalOnChain(proposal: DAOProposal): Promise<void> {
     // Регистрация предложения в блокчейн
-    console.log('Registering proposal on chain:', proposal.id)
+    SecureLogger.log('Registering proposal on chain:', proposal.id)
   }
 
   private async castVoteOnChain(proposalId: string, vote: ProposalVote): Promise<void> {
     // Запись голоса в блокчейн
-    console.log('Casting vote on chain for proposal:', proposalId)
+    SecureLogger.log('Casting vote on chain for proposal:', proposalId)
   }
 
   private async getProposal(proposalId: string): Promise<DAOProposal> {
@@ -681,7 +682,7 @@ export class MusicIdentitySystem {
 
   private async registerPrivateAttributeOnChain(did: string, attribute: PrivateAttribute): Promise<void> {
     // Запись private attribute в блокчейн
-    console.log('Registering private attribute on chain for:', did)
+    SecureLogger.log('Registering private attribute on chain for:', did)
   }
 
   private async verifySignature(credential: VerifiableCredential): Promise<boolean> {

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { NFTGallery } from "@/components/nft/nft-gallery";
@@ -55,47 +56,47 @@ export function UserDashboard({ className }: UserDashboardProps) {
   ];
 
   const handleEditProfile = () => {
-    console.log("Edit profile");
+    SecureLogger.log("Edit profile");
   };
 
   const handleViewWallet = () => {
-    console.log("View wallet");
+    SecureLogger.log("View wallet");
   };
 
   const handleSend = () => {
-    console.log("Send TON");
+    SecureLogger.log("Send TON");
   };
 
   const handleReceive = () => {
-    console.log("Receive TON");
+    SecureLogger.log("Receive TON");
   };
 
   const handleViewTransactions = () => {
-    console.log("View transactions");
+    SecureLogger.log("View transactions");
   };
 
   const handleDisconnectWallet = () => {
-    console.log("Disconnect wallet");
+    SecureLogger.log("Disconnect wallet");
   };
 
   const handlePurchaseStars = () => {
-    console.log("Purchase Stars");
+    SecureLogger.log("Purchase Stars");
   };
 
   const handleViewStarsTransactions = () => {
-    console.log("View Stars transactions");
+    SecureLogger.log("View Stars transactions");
   };
 
   const handlePlayNFT = (nftId: string) => {
-    console.log("Play NFT:", nftId);
+    SecureLogger.log("Play NFT:", nftId);
   };
 
   const handlePurchaseNFT = (nftId: string) => {
-    console.log("Purchase NFT:", nftId);
+    SecureLogger.log("Purchase NFT:", nftId);
   };
 
   const handleViewNFTDetails = (nftId: string) => {
-    console.log("View NFT details:", nftId);
+    SecureLogger.log("View NFT details:", nftId);
   };
 
   return (

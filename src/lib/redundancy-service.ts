@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 // Сервис для управления избыточным хранением файлов
 export interface StorageNode {
   id: string
@@ -94,14 +95,14 @@ export class RedundancyService {
   // Добавление нового узла хранения
   addNode(node: StorageNode): void {
     this.nodes.set(node.id, node)
-    console.log(`Added storage node: ${node.name} (${node.id})`)
+    SecureLogger.log(`Added storage node: ${node.name} (${node.id})`)
   }
 
   // Удаление узла хранения
   removeNode(nodeId: string): boolean {
     const removed = this.nodes.delete(nodeId)
     if (removed) {
-      console.log(`Removed storage node: ${nodeId}`)
+      SecureLogger.log(`Removed storage node: ${nodeId}`)
     }
     return removed
   }
@@ -152,7 +153,7 @@ export class RedundancyService {
       return isHealthy
 
     } catch (error) {
-      console.error(`Health check failed for node ${nodeId}:`, error)
+      SecureLogger.error(`Health check failed for node ${nodeId}:`, error)
       
       // Обновление состояния узла
       const updatedNode: StorageNode = {
@@ -174,7 +175,7 @@ export class RedundancyService {
     )
 
     await Promise.all(healthChecks)
-    console.log('Health check completed for all nodes')
+    SecureLogger.log('Health check completed for all nodes')
   }
 
   // Запланированная репликация файла
@@ -197,7 +198,7 @@ export class RedundancyService {
     const healthyReplicas = currentReplicas.filter(replica => replica.status === 'online')
 
     if (!forceReplication && healthyReplicas.length >= this.config.minReplicas) {
-      console.log(`File ${sourceCid} already has sufficient replicas (${healthyReplicas.length})`)
+      SecureLogger.log(`File ${sourceCid} already has sufficient replicas (${healthyReplicas.length})`)
       return {
         id: `job_${Date.now()}`,
         sourceCid,
@@ -243,7 +244,7 @@ export class RedundancyService {
         try {
           const node = this.nodes.get(nodeId)
           if (!node || node.status !== 'online') {
-            console.warn(`Node ${nodeId} is not available for replication`)
+            SecureLogger.warn(`Node ${nodeId} is not available for replication`)
             continue
           }
 
@@ -253,7 +254,7 @@ export class RedundancyService {
           completedNodes++
 
         } catch (error) {
-          console.error(`Replication failed for node ${nodeId}:`, error)
+          SecureLogger.error(`Replication failed for node ${nodeId}:`, error)
         }
 
         // Обновляем прогресс
@@ -279,7 +280,7 @@ export class RedundancyService {
     const delay = Math.random() * 3000 + 1000 // 1-4 секунды
     await new Promise(resolve => setTimeout(resolve, delay))
 
-    console.log(`Replicated ${sourceCid} to ${node.name} (${node.id})`)
+    SecureLogger.log(`Replicated ${sourceCid} to ${node.name} (${node.id})`)
   }
 
   // Получение реплик файла
@@ -315,7 +316,7 @@ export class RedundancyService {
       await this.checkAllNodesHealth()
     }, this.config.healthCheckInterval)
 
-    console.log(`Started health checks every ${this.config.healthCheckInterval}ms`)
+    SecureLogger.log(`Started health checks every ${this.config.healthCheckInterval}ms`)
   }
 
   // Остановка сервиса
@@ -324,7 +325,7 @@ export class RedundancyService {
       clearInterval(this.healthCheckInterval)
       this.healthCheckInterval = null
     }
-    console.log('Redundancy service stopped')
+    SecureLogger.log('Redundancy service stopped')
   }
 
   // Получение статистики

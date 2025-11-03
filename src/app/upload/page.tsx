@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { MainLayout } from '@/components/layout/main-layout'
@@ -97,7 +98,7 @@ export default function UploadPage() {
       
     } catch (error) {
       setUploadStatus('error')
-      console.error('Upload failed:', error)
+      SecureLogger.error('Upload failed:', error)
     } finally {
       setIsUploading(false)
     }

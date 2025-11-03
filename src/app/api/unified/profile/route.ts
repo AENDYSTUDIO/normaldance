@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
@@ -143,7 +144,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error getting unified profile:', error)
+    SecureLogger.error('Error getting unified profile:', error)
     return NextResponse.json(
       { error: 'Failed to get profile' },
       { status: 500 }
@@ -188,7 +189,7 @@ export async function PUT(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error updating profile:', error)
+    SecureLogger.error('Error updating profile:', error)
     return NextResponse.json(
       { error: 'Failed to update profile' },
       { status: 500 }

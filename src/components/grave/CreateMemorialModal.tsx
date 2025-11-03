@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import React, { useState } from 'react'
@@ -49,7 +50,7 @@ export default function CreateMemorialModal({ onClose, onSuccess }: CreateMemori
         alert('Ошибка при создании мемориала: ' + data.error)
       }
     } catch (error) {
-      console.error('Ошибка создания мемориала:', error)
+      SecureLogger.error('Ошибка создания мемориала:', error)
       alert('Ошибка при создании мемориала')
     } finally {
       setIsCreating(false)

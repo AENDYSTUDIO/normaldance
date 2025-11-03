@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔐 Travel Rule Crypto Service
  *
@@ -80,7 +81,7 @@ export class TravelRuleCrypto {
 
       return encryptedMessage;
     } catch (error) {
-      console.error("Error encrypting message:", error);
+      SecureLogger.error("Error encrypting message:", error);
       throw new Error(`Message encryption failed: ${error}`);
     }
   }
@@ -116,7 +117,7 @@ export class TravelRuleCrypto {
       const messageString = decrypted.toString('utf8');
       return JSON.parse(messageString);
     } catch (error) {
-      console.error("Error decrypting message:", error);
+      SecureLogger.error("Error decrypting message:", error);
       throw new Error(`Message decryption failed: ${error}`);
     }
   }
@@ -144,7 +145,7 @@ export class TravelRuleCrypto {
         keyId: signingKey.keyId,
       };
     } catch (error) {
-      console.error("Error signing message:", error);
+      SecureLogger.error("Error signing message:", error);
       throw new Error(`Message signing failed: ${error}`);
     }
   }
@@ -168,7 +169,7 @@ export class TravelRuleCrypto {
 
       return signature === expectedSignature;
     } catch (error) {
-      console.error("Error verifying signature:", error);
+      SecureLogger.error("Error verifying signature:", error);
       return false;
     }
   }
@@ -270,7 +271,7 @@ export class TravelRuleCrypto {
    */
   async rotateKeys(): Promise<void> {
     try {
-      console.log("Starting key rotation...");
+      SecureLogger.log("Starting key rotation...");
 
       // Генерация новых ключей
       const newEncryptionKey = this.generateEncryptionKey();
@@ -279,11 +280,11 @@ export class TravelRuleCrypto {
       // Удаление старых просроченных ключей
       this.removeExpiredKeys();
 
-      console.log("Key rotation completed successfully");
-      console.log(`New encryption key: ${newEncryptionKey.keyId}`);
-      console.log(`New signing key: ${newSigningKey.keyId}`);
+      SecureLogger.log("Key rotation completed successfully");
+      SecureLogger.log(`New encryption key: ${newEncryptionKey.keyId}`);
+      SecureLogger.log(`New signing key: ${newSigningKey.keyId}`);
     } catch (error) {
-      console.error("Error during key rotation:", error);
+      SecureLogger.error("Error during key rotation:", error);
       throw new Error(`Key rotation failed: ${error}`);
     }
   }
@@ -334,7 +335,7 @@ export class TravelRuleCrypto {
 
       return true;
     } catch (error) {
-      console.error("Error validating key:", error);
+      SecureLogger.error("Error validating key:", error);
       return false;
     }
   }
@@ -392,7 +393,7 @@ export class TravelRuleCrypto {
 
       return tokenData.data;
     } catch (error) {
-      console.error("Error verifying session token:", error);
+      SecureLogger.error("Error verifying session token:", error);
       throw new Error(`Token verification failed: ${error}`);
     }
   }
@@ -432,7 +433,7 @@ export class TravelRuleCrypto {
     for (const [keyId, key] of this.encryptionKeys) {
       if (key.validUntil && new Date(key.validUntil) <= now) {
         this.encryptionKeys.delete(keyId);
-        console.log(`Removed expired encryption key: ${keyId}`);
+        SecureLogger.log(`Removed expired encryption key: ${keyId}`);
       }
     }
 
@@ -440,7 +441,7 @@ export class TravelRuleCrypto {
     for (const [keyId, key] of this.signingKeys) {
       if (key.validUntil && new Date(key.validUntil) <= now) {
         this.signingKeys.delete(keyId);
-        console.log(`Removed expired signing key: ${keyId}`);
+        SecureLogger.log(`Removed expired signing key: ${keyId}`);
       }
     }
   }

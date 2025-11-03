@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import {
@@ -106,7 +107,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         process.env.NODE_ENV === "development"
       ) {
         // eslint-disable-next-line no-console
-        console.error("Translation error:", error);
+        SecureLogger.error("Translation error:", error);
       }
       return key;
     }

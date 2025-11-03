@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState } from 'react'
@@ -115,11 +116,11 @@ export default function SecretProgressDemo() {
               trackId={selectedTrack}
               className="mb-6"
               onComplete={() => {
-                console.log('Progress completed!')
+                SecureLogger.log('Progress completed!')
                 setShowStats(true)
               }}
               onPhaseChange={(phase) => {
-                console.log('Phase changed to:', phase.name)
+                SecureLogger.log('Phase changed to:', phase.name)
               }}
             />
           </div>

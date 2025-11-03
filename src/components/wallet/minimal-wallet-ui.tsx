@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import React, { useState, useEffect } from 'react';
 import { useInvisibleWallet } from './invisible-wallet-provider';
 import { formatSolAmount } from '@/lib/utils';
@@ -50,7 +51,7 @@ export const MinimalWalletUI: React.FC<MinimalWalletUIProps> = ({
   useEffect(() => {
     if (state.offlineMode && !isHovered) {
       // В оффлайн режиме может потребоваться особое поведение
-      console.log('Wallet is in offline mode');
+      SecureLogger.log('Wallet is in offline mode');
     }
   }, [state.offlineMode, isHovered]);
 

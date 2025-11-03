@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔐 KYC Sumsub Service - Enhanced KYC with Sumsub Integration
  *
@@ -240,7 +241,7 @@ export class KYCSumsubService {
         nextSteps: this.getNextStepsForLevel(request.verificationLevel),
       };
     } catch (error) {
-      console.error("Error creating KYC profile with Sumsub:", error);
+      SecureLogger.error("Error creating KYC profile with Sumsub:", error);
       return {
         success: false,
         status: "REJECTED",
@@ -326,7 +327,7 @@ export class KYCSumsubService {
         message: `KYC status updated to ${newStatus}`,
       };
     } catch (error) {
-      console.error("Error processing Sumsub verification result:", error);
+      SecureLogger.error("Error processing Sumsub verification result:", error);
       return {
         success: false,
         message: "Internal error occurred during verification processing",
@@ -416,7 +417,7 @@ export class KYCSumsubService {
         accessToken,
       };
     } catch (error) {
-      console.error("Error upgrading verification level:", error);
+      SecureLogger.error("Error upgrading verification level:", error);
       return {
         success: false,
         message: "Internal error occurred during level upgrade",
@@ -448,7 +449,7 @@ export class KYCSumsubService {
         lastUpdate: applicantInfo.createdAt,
       };
     } catch (error) {
-      console.error("Error getting Sumsub verification status:", error);
+      SecureLogger.error("Error getting Sumsub verification status:", error);
       return null;
     }
   }

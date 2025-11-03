@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Centralized Logger for NORMALDANCE
  * Replaces console.log/error/warn throughout the application
@@ -46,19 +47,19 @@ class AppLogger {
 
   debug(message: string, metadata?: LogMetadata): void {
     if (this.shouldLog("debug")) {
-      console.log(this.format("debug", message, metadata));
+      SecureLogger.log(this.format("debug", message, metadata));
     }
   }
 
   info(message: string, metadata?: LogMetadata): void {
     if (this.shouldLog("info")) {
-      console.info(this.format("info", message, metadata));
+      SecureLogger.info(this.format("info", message, metadata));
     }
   }
 
   warn(message: string, metadata?: LogMetadata): void {
     if (this.shouldLog("warn")) {
-      console.warn(this.format("warn", message, metadata));
+      SecureLogger.warn(this.format("warn", message, metadata));
       // if (this.sendToSentry) {  // Sentry temporarily disabled due to server component compatibility issues
       //   Sentry.captureMessage(message, { level: "warning", extra: metadata });
       // }
@@ -76,7 +77,7 @@ class AppLogger {
           ? { message: error.message, stack: error.stack, ...metadata }
           : { error, ...metadata };
 
-      console.error(this.format("error", message, errorData));
+      SecureLogger.error(this.format("error", message, errorData));
 
       // if (this.sendToSentry && error instanceof Error) {  // Sentry temporarily disabled due to server component compatibility issues
       //   Sentry.captureException(error, { extra: metadata });

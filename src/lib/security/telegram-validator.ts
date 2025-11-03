@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Telegram Mini App Security Validator
  * Validates initData HMAC signature to prevent user impersonation
@@ -45,7 +46,7 @@ export interface TelegramUser {
  * }
  * 
  * // User is authenticated
- * console.log('User ID:', result.userId);
+ * SecureLogger.log('User ID:', result.userId);
  * ```
  */
 export function validateTelegramInitData(
@@ -160,7 +161,7 @@ export function validateTelegramInitData(
     }
     
   } catch (error) {
-    console.error('[TelegramValidator] Unexpected error:', error);
+    SecureLogger.error('[TelegramValidator] Unexpected error:', error);
     return { 
       valid: false, 
       error: 'Validation failed due to internal error' 
@@ -200,7 +201,7 @@ export async function validateTelegramRequest(
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   
   if (!botToken) {
-    console.error('[TelegramValidator] TELEGRAM_BOT_TOKEN not configured!');
+    SecureLogger.error('[TelegramValidator] TELEGRAM_BOT_TOKEN not configured!');
     return { 
       valid: false, 
       error: 'Server configuration error' 

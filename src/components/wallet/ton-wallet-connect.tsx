@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,7 @@ export function TonWalletConnect({
         description: "TON кошелек успешно подключен к приложению",
       });
     } catch (error) {
-      console.error("Error connecting wallet:", error);
+      SecureLogger.error("Error connecting wallet:", error);
       toast({
         title: "Ошибка подключения",
         description: "Не удалось подключить TON кошелек",
@@ -58,7 +59,7 @@ export function TonWalletConnect({
         description: "TON кошелек успешно отключен от приложения",
       });
     } catch (error) {
-      console.error("Error disconnecting wallet:", error);
+      SecureLogger.error("Error disconnecting wallet:", error);
       toast({
         title: "Ошибка отключения",
         description: "Не удалось отключить TON кошелек",
@@ -75,7 +76,7 @@ export function TonWalletConnect({
         description: "Адрес кошелька скопирован в буфер обмена",
       });
     } catch (err) {
-      console.error("Failed to copy:", err);
+      SecureLogger.error("Failed to copy:", err);
       toast({
         title: "Ошибка копирования",
         description: "Не удалось скопировать адрес в буфер обмена",

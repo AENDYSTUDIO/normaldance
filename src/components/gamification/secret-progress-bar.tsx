@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
@@ -146,7 +147,7 @@ export function SecretProgressBar({
         }
       }
     } catch (error) {
-      console.error('Error loading progress data:', error)
+      SecureLogger.error('Error loading progress data:', error)
     } finally {
       setIsLoading(false)
     }
@@ -183,7 +184,7 @@ export function SecretProgressBar({
         await loadProgressData()
       }
     } catch (error) {
-      console.error('Error contributing:', error)
+      SecureLogger.error('Error contributing:', error)
     }
   }
 
@@ -416,7 +417,7 @@ export function useSecretProgressBar(trackId: string) {
         setProgressData(data.data)
       }
     } catch (error) {
-      console.error('Error loading progress:', error)
+      SecureLogger.error('Error loading progress:', error)
     } finally {
       setIsLoading(false)
     }
@@ -438,7 +439,7 @@ export function useSecretProgressBar(trackId: string) {
       }
       return false
     } catch (error) {
-      console.error('Error contributing:', error)
+      SecureLogger.error('Error contributing:', error)
       return false
     }
   }, [trackId, loadProgress])

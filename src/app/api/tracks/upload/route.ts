@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { db } from "@/lib/db";
 <<<<<<< HEAD
 import { handleApiError } from "@/lib/errors/errorHandler";
@@ -71,7 +72,7 @@ async function validateToken(token: string): Promise<string | null> {
     // Пока возвращаем фиктивный ID для примера
     return "valid_user_id"; // Замените на реальную проверку токена
   } catch (error) {
-    console.error("Token validation error:", error);
+    SecureLogger.error("Token validation error:", error);
     return null;
   }
 }
@@ -303,7 +304,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.error("Error uploading track:", error);
+    SecureLogger.error("Error uploading track:", error);
     return NextResponse.json(
       { error: "Failed to upload track" },
       { status: 500 }

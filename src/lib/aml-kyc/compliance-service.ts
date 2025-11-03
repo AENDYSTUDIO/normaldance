@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 📊 Compliance Service - Regulatory Reporting System
  *
@@ -64,7 +65,7 @@ export class ComplianceService {
         message: "Report created successfully",
       };
     } catch (error) {
-      console.error("Error creating compliance report:", error);
+      SecureLogger.error("Error creating compliance report:", error);
       return {
         success: false,
         message: "Internal error occurred during report creation",
@@ -86,7 +87,7 @@ export class ComplianceService {
 
       return this.mapDbToReport(report);
     } catch (error) {
-      console.error("Error fetching report:", error);
+      SecureLogger.error("Error fetching report:", error);
       return null;
     }
   }
@@ -134,7 +135,7 @@ export class ComplianceService {
 
       return reports.map((report) => this.mapDbToReport(report));
     } catch (error) {
-      console.error("Error fetching reports:", error);
+      SecureLogger.error("Error fetching reports:", error);
       return [];
     }
   }
@@ -177,7 +178,7 @@ export class ComplianceService {
         message: `Report status updated to ${status}`,
       };
     } catch (error) {
-      console.error("Error updating report status:", error);
+      SecureLogger.error("Error updating report status:", error);
       return {
         success: false,
         message: "Internal error occurred during status update",
@@ -227,7 +228,7 @@ export class ComplianceService {
 
       return await this.createReport(reportRequest);
     } catch (error) {
-      console.error("Error creating SAR:", error);
+      SecureLogger.error("Error creating SAR:", error);
       return {
         success: false,
         message: "Internal error occurred during SAR creation",
@@ -284,7 +285,7 @@ export class ComplianceService {
 
       return await this.createReport(reportRequest);
     } catch (error) {
-      console.error("Error creating CTR:", error);
+      SecureLogger.error("Error creating CTR:", error);
       return {
         success: false,
         message: "Internal error occurred during CTR creation",
@@ -351,7 +352,7 @@ export class ComplianceService {
 
       return await this.createReport(reportRequest);
     } catch (error) {
-      console.error("Error creating annual risk assessment:", error);
+      SecureLogger.error("Error creating annual risk assessment:", error);
       return {
         success: false,
         message: "Internal error occurred during risk assessment creation",
@@ -395,7 +396,7 @@ export class ComplianceService {
         message: "User risk assessment created successfully",
       };
     } catch (error) {
-      console.error("Error creating user risk assessment:", error);
+      SecureLogger.error("Error creating user risk assessment:", error);
       return {
         success: false,
         message: "Internal error occurred during risk assessment creation",
@@ -419,7 +420,7 @@ export class ComplianceService {
 
       return this.mapDbToRiskAssessment(assessment);
     } catch (error) {
-      console.error("Error fetching user risk assessment:", error);
+      SecureLogger.error("Error fetching user risk assessment:", error);
       return null;
     }
   }
@@ -455,7 +456,7 @@ export class ComplianceService {
         message: "Compliance event created successfully",
       };
     } catch (error) {
-      console.error("Error creating compliance event:", error);
+      SecureLogger.error("Error creating compliance event:", error);
       return {
         success: false,
         message: "Internal error occurred during event creation",
@@ -516,7 +517,7 @@ export class ComplianceService {
 
       return events.map((event) => this.mapDbToEvent(event));
     } catch (error) {
-      console.error("Error fetching compliance events:", error);
+      SecureLogger.error("Error fetching compliance events:", error);
       return [];
     }
   }
@@ -587,7 +588,7 @@ export class ComplianceService {
    * Сохранение отчета в базу данных
    */
   private async saveReport(report: ComplianceReport): Promise<void> {
-    console.log(`Saving compliance report: ${report.id}`);
+    SecureLogger.log(`Saving compliance report: ${report.id}`);
 
     await prisma.complianceReport.upsert({
       where: { id: report.id },
@@ -629,7 +630,7 @@ export class ComplianceService {
   private async saveRiskAssessment(
     assessment: UserRiskAssessment
   ): Promise<void> {
-    console.log(`Saving user risk assessment: ${assessment.id}`);
+    SecureLogger.log(`Saving user risk assessment: ${assessment.id}`);
 
     await prisma.userRiskAssessment.upsert({
       where: { id: assessment.id },
@@ -661,7 +662,7 @@ export class ComplianceService {
    * Сохранение события в базу данных
    */
   private async saveEvent(event: AMLKYCEvent): Promise<void> {
-    console.log(`Saving compliance event: ${event.id}`);
+    SecureLogger.log(`Saving compliance event: ${event.id}`);
 
     await prisma.aMLKYCEvent.upsert({
       where: { id: event.id },

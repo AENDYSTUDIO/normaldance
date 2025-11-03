@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Интеграция с Apple Music API для NormalDance
  * Синхронизация библиотек, импорт/экспорт плейлистов, аналитика
@@ -113,7 +114,7 @@ class AppleMusicIntegration {
 
       return response.data
     } catch (error) {
-      console.error('Failed to search on Apple Music:', error)
+      SecureLogger.error('Failed to search on Apple Music:', error)
       throw new Error('Failed to search on Apple Music')
     }
   }
@@ -129,7 +130,7 @@ class AppleMusicIntegration {
 
       return response.data.data[0]
     } catch (error) {
-      console.error('Failed to get track:', error)
+      SecureLogger.error('Failed to get track:', error)
       throw new Error('Failed to get Apple Music track')
     }
   }
@@ -148,7 +149,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get tracks:', error)
+      SecureLogger.error('Failed to get tracks:', error)
       throw new Error('Failed to get Apple Music tracks')
     }
   }
@@ -187,7 +188,7 @@ class AppleMusicIntegration {
         playlists: playlistsResponse.data.data
       }
     } catch (error) {
-      console.error('Failed to get user library:', error)
+      SecureLogger.error('Failed to get user library:', error)
       throw new Error('Failed to get Apple Music library')
     }
   }
@@ -208,7 +209,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get user playlists:', error)
+      SecureLogger.error('Failed to get user playlists:', error)
       throw new Error('Failed to get Apple Music playlists')
     }
   }
@@ -224,7 +225,7 @@ class AppleMusicIntegration {
 
       return response.data.data[0]
     } catch (error) {
-      console.error('Failed to get playlist:', error)
+      SecureLogger.error('Failed to get playlist:', error)
       throw new Error('Failed to get Apple Music playlist')
     }
   }
@@ -241,7 +242,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get playlist tracks:', error)
+      SecureLogger.error('Failed to get playlist tracks:', error)
       throw new Error('Failed to get Apple Music playlist tracks')
     }
   }
@@ -261,7 +262,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get top charts:', error)
+      SecureLogger.error('Failed to get top charts:', error)
       throw new Error('Failed to get Apple Music top charts')
     }
   }
@@ -281,7 +282,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get recommendations:', error)
+      SecureLogger.error('Failed to get recommendations:', error)
       throw new Error('Failed to get Apple Music recommendations')
     }
   }
@@ -297,7 +298,7 @@ class AppleMusicIntegration {
 
       return response.data.data[0]
     } catch (error) {
-      console.error('Failed to get artist:', error)
+      SecureLogger.error('Failed to get artist:', error)
       throw new Error('Failed to get Apple Music artist')
     }
   }
@@ -314,7 +315,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get artist tracks:', error)
+      SecureLogger.error('Failed to get artist tracks:', error)
       throw new Error('Failed to get Apple Music artist tracks')
     }
   }
@@ -331,7 +332,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get artist albums:', error)
+      SecureLogger.error('Failed to get artist albums:', error)
       throw new Error('Failed to get Apple Music artist albums')
     }
   }
@@ -347,7 +348,7 @@ class AppleMusicIntegration {
 
       return response.data.data[0]
     } catch (error) {
-      console.error('Failed to get album:', error)
+      SecureLogger.error('Failed to get album:', error)
       throw new Error('Failed to get Apple Music album')
     }
   }
@@ -364,7 +365,7 @@ class AppleMusicIntegration {
 
       return response.data.data
     } catch (error) {
-      console.error('Failed to get album tracks:', error)
+      SecureLogger.error('Failed to get album tracks:', error)
       throw new Error('Failed to get Apple Music album tracks')
     }
   }
@@ -433,7 +434,7 @@ class AppleMusicIntegration {
         dailyAverage: Math.round(dailyAverage)
       }
     } catch (error) {
-      console.error('Failed to get listening stats:', error)
+      SecureLogger.error('Failed to get listening stats:', error)
       throw new Error('Failed to get Apple Music listening stats')
     }
   }
@@ -529,7 +530,7 @@ class AppleMusicIntegration {
         name: storefront.attributes.name
       }))
     } catch (error) {
-      console.error('Failed to get storefronts:', error)
+      SecureLogger.error('Failed to get storefronts:', error)
       throw new Error('Failed to get Apple Music storefronts')
     }
   }
@@ -593,7 +594,7 @@ export function useAppleMusicIntegration(config: {
         setUserLibrary(library)
       }
     } catch (error) {
-      console.error('Failed to check Apple Music connection:', error)
+      SecureLogger.error('Failed to check Apple Music connection:', error)
       setIsConnected(false)
       setUserLibrary(null)
     } finally {

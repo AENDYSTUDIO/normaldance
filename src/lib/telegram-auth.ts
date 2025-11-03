@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Функции для аутентификации через Telegram Web App
  *
@@ -57,7 +58,7 @@ export async function verifyTelegramWebAppData(
     // Сравниваем вычисленный хеш с полученным
     return calculatedHash === hash;
   } catch (error) {
-    console.error("Error verifying Telegram WebApp data:", error);
+    SecureLogger.error("Error verifying Telegram WebApp data:", error);
     return false;
   }
 }
@@ -74,7 +75,7 @@ export function parseTelegramUserData(initData: string) {
 
     return null;
   } catch (error) {
-    console.error("Error parsing Telegram user data:", error);
+    SecureLogger.error("Error parsing Telegram user data:", error);
     return null;
   }
 }

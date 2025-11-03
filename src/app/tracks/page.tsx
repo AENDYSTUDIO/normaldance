@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
@@ -84,7 +85,7 @@ export default function TracksPage() {
         setTracks(data.tracks)
       }
     } catch (error) {
-      console.error('Error fetching tracks:', error)
+      SecureLogger.error('Error fetching tracks:', error)
     } finally {
       setLoading(false)
     }

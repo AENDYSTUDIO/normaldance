@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { InvisibleDeflationAdapter } from './invisible-deflation-adapter';
@@ -70,7 +71,7 @@ export function NDTManager({ className }: NDTManagerProps) {
       }
       setStakingInfo(mockInfo)
     } catch (err) {
-      console.error('Error loading staking info:', err)
+      SecureLogger.error('Error loading staking info:', err)
     }
   }
 

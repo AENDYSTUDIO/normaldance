@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Утилита для мониторинга производительности компонентов
  */
@@ -8,7 +9,7 @@ export const measureRenderTime = (componentName: string) => {
   
   return () => {
     const endTime = performance.now();
-    console.log(`[Performance] ${componentName} render time: ${endTime - startTime}ms`);
+    SecureLogger.log(`[Performance] ${componentName} render time: ${endTime - startTime}ms`);
   };
 };
 
@@ -18,7 +19,7 @@ export const trackRenders = (componentName: string) => {
   
   return () => {
     renderCount++;
-    console.log(`[Performance] ${componentName} render count: ${renderCount}`);
+    SecureLogger.log(`[Performance] ${componentName} render count: ${renderCount}`);
   };
 };
 
@@ -32,7 +33,7 @@ export const measureFunctionTime = <T extends (...args: any[]) => any>(
     const result = fn(...args);
     const endTime = performance.now();
     
-    console.log(`[Performance] ${fnName} execution time: ${endTime - startTime}ms`);
+    SecureLogger.log(`[Performance] ${fnName} execution time: ${endTime - startTime}ms`);
     
     return result;
   };
@@ -43,12 +44,12 @@ export const monitorMemoryUsage = () => {
   if ('memory' in performance) {
     // @ts-ignore - Свойство memory не определено в типах TS, но существует в Chrome
     const memoryInfo = performance.memory;
-    console.log(`[Performance] Memory usage:`, {
+    SecureLogger.log(`[Performance] Memory usage:`, {
       totalJSHeapSize: `${Math.round(memoryInfo.totalJSHeapSize / (1024 * 1024))} MB`,
       usedJSHeapSize: `${Math.round(memoryInfo.usedJSHeapSize / (1024 * 1024))} MB`,
       jsHeapSizeLimit: `${Math.round(memoryInfo.jsHeapSizeLimit / (1024 * 1024))} MB`,
     });
   } else {
-    console.log('[Performance] Memory API not available in this browser');
+    SecureLogger.log('[Performance] Memory API not available in this browser');
   }
 };

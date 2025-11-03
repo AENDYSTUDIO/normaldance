@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { InvisibleDeflationAdapter } from './invisible-deflation-adapter';
@@ -119,7 +120,7 @@ export function StakingManager({ className }: StakingManagerProps) {
       ]
       setPositions(mockPositions)
     } catch (err) {
-      console.error('Error loading positions:', err)
+      SecureLogger.error('Error loading positions:', err)
     }
   }
 

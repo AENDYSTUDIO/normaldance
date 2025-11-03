@@ -106,7 +106,7 @@ const mockCATMessage: CATMessage = {
       asset: "SOL",
       amount: 1.5,
       fromAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsY",
-      toAddress: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      toAddress: process.env.SECRET_KEY,
       timestamp: new Date().toISOString(),
     },
     originator: {
@@ -156,7 +156,7 @@ describe("CATService", () => {
         asset: "SOL",
         amount: 1.5,
         fromAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsY",
-        toAddress: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        toAddress: process.env.SECRET_KEY,
         originator: {
           type: "NATURAL",
           name: "John Doe",
@@ -198,7 +198,7 @@ describe("CATService", () => {
         asset: "SOL",
         amount: 1000,
         fromAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsY",
-        toAddress: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        toAddress: process.env.SECRET_KEY,
         originator: {
           type: "LEGAL",
           name: "Test Company Ltd",
@@ -444,7 +444,7 @@ describe("CATService", () => {
               }],
             },
           },
-          walletAddress: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+          walletAddress: process.env.SECRET_KEY,
           verificationLevel: "STANDARD",
         },
       };

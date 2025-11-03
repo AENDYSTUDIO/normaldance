@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔄 Travel Rule Integration Service
  *
@@ -172,7 +173,7 @@ export class TravelRuleIntegrationService {
         };
       }
     } catch (error) {
-      console.error("Error processing transaction for Travel Rule:", error);
+      SecureLogger.error("Error processing transaction for Travel Rule:", error);
       return {
         travelRuleTriggered: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -225,7 +226,7 @@ export class TravelRuleIntegrationService {
         };
       }
     } catch (error) {
-      console.error("Error handling incoming Travel Rule message:", error);
+      SecureLogger.error("Error handling incoming Travel Rule message:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -262,7 +263,7 @@ export class TravelRuleIntegrationService {
         integrationStats,
       };
     } catch (error) {
-      console.error("Error getting Travel Rule statistics:", error);
+      SecureLogger.error("Error getting Travel Rule statistics:", error);
       return {
         totalMessages: 0,
         sentMessages: 0,
@@ -322,7 +323,7 @@ export class TravelRuleIntegrationService {
           name: "CryptoExchange Pro",
           type: "EXCHANGE",
         },
-        "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v": {
+        process.env.SECRET_KEY: {
           id: "vasp_securewallet",
           name: "SecureWallet",
           type: "WALLET_PROVIDER",
@@ -331,7 +332,7 @@ export class TravelRuleIntegrationService {
 
       return externalVASPs[address] || null;
     } catch (error) {
-      console.error("Error identifying recipient VASP:", error);
+      SecureLogger.error("Error identifying recipient VASP:", error);
       return null;
     }
   }
@@ -348,7 +349,7 @@ export class TravelRuleIntegrationService {
 
       return !!user;
     } catch (error) {
-      console.error("Error checking internal address:", error);
+      SecureLogger.error("Error checking internal address:", error);
       return false;
     }
   }
@@ -384,7 +385,7 @@ export class TravelRuleIntegrationService {
         addresses: user.kycProfile?.addresses,
       };
     } catch (error) {
-      console.error("Error getting user info:", error);
+      SecureLogger.error("Error getting user info:", error);
       return null;
     }
   }
@@ -473,10 +474,10 @@ export class TravelRuleIntegrationService {
           await this.processOFACMessage(message);
           break;
         default:
-          console.log(`No specific processing for protocol: ${message.protocol}`);
+          SecureLogger.log(`No specific processing for protocol: ${message.protocol}`);
       }
     } catch (error) {
-      console.error("Error processing protocol specific message:", error);
+      SecureLogger.error("Error processing protocol specific message:", error);
     }
   }
 
@@ -485,7 +486,7 @@ export class TravelRuleIntegrationService {
    */
   private async processCATMessage(message: any): Promise<void> {
     // Дополнительная обработка CAT сообщений
-    console.log(`Processing CAT message: ${message.id}`);
+    SecureLogger.log(`Processing CAT message: ${message.id}`);
     
     // Здесь может быть логика для автоматического подтверждения
     // или дополнительной проверки
@@ -496,7 +497,7 @@ export class TravelRuleIntegrationService {
    */
   private async processOFACMessage(message: any): Promise<void> {
     // Дополнительная обработка OFAC сообщений
-    console.log(`Processing OFAC message: ${message.id}`);
+    SecureLogger.log(`Processing OFAC message: ${message.id}`);
     
     // Здесь может быть логика для автоматической блокировки
     // или дополнительной проверки
@@ -526,7 +527,7 @@ export class TravelRuleIntegrationService {
         },
       });
     } catch (logError) {
-      console.error("Error logging Travel Rule transaction:", logError);
+      SecureLogger.error("Error logging Travel Rule transaction:", logError);
     }
   }
 
@@ -549,7 +550,7 @@ export class TravelRuleIntegrationService {
         averageTransactionAmount: 2500,
       };
     } catch (error) {
-      console.error("Error getting integration statistics:", error);
+      SecureLogger.error("Error getting integration statistics:", error);
       return {
         totalTransactions: 0,
         travelRuleTriggered: 0,

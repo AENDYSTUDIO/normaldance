@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { enhancedSolanaPayService } from "@/lib/solana-pay-enhanced";
 import { useTelegram } from "@/contexts/telegram-context";
 import React, { useEffect, useState, useCallback } from "react";
@@ -283,7 +284,7 @@ const SolanaPayButton: React.FC<SolanaPayButtonProps> = ({
             expiresAt: payment.expiresAt
           }));
         } catch (error) {
-          console.error('Error generating payment request:', error);
+          SecureLogger.error('Error generating payment request:', error);
           setPaymentState(prev => ({
             ...prev,
             status: 'failed',
@@ -310,7 +311,7 @@ const SolanaPayButton: React.FC<SolanaPayButtonProps> = ({
         setPaymentUrl(paymentRequest.url);
         setQrData(paymentRequest.qr);
       } catch (error) {
-        console.error("Error generating payment request:", error);
+        SecureLogger.error("Error generating payment request:", error);
         if (onError) onError(error as Error);
       }
     }
@@ -366,7 +367,7 @@ const SolanaPayButton: React.FC<SolanaPayButtonProps> = ({
       try {
         // In a real implementation, we would check the transaction status
         // For now, we'll simulate the confirmation after a few seconds
-        console.log("Polling for transaction status:", signature);
+        SecureLogger.log("Polling for transaction status:", signature);
 
         // This is where you would call the backend to check transaction status
         // const status = await checkTransactionStatus(signature);
@@ -377,7 +378,7 @@ const SolanaPayButton: React.FC<SolanaPayButtonProps> = ({
         //   if (onSuccess) onSuccess();
         // }
       } catch (error) {
-        console.error("Error polling transaction status:", error);
+        SecureLogger.error("Error polling transaction status:", error);
         clearInterval(interval);
         setPaymentStatus("failed");
         setIsWaitingForPayment(false);
@@ -425,7 +426,7 @@ const SolanaPayButton: React.FC<SolanaPayButtonProps> = ({
         }
       }
     } catch (error) {
-      console.error("Payment error:", error);
+      SecureLogger.error("Payment error:", error);
       if (onError) onError(error as Error);
     } finally {
       setIsProcessing(false);

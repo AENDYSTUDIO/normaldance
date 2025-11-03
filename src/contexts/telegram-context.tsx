@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
@@ -39,7 +40,7 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
   
           // Set up WebApp initialization
           tg.ready(() => {
-            console.log('Telegram WebApp is ready');
+            SecureLogger.log('Telegram WebApp is ready');
             setIsReady(true);
           });
           
@@ -67,7 +68,7 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
           setWebApp(tg);
   
         } catch (error) {
-          console.error('Error initializing Telegram WebApp:', error);
+          SecureLogger.error('Error initializing Telegram WebApp:', error);
           // Fall back to mock for development
           initMockTelegram();
         }
@@ -78,7 +79,7 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
     };
 
     const initMockTelegram = () => {
-      console.log('Using mock Telegram WebApp for development');
+      SecureLogger.log('Using mock Telegram WebApp for development');
       setWebApp({
         ready: () => {},
         expand: () => {},
@@ -98,7 +99,7 @@ export function TelegramProvider({ children }: { children: React.ReactNode }) {
         },
         HapticFeedback: {
           impactOccurred: (style: 'medium') => {
-            console.log(`Haptic feedback: ${style}`);
+            SecureLogger.log(`Haptic feedback: ${style}`);
           }
         },
         popup: {

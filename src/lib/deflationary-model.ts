@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { NDT_MINT_ADDRESS } from "@/constants/solana";
 import { Mint } from "@solana/spl-token";
 import { Transaction, Connection, PublicKey } from "@solana/web3.js";
@@ -236,7 +237,7 @@ export function useDeflationaryModel(connection?: Connection) {
       const stats = await model.getDeflationStats();
       setStats(stats);
     } catch (error) {
-      console.error("Error loading deflation stats:", error);
+      SecureLogger.error("Error loading deflation stats:", error);
     } finally {
       setLoading(false);
     }
@@ -287,10 +288,10 @@ export const deflationUtils = {
   async distributeToTreasury(amount: number): Promise<boolean> {
     try {
       // Логика распределения в казну
-      console.log(`Distributing ${amount} to treasury`);
+      SecureLogger.log(`Distributing ${amount} to treasury`);
       return true;
     } catch (error) {
-      console.error('Error distributing to treasury:', error);
+      SecureLogger.error('Error distributing to treasury:', error);
       return false;
     }
   }
@@ -299,10 +300,10 @@ export const deflationUtils = {
   async distributeToStaking(amount: number): Promise<boolean> {
     try {
       // Логика распределения в стейкинг
-      console.log(`Distributing ${amount} to staking`);
+      SecureLogger.log(`Distributing ${amount} to staking`);
       return true;
     } catch (error) {
-      console.error('Error distributing to staking:', error);
+      SecureLogger.error('Error distributing to staking:', error);
       return false;
     }
   }

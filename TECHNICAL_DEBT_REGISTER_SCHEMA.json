@@ -1,0 +1,287 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Реестр технического долга",
+  "description": "Шаблон для отслеживания элементов технического долга в проекте",
+  "properties": {
+    "debtRegister": {
+      "type": "array",
+      "title": "Реестр технического долга",
+      "description": "Массив элементов технического долга",
+      "items": {
+        "type": "object",
+        "title": "Элемент технического долга",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "priority",
+          "type",
+          "createdDate"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Идентификатор",
+            "description": "Уникальный идентификатор элемента технического долга",
+            "pattern": "^TD-[0-9]{4,}$"
+          },
+          "title": {
+            "type": "string",
+            "title": "Название",
+            "description": "Краткое описание элемента технического долга",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "description": {
+            "type": "string",
+            "title": "Описание",
+            "description": "Полное описание элемента технического долга",
+            "maxLength": 2000
+          },
+          "type": {
+            "type": "string",
+            "title": "Тип технического долга",
+            "description": "Классификация типа технического долга",
+            "enum": [
+              "code_debt",
+              "design_debt",
+              "architectural_debt",
+              "requirement_debt",
+              "test_debt",
+              "documentation_debt",
+              "security_debt",
+              "performance_debt",
+              "dependency_debt",
+              "other"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "title": "Категория",
+            "description": "Дополнительная категоризация технического долга",
+            "enum": [
+              "frontend",
+              "backend",
+              "database",
+              "infrastructure",
+              "security",
+              "testing",
+              "documentation",
+              "build_process",
+              "deployment",
+              "integration",
+              "performance",
+              "usability",
+              "maintenance",
+              "other"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "title": "Критичность",
+            "description": "Уровень критичности технического долга",
+            "enum": ["low", "medium", "high", "critical"],
+            "default": "medium"
+          },
+          "priority": {
+            "type": "string",
+            "title": "Приоритет",
+            "description": "Приоритет устранения технического долга",
+            "enum": ["p1", "p2", "p3", "p4"],
+            "default": "p2"
+          },
+          "status": {
+            "type": "string",
+            "title": "Статус",
+            "description": "Текущий статус элемента технического долга",
+            "enum": [
+              "open",
+              "acknowledged",
+              "planned",
+              "in_progress",
+              "resolved",
+              "wont_fix",
+              "duplicate",
+              "closed"
+            ],
+            "default": "open"
+          },
+          "estimatedEffort": {
+            "type": "object",
+            "title": "Оценка трудозатрат",
+            "description": "Оценка трудозатрат на устранение технического долга",
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Значение",
+                "description": "Количество единиц оценки",
+                "minimum": 0
+              },
+              "unit": {
+                "type": "string",
+                "title": "Единица измерения",
+                "description": "Единица измерения трудозатрат",
+                "enum": ["hours", "days", "points", "sprints"]
+              }
+            }
+          },
+          "businessImpact": {
+            "type": "object",
+            "title": "Бизнес-влияние",
+            "description": "Оценка влияния на бизнес",
+            "properties": {
+              "riskLevel": {
+                "type": "string",
+                "title": "Уровень риска",
+                "description": "Уровень риска для бизнеса",
+                "enum": ["low", "medium", "high", "critical"]
+              },
+              "impactDescription": {
+                "type": "string",
+                "title": "Описание влияния",
+                "description": "Подробное описание влияния на бизнес",
+                "maxLength": 1000
+              }
+            }
+          },
+          "createdDate": {
+            "type": "string",
+            "title": "Дата создания",
+            "description": "Дата создания записи о техническом долге",
+            "format": "date-time"
+          },
+          "targetResolutionDate": {
+            "type": "string",
+            "title": "Планируемая дата устранения",
+            "description": "Планируемая дата устранения технического долга",
+            "format": "date-time"
+          },
+          "actualResolutionDate": {
+            "type": "string",
+            "title": "Фактическая дата устранения",
+            "description": "Фактическая дата устранения технического долга",
+            "format": "date-time"
+          },
+          "reporter": {
+            "type": "string",
+            "title": "Сообщивший",
+            "description": "Имя или идентификатор человека, сообщившего о техническом долге"
+          },
+          "assignee": {
+            "type": "string",
+            "title": "Ответственный",
+            "description": "Имя или идентификатор человека, ответственного за устранение технического долга"
+          },
+          "tags": {
+            "type": "array",
+            "title": "Теги",
+            "description": "Список тегов для классификации технического долга",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50
+            },
+            "maxItems": 10
+          },
+          "resolutionPlan": {
+            "type": "object",
+            "title": "План устранения",
+            "description": "Детали плана устранения технического долга",
+            "properties": {
+              "approach": {
+                "type": "string",
+                "title": "Подход",
+                "description": "Описание подхода к устранению технического долга",
+                "maxLength": 2000
+              },
+              "steps": {
+                "type": "array",
+                "title": "Шаги",
+                "description": "Пошаговое описание процесса устранения",
+                "items": {
+                  "type": "string",
+                  "title": "Шаг",
+                  "description": "Описание одного шага в процессе устранения",
+                  "minLength": 1,
+                  "maxLength": 500
+                }
+              },
+              "dependencies": {
+                "type": "array",
+                "title": "Зависимости",
+                "description": "Список зависимостей для устранения технического долга",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                }
+              }
+            }
+          },
+          "affectedComponents": {
+            "type": "array",
+            "title": "Затронутые компоненты",
+            "description": "Список компонентов системы, затронутых техническим долгом",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "relatedIssues": {
+            "type": "array",
+            "title": "Связанные задачи",
+            "description": "Ссылки на связанные задачи или элементы технического долга",
+            "items": {
+              "type": "string",
+              "pattern": "^TD-[0-9]{4,}$"
+            }
+          },
+          "costOfDelay": {
+            "type": "object",
+            "title": "Стоимость отсрочки",
+            "description": "Оценка стоимости отсрочки устранения технического долга",
+            "properties": {
+              "value": {
+                "type": "number",
+                "title": "Значение",
+                "description": "Сумма стоимости отсрочки",
+                "minimum": 0
+              },
+              "currency": {
+                "type": "string",
+                "title": "Валюта",
+                "description": "Валюта стоимости отсрочки",
+                "default": "USD"
+              },
+              "period": {
+                "type": "string",
+                "title": "Период",
+                "description": "Период, за который рассчитывается стоимость",
+                "enum": ["monthly", "quarterly", "annually"]
+              }
+            }
+          },
+          "versionIntroduced": {
+            "type": "string",
+            "title": "Версия введения",
+            "description": "Версия продукта, в которой был введен технический долг"
+          },
+          "versionResolved": {
+            "type": "string",
+            "title": "Версия устранения",
+            "description": "Версия продукта, в которой технический долг был устранен"
+          },
+          "reviewDate": {
+            "type": "string",
+            "title": "Дата пересмотра",
+            "description": "Дата следующего пересмотра элемента технического долга",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  },
+  "required": ["debtRegister"]
+}

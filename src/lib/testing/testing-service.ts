@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import {
   AdaptiveSettings,
   Question,
@@ -309,7 +310,7 @@ export class TestingService {
    */
   async sendResultToLMS(testResult: TestResult): Promise<boolean> {
     if (!this.lmsIntegration) {
-      console.warn("LMS интеграция не настроена");
+      SecureLogger.warn("LMS интеграция не настроена");
       return false;
     }
 
@@ -321,7 +322,7 @@ export class TestingService {
    */
   async getTestsFromLMS(userId: string): Promise<Test[]> {
     if (!this.lmsIntegration) {
-      console.warn("LMS интеграция не настроена");
+      SecureLogger.warn("LMS интеграция не настроена");
       return [];
     }
 
@@ -333,7 +334,7 @@ export class TestingService {
    */
   async syncUserProfile(userProfile: UserProfile): Promise<UserProfile> {
     if (!this.lmsIntegration) {
-      console.warn("LMS интеграция не настроена");
+      SecureLogger.warn("LMS интеграция не настроена");
       return userProfile;
     }
 

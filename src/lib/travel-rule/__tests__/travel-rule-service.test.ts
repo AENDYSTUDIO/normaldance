@@ -100,7 +100,7 @@ const mockCATMessage: CATMessage = {
       asset: "SOL",
       amount: 1.5,
       fromAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsY",
-      toAddress: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      toAddress: process.env.SECRET_KEY,
       timestamp: new Date().toISOString(),
     },
     originator: {

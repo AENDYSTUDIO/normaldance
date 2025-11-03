@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔗 Chainalysis AML Integration - Blockchain Analytics Integration
  *
@@ -101,7 +102,7 @@ export class ChainalysisAMLIntegration {
 
       return combinedTransaction;
     } catch (error) {
-      console.error("Error in transaction analysis with Chainalysis:", error);
+      SecureLogger.error("Error in transaction analysis with Chainalysis:", error);
       // В случае ошибки возвращаем только AML анализ
       return this.amlService.monitorTransaction(transaction);
     }
@@ -167,7 +168,7 @@ export class ChainalysisAMLIntegration {
 
       return combinedAssessment;
     } catch (error) {
-      console.error("Error in user risk assessment with Chainalysis:", error);
+      SecureLogger.error("Error in user risk assessment with Chainalysis:", error);
       // В случае ошибки возвращаем только AML оценку
       return this.amlService.runUserRiskAssessment(userId, assessedBy);
     }
@@ -243,7 +244,7 @@ export class ChainalysisAMLIntegration {
         requiresAction: integration.requiresManualReview || integration.shouldBlock,
       };
     } catch (error) {
-      console.error("Error monitoring address:", error);
+      SecureLogger.error("Error monitoring address:", error);
       return {
         success: false,
         riskLevel: "MEDIUM",
@@ -342,7 +343,7 @@ export class ChainalysisAMLIntegration {
         ),
       };
     } catch (error) {
-      console.error("Error generating portfolio risk report:", error);
+      SecureLogger.error("Error generating portfolio risk report:", error);
       return {
         success: false,
         overallRisk: "MEDIUM",
@@ -523,7 +524,7 @@ export class ChainalysisAMLIntegration {
         },
       });
     } catch (error) {
-      console.error("Error saving Chainalysis results:", error);
+      SecureLogger.error("Error saving Chainalysis results:", error);
     }
   }
 
@@ -555,7 +556,7 @@ export class ChainalysisAMLIntegration {
         });
       }
     } catch (error) {
-      console.error("Error saving user Chainalysis results:", error);
+      SecureLogger.error("Error saving user Chainalysis results:", error);
     }
   }
 

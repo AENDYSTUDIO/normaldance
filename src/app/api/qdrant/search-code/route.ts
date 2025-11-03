@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import codeEmbeddings from "@/lib/code-embeddings";
 
 export async function POST(request: NextRequest) {
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error("Ошибка при поиске по кодовой базе:", error);
+    SecureLogger.error("Ошибка при поиске по кодовой базе:", error);
 
     return new Response(
       JSON.stringify({

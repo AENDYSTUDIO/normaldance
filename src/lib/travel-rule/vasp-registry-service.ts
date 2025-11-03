@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🏛️ VASP Registry Service
  *
@@ -28,7 +29,7 @@ export class VASPRegistryService {
       const vaspEntry = this.registryCache.get(vaspId);
       return vaspEntry || null;
     } catch (error) {
-      console.error("Error getting VASP info:", error);
+      SecureLogger.error("Error getting VASP info:", error);
       return null;
     }
   }
@@ -66,7 +67,7 @@ export class VASPRegistryService {
         return a.vaspInfo.reputation.score - b.vaspInfo.reputation.score;
       });
     } catch (error) {
-      console.error("Error searching VASP by name:", error);
+      SecureLogger.error("Error searching VASP by name:", error);
       return [];
     }
   }
@@ -91,7 +92,7 @@ export class VASPRegistryService {
         b.vaspInfo.reputation.score - a.vaspInfo.reputation.score
       );
     } catch (error) {
-      console.error("Error searching VASP by jurisdiction:", error);
+      SecureLogger.error("Error searching VASP by jurisdiction:", error);
       return [];
     }
   }
@@ -116,7 +117,7 @@ export class VASPRegistryService {
         b.vaspInfo.reputation.score - a.vaspInfo.reputation.score
       );
     } catch (error) {
-      console.error("Error searching VASP by type:", error);
+      SecureLogger.error("Error searching VASP by type:", error);
       return [];
     }
   }
@@ -151,7 +152,7 @@ export class VASPRegistryService {
 
       return vaspEntry;
     } catch (error) {
-      console.error("Error adding VASP:", error);
+      SecureLogger.error("Error adding VASP:", error);
       throw new Error(`Failed to add VASP: ${error}`);
     }
   }
@@ -178,7 +179,7 @@ export class VASPRegistryService {
 
       return updatedVasp;
     } catch (error) {
-      console.error("Error updating VASP:", error);
+      SecureLogger.error("Error updating VASP:", error);
       throw new Error(`Failed to update VASP: ${error}`);
     }
   }
@@ -221,7 +222,7 @@ export class VASPRegistryService {
 
       return updatedVasp;
     } catch (error) {
-      console.error("Error updating VASP reputation:", error);
+      SecureLogger.error("Error updating VASP reputation:", error);
       throw new Error(`Failed to update VASP reputation: ${error}`);
     }
   }
@@ -245,7 +246,7 @@ export class VASPRegistryService {
         b.vaspInfo.reputation.score - a.vaspInfo.reputation.score
       );
     } catch (error) {
-      console.error("Error getting all active VASPs:", error);
+      SecureLogger.error("Error getting all active VASPs:", error);
       return [];
     }
   }
@@ -310,7 +311,7 @@ export class VASPRegistryService {
 
       return stats;
     } catch (error) {
-      console.error("Error getting registry statistics:", error);
+      SecureLogger.error("Error getting registry statistics:", error);
       return {
         totalVASPs: 0,
         activeVASPs: 0,
@@ -364,9 +365,9 @@ export class VASPRegistryService {
   private async initializeRegistry(): Promise<void> {
     try {
       await this.updateRegistryCache();
-      console.log("VASP Registry initialized successfully");
+      SecureLogger.log("VASP Registry initialized successfully");
     } catch (error) {
-      console.error("Error initializing VASP Registry:", error);
+      SecureLogger.error("Error initializing VASP Registry:", error);
     }
   }
 
@@ -396,9 +397,9 @@ export class VASPRegistryService {
         this.registryCache.set(vasp.id, vasp);
       }
 
-      console.log(`VASP Registry cache updated with ${mockVASPs.length} entries`);
+      SecureLogger.log(`VASP Registry cache updated with ${mockVASPs.length} entries`);
     } catch (error) {
-      console.error("Error updating VASP Registry cache:", error);
+      SecureLogger.error("Error updating VASP Registry cache:", error);
     }
   }
 
@@ -572,9 +573,9 @@ export class VASPRegistryService {
   private async saveVASPToDatabase(vaspEntry: VASPRegistryEntry): Promise<void> {
     try {
       // В реальной системе здесь будет сохранение в базу данных
-      console.log(`Saving VASP to database: ${vaspEntry.id} - ${vaspEntry.vaspInfo.name}`);
+      SecureLogger.log(`Saving VASP to database: ${vaspEntry.id} - ${vaspEntry.vaspInfo.name}`);
     } catch (error) {
-      console.error("Error saving VASP to database:", error);
+      SecureLogger.error("Error saving VASP to database:", error);
     }
   }
 }

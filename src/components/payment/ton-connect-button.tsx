@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -55,7 +56,7 @@ const TonConnectButton: React.FC<TonConnectButtonProps> = ({
       }
 
       // Simulate API call to initiate purchase
-      console.log("Initiating TON Connect purchase:", {
+      SecureLogger.log("Initiating TON Connect purchase:", {
         amount,
         itemId,
         itemName,
@@ -75,7 +76,7 @@ const TonConnectButton: React.FC<TonConnectButtonProps> = ({
       // Call success callback
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error("TON Connect purchase error:", error);
+      SecureLogger.error("TON Connect purchase error:", error);
       onError?.(error as Error);
     } finally {
       setIsProcessing(false);

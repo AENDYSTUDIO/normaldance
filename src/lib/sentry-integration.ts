@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Интеграция Sentry для мониторинга ошибок и производительности
  * Поддержка кастомных метрик, уведомлений и автоматического создания issue
@@ -359,7 +360,7 @@ export class SentryIntegration {
         timestamp: Date.now(),
       })
     } catch (error) {
-      console.error('Failed to create Sentry issue:', error)
+      SecureLogger.error('Failed to create Sentry issue:', error)
     }
   }
 
@@ -371,7 +372,7 @@ export class SentryIntegration {
     issueType: string = 'Bug'
   ): Promise<void> {
     if (!this.notificationConfig.jira) {
-      console.warn('Jira integration not configured')
+      SecureLogger.warn('Jira integration not configured')
       return
     }
 
@@ -400,7 +401,7 @@ export class SentryIntegration {
         timestamp: Date.now(),
       })
     } catch (error) {
-      console.error('Failed to create Jira ticket:', error)
+      SecureLogger.error('Failed to create Jira ticket:', error)
     }
   }
 
@@ -411,7 +412,7 @@ export class SentryIntegration {
     labels: string[] = []
   ): Promise<void> {
     if (!this.notificationConfig.trello) {
-      console.warn('Trello integration not configured')
+      SecureLogger.warn('Trello integration not configured')
       return
     }
 
@@ -435,7 +436,7 @@ export class SentryIntegration {
         timestamp: Date.now(),
       })
     } catch (error) {
-      console.error('Failed to create Trello card:', error)
+      SecureLogger.error('Failed to create Trello card:', error)
     }
   }
 
@@ -446,7 +447,7 @@ export class SentryIntegration {
     severity: 'low' | 'medium' | 'high' | 'critical' = 'medium'
   ): Promise<void> {
     if (!this.notificationConfig.slack) {
-      console.warn('Slack integration not configured')
+      SecureLogger.warn('Slack integration not configured')
       return
     }
 
@@ -476,7 +477,7 @@ export class SentryIntegration {
         timestamp: Date.now(),
       })
     } catch (error) {
-      console.error('Failed to send Slack notification:', error)
+      SecureLogger.error('Failed to send Slack notification:', error)
     }
   }
 
@@ -486,7 +487,7 @@ export class SentryIntegration {
     severity: 'low' | 'medium' | 'high' | 'critical' = 'medium'
   ): Promise<void> {
     if (!this.notificationConfig.teams) {
-      console.warn('Teams integration not configured')
+      SecureLogger.warn('Teams integration not configured')
       return
     }
 
@@ -526,7 +527,7 @@ export class SentryIntegration {
         timestamp: Date.now(),
       })
     } catch (error) {
-      console.error('Failed to send Teams notification:', error)
+      SecureLogger.error('Failed to send Teams notification:', error)
     }
   }
 

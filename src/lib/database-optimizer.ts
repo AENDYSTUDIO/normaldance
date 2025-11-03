@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Оптимизатор базы данных для NormalDance
  * Ускорение запросов, кеширование, индексация и оптимизация запросов
@@ -121,7 +122,7 @@ class DatabaseOptimizer {
 
     // Логируем медленные запросы
     if (executionTime > this.slowQueryThreshold) {
-      console.warn(`Slow query detected: ${query} (${executionTime}ms)`)
+      SecureLogger.warn(`Slow query detected: ${query} (${executionTime}ms)`)
     }
   }
 
@@ -132,9 +133,9 @@ class DatabaseOptimizer {
     const suggestions = this.getOptimizationSuggestions(query)
     
     console.group(`🐌 Slow Query Analysis: ${query}`)
-    console.log(`Execution time: ${executionTime}ms`)
-    console.log(`Parameters:`, parameters)
-    console.log(`Suggestions:`, suggestions)
+    SecureLogger.log(`Execution time: ${executionTime}ms`)
+    SecureLogger.log(`Parameters:`, parameters)
+    SecureLogger.log(`Suggestions:`, suggestions)
     console.groupEnd()
   }
 

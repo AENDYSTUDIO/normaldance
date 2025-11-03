@@ -47,6 +47,15 @@ export interface StarsBalance {
   currency: "stars";
 }
 
+export interface StarsAuditEntry {
+  id: string;
+  type: "purchase" | "conversion" | "refund";
+  starsAmount: number; // positive for credit, negative for debit
+  description?: string;
+  relatedTransactionId?: string;
+  timestamp: number;
+}
+
 /**
  * Менеджер Telegram Stars
  *
@@ -61,6 +70,7 @@ export class TelegramStarsManager {
   private _conversionRates: Map<string, ConversionRate> = new Map();
   private _balanceCache: StarsBalance | null = null;
   private _isTelegramWebApp: boolean = false;
+  private _auditLog: StarsAuditEntry[] = [];
 
   constructor(config: InvisibleWalletConfig) {
     this._config = config;
@@ -121,8 +131,14 @@ export class TelegramStarsManager {
         };
       }
 
-      // 5. Обновление баланса
+      // 5. Обновление баланса и аудит
       await this._updateBalance(-amount);
+      this._recordAudit({
+        type: "purchase",
+        starsAmount: -amount,
+        description,
+        relatedTransactionId: paymentResult.transactionId,
+      });
 
       logger.info("Stars purchase completed", {
         amount,
@@ -144,6 +160,40 @@ export class TelegramStarsManager {
         error: error instanceof Error ? error.message : "Purchase failed",
       };
     }
+  }
+
+  /**
+   * Возврат Stars (refund)
+   */
+  async refundStars(
+    amount: number,
+    reason: string,
+    relatedTransactionId?: string
+  ): Promise<PurchaseResult> {
+    try {
+      if (amount <= 0) {
+        return { success: false, error: "Refund amount must be positive" };
+      }
+      await this._updateBalance(amount);
+      const entry = this._recordAudit({
+        type: "refund",
+        starsAmount: amount,
+        description: reason,
+        relatedTransactionId,
+      });
+      logger.info("Stars refund processed", { amount, reason, entryId: entry.id });
+      return { success: true, transactionId: entry.id, starsAmount: amount };
+    } catch (error) {
+      logger.error("Stars refund failed", error);
+      return { success: false, error: error instanceof Error ? error.message : "Refund failed" };
+    }
+  }
+
+  /**
+   * Получить аудит лог (последние N)
+   */
+  getAuditLog(limit: number = 100): StarsAuditEntry[] {
+    return this._auditLog.slice(-limit);
   }
 
   /**
@@ -467,6 +517,16 @@ export class TelegramStarsManager {
       this._balanceCache.amount += delta;
       this._balanceCache.lastUpdated = Date.now();
     }
+  }
+
+  private _recordAudit(entry: Omit<StarsAuditEntry, "id" | "timestamp">): StarsAuditEntry {
+    const full: StarsAuditEntry = {
+      id: `audit_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      timestamp: Date.now(),
+      ...entry,
+    };
+    this._auditLog.push(full);
+    return full;
   }
 
   private async _fetchConversionRate(

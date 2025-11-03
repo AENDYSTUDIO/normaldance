@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getServerSession } from 'next-auth/next'
@@ -66,7 +67,7 @@ export async function GET(request: Request) {
     })
 
   } catch (error) {
-    console.error('Error checking free tracks:', error)
+    SecureLogger.error('Error checking free tracks:', error)
     return NextResponse.json(
       { error: 'Failed to check free tracks' },
       { status: 500 }
@@ -145,7 +146,7 @@ export async function POST(request: Request) {
     })
 
   } catch (error) {
-    console.error('Error recording free track usage:', error)
+    SecureLogger.error('Error recording free track usage:', error)
     return NextResponse.json(
       { error: 'Failed to record free track usage' },
       { status: 500 }

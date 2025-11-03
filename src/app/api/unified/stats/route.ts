@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
@@ -163,7 +164,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error getting unified stats:', error)
+    SecureLogger.error('Error getting unified stats:', error)
     return NextResponse.json(
       { error: 'Failed to get stats' },
       { status: 500 }

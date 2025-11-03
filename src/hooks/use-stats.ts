@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -27,7 +28,7 @@ export function useStats() {
           setStats(data)
         }
       } catch (error) {
-        console.error('Failed to fetch stats:', error)
+        SecureLogger.error('Failed to fetch stats:', error)
       } finally {
         setLoading(false)
       }

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import codeEmbeddings from "@/lib/code-embeddings";
 
 export async function POST(request: NextRequest) {
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error("Ошибка при индексации кодовой базы:", error);
+    SecureLogger.error("Ошибка при индексации кодовой базы:", error);
 
     return new Response(
       JSON.stringify({

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import React, { useState } from 'react'
@@ -48,7 +49,7 @@ export default function MemorialCard({ memorial, onDonate }: MemorialCardProps) 
         alert('Ошибка при отправке пожертвования: ' + data.error)
       }
     } catch (error) {
-      console.error('Ошибка пожертвования:', error)
+      SecureLogger.error('Ошибка пожертвования:', error)
       alert('Ошибка при отправке пожертвования')
     } finally {
       setIsDonating(false)

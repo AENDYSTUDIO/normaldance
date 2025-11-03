@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,7 @@ export function TonPaymentButton({
         onPaymentSuccess?.();
       }
     } catch (err) {
-      console.error("TON payment error:", err);
+      SecureLogger.error("TON payment error:", err);
       const errorMessage =
         err instanceof Error ? err.message : "Payment failed";
       setError(errorMessage);

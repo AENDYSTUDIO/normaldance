@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Конфигурация NextAuth для различных окружений
  *
@@ -16,7 +17,7 @@ function validateEnvVars() {
   }
 
   if (missingVars.length > 0) {
-    console.warn(`Missing environment variables: ${missingVars.join(", ")}`);
+    SecureLogger.warn(`Missing environment variables: ${missingVars.join(", ")}`);
     return false;
   }
 
@@ -27,7 +28,7 @@ function validateEnvVars() {
 export function getNextAuthConfig() {
   // Проверяем, что переменные окружения установлены
   if (!validateEnvVars()) {
-    console.error("NextAuth configuration validation failed");
+    SecureLogger.error("NextAuth configuration validation failed");
     return null;
   }
 

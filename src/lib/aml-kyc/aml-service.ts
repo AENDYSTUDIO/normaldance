@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🛡️ AML Service - Anti-Money Laundering System
  *
@@ -141,7 +142,7 @@ export class AMLService {
 
       return monitoredTransaction;
     } catch (error) {
-      console.error("Error monitoring transaction:", error);
+      SecureLogger.error("Error monitoring transaction:", error);
       throw error;
     }
   }
@@ -223,7 +224,7 @@ export class AMLService {
         riskLevel,
       };
     } catch (error) {
-      console.error("Error assessing transaction risk:", error);
+      SecureLogger.error("Error assessing transaction risk:", error);
       // Возвращаем средний риск в случае ошибки
       return {
         riskScore: 50,
@@ -289,7 +290,7 @@ export class AMLService {
 
       return null;
     } catch (error) {
-      console.error("Error checking sanctions lists:", error);
+      SecureLogger.error("Error checking sanctions lists:", error);
       return null;
     }
   }
@@ -333,7 +334,7 @@ export class AMLService {
 
       return violations;
     } catch (error) {
-      console.error("Error checking against AML rules:", error);
+      SecureLogger.error("Error checking against AML rules:", error);
       return [];
     }
   }
@@ -350,7 +351,7 @@ export class AMLService {
 
       return rules.map((rule) => this.mapDbToAMLRule(rule));
     } catch (error) {
-      console.error("Error fetching AML rules:", error);
+      SecureLogger.error("Error fetching AML rules:", error);
       return [];
     }
   }
@@ -420,7 +421,7 @@ export class AMLService {
           return false;
       }
     } catch (error) {
-      console.error("Error evaluating rule condition:", error);
+      SecureLogger.error("Error evaluating rule condition:", error);
       return false;
     }
   }
@@ -461,7 +462,7 @@ export class AMLService {
         break;
       case "SEND_NOTIFICATION":
         // В реальной системе отправляем уведомление
-        console.log(
+        SecureLogger.log(
           `Notification sent for rule: ${rule.name}, transaction: ${transaction.id}`
         );
         break;
@@ -588,7 +589,7 @@ export class AMLService {
         return 10;
       }
     } catch (error) {
-      console.error(
+      SecureLogger.error(
         "Error calculating user transaction frequency risk:",
         error
       );
@@ -690,7 +691,7 @@ export class AMLService {
         this.sanctionsLists.set(sanctionsList.id, sanctionsList);
       }
     } catch (error) {
-      console.error("Error loading sanctions lists:", error);
+      SecureLogger.error("Error loading sanctions lists:", error);
     }
   }
 
@@ -724,7 +725,7 @@ export class AMLService {
         this.sanctionsLists.set(list.id, list);
       }
     } catch (error) {
-      console.error("Error updating sanctions lists:", error);
+      SecureLogger.error("Error updating sanctions lists:", error);
       throw error;
     }
   }
@@ -787,7 +788,7 @@ export class AMLService {
 
       return transactions.map((tx) => this.mapDbToMonitoredTransaction(tx));
     } catch (error) {
-      console.error("Error fetching transactions for monitoring:", error);
+      SecureLogger.error("Error fetching transactions for monitoring:", error);
       return [];
     }
   }
@@ -835,7 +836,7 @@ export class AMLService {
         averageRiskScore: Number(averageRiskScore),
       };
     } catch (error) {
-      console.error("Error fetching monitoring stats:", error);
+      SecureLogger.error("Error fetching monitoring stats:", error);
       return {
         totalTransactions: 0,
         flaggedTransactions: 0,
@@ -902,7 +903,7 @@ export class AMLService {
 
       return assessment;
     } catch (error) {
-      console.error("Error running user risk assessment:", error);
+      SecureLogger.error("Error running user risk assessment:", error);
       return null;
     }
   }

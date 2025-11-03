@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Utility Logger for NORMALDANCE
  * Provides structured logging with different levels
@@ -46,13 +47,13 @@ class Logger {
     // Output to console with appropriate level
     switch (level) {
       case 'error':
-        console.error(formattedLog);
+        SecureLogger.error(formattedLog);
         break;
       case 'warn':
-        console.warn(formattedLog);
+        SecureLogger.warn(formattedLog);
         break;
       case 'info':
-        console.info(formattedLog);
+        SecureLogger.info(formattedLog);
         break;
       case 'debug':
         console.debug(formattedLog);
@@ -106,7 +107,7 @@ class Logger {
       }
     } catch (error) {
       // Don't let logging errors crash the application
-      console.warn('Failed to send log to external service:', error);
+      SecureLogger.warn('Failed to send log to external service:', error);
     }
   }
 

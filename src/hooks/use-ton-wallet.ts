@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Address } from "@ton/core";
@@ -77,7 +78,7 @@ export function useTonWallet() {
         balance,
       }));
     } catch (error) {
-      console.error("Error loading balance:", error);
+      SecureLogger.error("Error loading balance:", error);
       setWalletState((prev) => ({
         ...prev,
         error: "Failed to load balance",
@@ -92,7 +93,7 @@ export function useTonWallet() {
       setIsLoading(true);
       await tonConnectUI.connectWallet();
     } catch (error) {
-      console.error("Error connecting wallet:", error);
+      SecureLogger.error("Error connecting wallet:", error);
       setWalletState((prev) => ({
         ...prev,
         error: "Failed to connect wallet",
@@ -107,7 +108,7 @@ export function useTonWallet() {
       setIsLoading(true);
       await tonConnectUI.disconnect();
     } catch (error) {
-      console.error("Error disconnecting wallet:", error);
+      SecureLogger.error("Error disconnecting wallet:", error);
       setWalletState((prev) => ({
         ...prev,
         error: "Failed to disconnect wallet",
@@ -142,7 +143,7 @@ export function useTonWallet() {
 
       return result;
     } catch (error) {
-      console.error("Error sending transaction:", error);
+      SecureLogger.error("Error sending transaction:", error);
       setWalletState((prev) => ({
         ...prev,
         error: "Failed to send transaction",

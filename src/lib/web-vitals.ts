@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Сервис для сбора Core Web Vitals и кастомных метрик
  * Интеграция с Vercel Analytics и Sentry
@@ -322,7 +323,7 @@ export class WebVitalsService {
 
       localStorage.setItem('web-vitals-metrics', JSON.stringify(storedMetrics))
     } catch (error) {
-      console.error('Failed to store web vitals metric:', error)
+      SecureLogger.error('Failed to store web vitals metric:', error)
     }
   }
 
@@ -352,7 +353,7 @@ export class WebVitalsService {
 
       return stats
     } catch (error) {
-      console.error('Failed to get metrics stats:', error)
+      SecureLogger.error('Failed to get metrics stats:', error)
       return {}
     }
   }

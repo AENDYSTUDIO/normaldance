@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import qdrantClient from "./qdrant-config";
 
 // Интерфейс для документа в Qdrant
@@ -28,12 +29,12 @@ class QdrantService {
             distance: "Cosine", // Метрика расстояния
           },
         });
-        console.log(`Коллекция ${this.collectionName} создана`);
+        SecureLogger.log(`Коллекция ${this.collectionName} создана`);
       } else {
-        console.log(`Коллекция ${this.collectionName} уже существует`);
+        SecureLogger.log(`Коллекция ${this.collectionName} уже существует`);
       }
     } catch (error) {
-      console.error("Ошибка при инициализации коллекции:", error);
+      SecureLogger.error("Ошибка при инициализации коллекции:", error);
       throw error;
     }
   }
@@ -55,9 +56,9 @@ class QdrantService {
         points,
       });
 
-      console.log(`Документ ${document.id} добавлен в Qdrant`);
+      SecureLogger.log(`Документ ${document.id} добавлен в Qdrant`);
     } catch (error) {
-      console.error("Ошибка при добавлении документа:", error);
+      SecureLogger.error("Ошибка при добавлении документа:", error);
       throw error;
     }
   }
@@ -72,7 +73,7 @@ class QdrantService {
 
       return results;
     } catch (error) {
-      console.error("Ошибка при поиске документов:", error);
+      SecureLogger.error("Ошибка при поиске документов:", error);
       throw error;
     }
   }

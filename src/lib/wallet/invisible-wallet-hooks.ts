@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useInvisibleWallet } from '@/components/wallet/invisible-wallet-provider';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -37,7 +38,7 @@ export const useInvisibleBalance = () => {
         await updateBalance();
         setBalance(state.balance);
       } catch (error) {
-        console.error('Error updating balance:', error);
+        SecureLogger.error('Error updating balance:', error);
       } finally {
         setLoading(false);
       }
@@ -79,7 +80,7 @@ export const useInvisibleTransaction = () => {
     options?: TransactionOptions
   ): Promise<string | null> => {
     if (!sendTransaction || !publicKey) {
-      console.error('Wallet not connected');
+      SecureLogger.error('Wallet not connected');
       options?.onError?.('Wallet not connected');
       return null;
     }
@@ -137,7 +138,7 @@ export const useInvisibleTransaction = () => {
       
       return signature;
     } catch (error) {
-      console.error('Transaction failed:', error);
+      SecureLogger.error('Transaction failed:', error);
       
       // Обновляем статус транзакции
       setTransactionStatus(prev => ({
@@ -203,7 +204,7 @@ export const useInvisibleAuth = () => {
       setAuthStatus('connected');
       return true;
     } catch (error) {
-      console.error('Auth failed:', error);
+      SecureLogger.error('Auth failed:', error);
       setAuthStatus('error');
       return false;
     }
@@ -216,7 +217,7 @@ export const useInvisibleAuth = () => {
       setAuthStatus('disconnected');
       return true;
     } catch (error) {
-      console.error('Sign out failed:', error);
+      SecureLogger.error('Sign out failed:', error);
       setAuthStatus('error');
       return false;
     }
@@ -262,7 +263,7 @@ export const useInvisibleTokens = () => {
       const balances: Record<string, number> = {};
       setTokenBalances(balances);
     } catch (error) {
-      console.error('Error fetching token balances:', error);
+      SecureLogger.error('Error fetching token balances:', error);
     } finally {
       setLoading(false);
     }

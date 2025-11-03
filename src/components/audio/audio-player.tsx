@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
@@ -238,7 +239,7 @@ export function AudioPlayer() {
         const userPlaylists = await getUserPlaylists()
         setPlaylists(userPlaylists)
       } catch (error) {
-        console.error('Error loading playlists:', error)
+        SecureLogger.error('Error loading playlists:', error)
       }
     }
     loadPlaylists()
@@ -271,10 +272,10 @@ export function AudioPlayer() {
             audioOptimizer.optimizeAudioElement(audioRef.current, currentTrack.audioUrl);
           }
           setTimeout(() => {
-            if (audioRef.current) audioRef.current.play().catch(e => console.error("Error playing audio:", e))
+            if (audioRef.current) audioRef.current.play().catch(e => SecureLogger.error("Error playing audio:", e))
           }, 100)
         } else {
-          audioRef.current.play().catch(e => console.error("Error playing audio:", e))
+          audioRef.current.play().catch(e => SecureLogger.error("Error playing audio:", e))
         }
       } else {
         audioRef.current.pause()
@@ -351,7 +352,7 @@ export function AudioPlayer() {
       setNewPlaylistDescription('')
       setShowCreatePlaylist(false)
     } catch (error) {
-      console.error('Error creating playlist:', error)
+      SecureLogger.error('Error creating playlist:', error)
     }
   }
 
@@ -363,7 +364,7 @@ export function AudioPlayer() {
       await addToPlaylist(playlistId, currentTrack)
       alert('Трек добавлен в плейлист')
     } catch (error) {
-      console.error('Error adding to playlist:', error)
+      SecureLogger.error('Error adding to playlist:', error)
     }
   }
 

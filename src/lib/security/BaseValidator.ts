@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * BaseValidator — базовый класс валидации с поддержкой:
  * - generic-типов входа/выхода
@@ -100,12 +101,12 @@ export class BaseValidator<TInput, TOutput> {
    * @param name Необязательное имя шага
    */
   rule<TNext>(
-    fn: Rule<TInput extends never ? unknown : any, TNext>,
+    fn: Rule<TInput, TNext>,
     name?: string
-  ): BaseValidator<TNext, TOutput> {
+  ): BaseValidator<TInput, TNext> {
     this.steps.push({ name, fn });
-    // Трюк с типами: каждый следующий шаг принимает выход предыдущего
-    return this as unknown as BaseValidator<TNext, TOutput>;
+    // Use type assertion to unknown first to avoid type safety issues
+    return this as unknown as BaseValidator<TInput, TNext>;
   }
 
   /**
@@ -159,26 +160,40 @@ export class BaseValidator<TInput, TOutput> {
    * @param options Параметры: greedy/lazy/normalize
    * @returns SecurityResult<TOutput>
    */
-  validate(
+  validate<T = TOutput>(
     input: unknown,
     options?: ValidationOptions
-  ): SecurityResult<TOutput> {
+  ): SecurityResult<T> {
     const opts = this.mergeOptions(options);
 
     // 1) Нормализация
-    let value: any;
+    let value: TInput;
     try {
-      value =
-        opts.normalize && this.normalizer
-          ? this.normalizer(input)
-          : (input as TInput);
-    } catch (e: any) {
+      if (opts.normalize && this.normalizer) {
+        value = this.normalizer(input);
+      } else {
+        if (input === undefined || input === null) {
+          return err(
+            BaseValidator.error(
+              SecurityErrorCode.VALIDATION_ERROR,
+              "Input cannot be null or undefined"
+            )
+          );
+        }
+        value = input as TInput;
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error during normalization';
       return err(
-        makeError(
+        BaseValidator.error(
           SecurityErrorCode.VALIDATION_ERROR,
-          "Normalization failed",
+          `Normalization failed: ${errorMessage}`,
           undefined,
-          { cause: e ? String(e) : "unknown" }
+          {
+            inputType: typeof input,
+            error: errorMessage,
+            stack: error instanceof Error ? error.stack : undefined
+          }
         )
       );
     }
@@ -209,19 +224,17 @@ export class BaseValidator<TInput, TOutput> {
       return err(collectedErrors);
     }
 
+    // Use type assertion to handle the generic type
     return ok(
-      value as TOutput,
+      value as unknown as T,
       collectedWarnings.length > 0 ? collectedWarnings : undefined
-    );
+    ) as SecurityResult<T>;
   }
 
-  /**
-   * Переиспользование: собрать правило из внешнего валидатора как единый шаг.
-   * Удобно для композиции модулей (наследование не требуется).
-   */
+  // ...
   asRule(name?: string): Rule<unknown, TOutput> {
     return (input: unknown) =>
-      this.validate(input, { greedy: true, normalize: true, lazy: false });
+      this.validate<TOutput>(input, { greedy: true, normalize: true, lazy: false });
   }
 
   /**
@@ -239,13 +252,29 @@ export class BaseValidator<TInput, TOutput> {
    * Объединение дефолтных опций и пользовательских.
    */
   private mergeOptions(
-    options?: ValidationOptions
+    options: ValidationOptions = {}
   ): Required<Pick<ValidationOptions, "greedy" | "lazy" | "normalize">> {
+    // Проверка на конфликтующие опции
+    if (options.greedy !== undefined && options.lazy !== undefined) {
+      this.logWarning(
+        'Both "greedy" and "lazy" options are set. "lazy" will take precedence.',
+        options
+      );
+    }
+
     return {
-      greedy: options?.greedy ?? this.defaultOptions.greedy,
-      lazy: options?.lazy ?? this.defaultOptions.lazy,
-      normalize: options?.normalize ?? this.defaultOptions.normalize,
+      greedy: options.greedy ?? this.defaultOptions.greedy,
+      lazy: options.lazy ?? this.defaultOptions.lazy,
+      normalize: options.normalize ?? this.defaultOptions.normalize,
     };
+  }
+
+  private logWarning(message: string, context: unknown = {}): void {
+    // Safely handle the context parameter
+    const safeContext = context && typeof context === 'object' ? context : {};
+    if (typeof console !== 'undefined' && console.warn) {
+      SecureLogger.warn(`[BaseValidator${this.name ? `:${this.name}` : ''}] ${message}`, safeContext);
+    }
   }
 
   // ---------- Статические утилиты для разработчиков правил ----------

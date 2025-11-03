@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -72,7 +73,7 @@ export function AIRecommendations({
   const { isTMA } = useTelegram();
   const hapticFeedback = (type: string) => {
     // Пока используем простую реализацию, чтобы избежать ошибок типизации
-    console.log(`Haptic feedback: ${type}`);
+    SecureLogger.log(`Haptic feedback: ${type}`);
   };
   const { toast } = useToast();
 
@@ -121,7 +122,7 @@ export function AIRecommendations({
 
       setRecommendations(formattedRecommendations);
     } catch (error) {
-      console.error("Failed to load recommendations:", error);
+      SecureLogger.error("Failed to load recommendations:", error);
       toast({
         title: "Failed to load recommendations",
         description: "Please try again",

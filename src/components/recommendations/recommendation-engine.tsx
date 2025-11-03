@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -96,7 +97,7 @@ export function RecommendationEngine() {
 
       setRecommendations(newRecommendations)
     } catch (error) {
-      console.error('Error generating recommendations:', error)
+      SecureLogger.error('Error generating recommendations:', error)
     } finally {
       setLoading(false)
     }

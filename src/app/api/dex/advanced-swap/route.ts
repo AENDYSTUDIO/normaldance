@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
@@ -237,7 +238,7 @@ export async function POST(request: NextRequest) {
     // Trigger volatility protection if enabled
     if (enableVolatilityProtection && swapResult.volatility > 10) {
       // This would trigger protection mechanisms in background
-      console.log(`🛡️ High volatility detected: ${swapResult.volatility.toFixed(2)}%`)
+      SecureLogger.log(`🛡️ High volatility detected: ${swapResult.volatility.toFixed(2)}%`)
     }
 
     return NextResponse.json({

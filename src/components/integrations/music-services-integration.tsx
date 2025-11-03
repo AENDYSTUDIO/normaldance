@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -106,7 +107,7 @@ export function MusicServicesIntegration() {
           await loadAppleMusicData()
         }
       } catch (error) {
-        console.error('Failed to check integration status:', error)
+        SecureLogger.error('Failed to check integration status:', error)
       }
     }
 
@@ -143,7 +144,7 @@ export function MusicServicesIntegration() {
 
       setPlaylists(prev => [...prev, ...convertedPlaylists])
     } catch (error) {
-      console.error('Failed to load Spotify data:', error)
+      SecureLogger.error('Failed to load Spotify data:', error)
       setStatus(prev => ({ 
         ...prev, 
         spotify: { 
@@ -184,7 +185,7 @@ export function MusicServicesIntegration() {
 
       setPlaylists(prev => [...prev, ...convertedPlaylists])
     } catch (error) {
-      console.error('Failed to load Apple Music data:', error)
+      SecureLogger.error('Failed to load Apple Music data:', error)
       setStatus(prev => ({ 
         ...prev, 
         appleMusic: { 
@@ -234,7 +235,7 @@ export function MusicServicesIntegration() {
 
       setSearchResults(results)
     } catch (error) {
-      console.error('Search failed:', error)
+      SecureLogger.error('Search failed:', error)
     } finally {
       setImporting(false)
     }
@@ -253,14 +254,14 @@ export function MusicServicesIntegration() {
       }
 
       // Здесь будет логика сохранения в базу данных NormalDance
-      console.log('Imported playlist:', importedData)
+      SecureLogger.log('Imported playlist:', importedData)
       
       // Обновление списка плейлистов
       setPlaylists(prev => prev.filter(p => p.id !== playlist.id))
       
       alert(`Плейлист "${playlist.name}" успешно импортирован!`)
     } catch (error) {
-      console.error('Import failed:', error)
+      SecureLogger.error('Import failed:', error)
       alert('Не удалось импортировать плейлист')
     } finally {
       setImporting(false)
@@ -277,12 +278,12 @@ export function MusicServicesIntegration() {
         appleMusic.appleMusic.syncLibrary('current-user-id')
       ])
 
-      console.log('Spotify sync result:', spotifySync)
-      console.log('Apple Music sync result:', appleMusicSync)
+      SecureLogger.log('Spotify sync result:', spotifySync)
+      SecureLogger.log('Apple Music sync result:', appleMusicSync)
       
       alert('Библиотека успешно синхронизирована!')
     } catch (error) {
-      console.error('Sync failed:', error)
+      SecureLogger.error('Sync failed:', error)
       alert('Не удалось синхронизировать библиотеку')
     } finally {
       setSyncing(false)

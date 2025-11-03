@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Оптимизированный загрузчик аудиофайлов для NormalDance
  * Поддержка стриминга, кеширования, адаптивного качества и предзагрузки
@@ -91,9 +92,9 @@ class AudioLoader {
     try {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
       this.isInitialized = true
-      console.log('AudioLoader initialized')
+      SecureLogger.log('AudioLoader initialized')
     } catch (error) {
-      console.error('Failed to initialize AudioContext:', error)
+      SecureLogger.error('Failed to initialize AudioContext:', error)
       throw new Error('Audio context not supported')
     }
   }
@@ -148,7 +149,7 @@ class AudioLoader {
     // Проверка кеша
     const cachedAudio = await audioCache.getCachedAudio(url, quality)
     if (cachedAudio) {
-      console.log(`Audio loaded from cache: ${url}`)
+      SecureLogger.log(`Audio loaded from cache: ${url}`)
       if (options.onSuccess) {
         options.onSuccess(this.arrayBufferToAudioBuffer(cachedAudio))
       }
@@ -296,9 +297,9 @@ class AudioLoader {
   async preloadAudio(url: string, quality: 'low' | 'medium' | 'high' = 'low'): Promise<void> {
     try {
       await this.loadAudio(url, { quality, preload: true })
-      console.log(`Audio preloaded: ${url}`)
+      SecureLogger.log(`Audio preloaded: ${url}`)
     } catch (error) {
-      console.warn(`Failed to preload audio: ${url}`, error)
+      SecureLogger.warn(`Failed to preload audio: ${url}`, error)
     }
   }
 
@@ -366,17 +367,17 @@ class AudioLoader {
         // Адаптация качества на основе производительности
         if (loadTime > 5000 && quality !== 'low') {
           currentQuality = 'low'
-          console.log(`Switching to low quality due to slow load: ${loadTime}ms`)
+          SecureLogger.log(`Switching to low quality due to slow load: ${loadTime}ms`)
         } else if (loadTime < 2000 && quality !== 'high') {
           currentQuality = 'high'
-          console.log(`Switching to high quality due to fast load: ${loadTime}ms`)
+          SecureLogger.log(`Switching to high quality due to fast load: ${loadTime}ms`)
         }
 
         return result
       } catch (error) {
         // Падение качества при ошибке
         if (quality !== 'low') {
-          console.log(`Retrying with lower quality due to error: ${error}`)
+          SecureLogger.log(`Retrying with lower quality due to error: ${error}`)
           return loadWithRetry(quality === 'high' ? 'medium' : 'low')
         }
         throw error
@@ -413,7 +414,7 @@ class AudioLoader {
         results.push(audioBuffer)
       } catch (error) {
         errors.push(error as Error)
-        console.warn(`Failed to load audio: ${url}`, error)
+        SecureLogger.warn(`Failed to load audio: ${url}`, error)
       } finally {
         activeLoads--
         await loadNext()
@@ -429,7 +430,7 @@ class AudioLoader {
     await Promise.all(promises)
 
     if (errors.length > 0) {
-      console.warn(`${errors.length} errors occurred during batch loading`)
+      SecureLogger.warn(`${errors.length} errors occurred during batch loading`)
     }
 
     return results

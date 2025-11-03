@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 📱 Telegram Integration 2025
  * 
@@ -115,7 +116,7 @@ export class TelegramIntegration2025 {
       const result = await response.json()
       return result.ok
     } catch (error) {
-      console.error('Error initializing Telegram Mini-App:', error)
+      SecureLogger.error('Error initializing Telegram Mini-App:', error)
       return false
     }
   }
@@ -146,7 +147,7 @@ export class TelegramIntegration2025 {
 
       return success
     } catch (error) {
-      console.error('Error processing Telegram payment:', error)
+      SecureLogger.error('Error processing Telegram payment:', error)
       return false
     }
   }
@@ -215,7 +216,7 @@ export class TelegramIntegration2025 {
 
       return success
     } catch (error) {
-      console.error('Error sending notification:', error)
+      SecureLogger.error('Error sending notification:', error)
       return false
     }
   }
@@ -248,7 +249,7 @@ export class TelegramIntegration2025 {
         }
       })
     } catch (error) {
-      console.error('Error sending analytics to channel:', error)
+      SecureLogger.error('Error sending analytics to channel:', error)
       return false
     }
   }
@@ -534,7 +535,7 @@ export class TelegramIntegration2025 {
       const result = await response.json()
       return result.ok
     } catch (error) {
-      console.error('Error sending Telegram message:', error)
+      SecureLogger.error('Error sending Telegram message:', error)
       return false
     }
   }

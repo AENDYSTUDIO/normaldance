@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
@@ -255,9 +256,9 @@ export function ChatMatrix({ className }: ChatMatrixProps) {
       setDailySpend(prev => prev + 0.001)
 
       // Здесь будет API вызов для отправки сообщения
-      console.log('Sending message:', newMessage)
+      SecureLogger.log('Sending message:', newMessage)
     } catch (error) {
-      console.error('Error sending message:', error)
+      SecureLogger.error('Error sending message:', error)
     } finally {
       setIsLoading(false)
     }
@@ -266,7 +267,7 @@ export function ChatMatrix({ className }: ChatMatrixProps) {
   const handleVote = async (messageId: string, voteType: string, trackId?: string) => {
     try {
       // Здесь будет API вызов для голосования
-      console.log('Voting:', { messageId, voteType, trackId })
+      SecureLogger.log('Voting:', { messageId, voteType, trackId })
       
       // Обновляем сообщение с результатами голосования
       setMessages(prev => prev.map(msg => {
@@ -286,7 +287,7 @@ export function ChatMatrix({ className }: ChatMatrixProps) {
         return msg
       }))
     } catch (error) {
-      console.error('Error voting:', error)
+      SecureLogger.error('Error voting:', error)
     }
   }
 
@@ -309,7 +310,7 @@ export function ChatMatrix({ className }: ChatMatrixProps) {
         return msg
       }))
     } catch (error) {
-      console.error('Error adding reaction:', error)
+      SecureLogger.error('Error adding reaction:', error)
     }
   }
 
@@ -562,7 +563,7 @@ export function useChatMatrix() {
       }
       return false
     } catch (error) {
-      console.error('Error sending message:', error)
+      SecureLogger.error('Error sending message:', error)
       return false
     } finally {
       setIsLoading(false)
@@ -587,7 +588,7 @@ export function useChatMatrix() {
       }
       return false
     } catch (error) {
-      console.error('Error voting:', error)
+      SecureLogger.error('Error voting:', error)
       return false
     }
   }

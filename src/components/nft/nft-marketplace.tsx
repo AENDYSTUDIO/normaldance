@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
@@ -160,7 +161,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
       setNfts(applyFiltersAndSort(nftsData))
       setTrendingNFTs(trendingData)
     } catch (error) {
-      console.error('Error loading marketplace data:', error)
+      SecureLogger.error('Error loading marketplace data:', error)
     } finally {
       setLoading(false)
     }
@@ -244,7 +245,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
       const portfolio = await nftMarketplaces.getUserPortfolio(userId)
       setUserPortfolio(portfolio)
     } catch (error) {
-      console.error('Error loading user portfolio:', error)
+      SecureLogger.error('Error loading user portfolio:', error)
     }
   }
 
@@ -254,7 +255,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
       const stats = await nftMarketplaces.getMarketStats(selectedMarketplace)
       setMarketStats(stats)
     } catch (error) {
-      console.error('Error loading market stats:', error)
+      SecureLogger.error('Error loading market stats:', error)
     }
   }
 
@@ -264,7 +265,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
       const auctionsData = await nftMarketplaces.getActiveAuctions(selectedMarketplace, 20)
       setAuctions(auctionsData)
     } catch (error) {
-      console.error('Error loading auctions:', error)
+      SecureLogger.error('Error loading auctions:', error)
     }
   }
 
@@ -274,7 +275,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
       const watchlistData = await nftMarketplaces.getUserWatchlist(userId)
       setWatchlist(watchlistData.map((item: unknown) => item.nftId))
     } catch (error) {
-      console.error('Error loading watchlist:', error)
+      SecureLogger.error('Error loading watchlist:', error)
     }
   }
 
@@ -303,7 +304,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
         alert(`Ошибка покупки: ${error.error}`)
       }
     } catch (error) {
-      console.error('Error buying NFT:', error)
+      SecureLogger.error('Error buying NFT:', error)
       alert('Произошла ошибка при покупке NFT')
     }
   }
@@ -332,7 +333,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
         alert(`Ошибка ставки: ${error.error}`)
       }
     } catch (error) {
-      console.error('Error placing bid:', error)
+      SecureLogger.error('Error placing bid:', error)
       alert('Произошла ошибка при размещении ставки')
     }
   }
@@ -350,7 +351,7 @@ export function NFTMarketplace({ userId }: NFTMarketplaceProps) {
         setWatchlist(prev => [...prev, nft.id])
       }
     } catch (error) {
-      console.error('Error updating watchlist:', error)
+      SecureLogger.error('Error updating watchlist:', error)
     }
   }
 

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, Connection } from '@solana/web3.js';
@@ -78,7 +79,7 @@ export const InvisibleWalletProvider: React.FC<InvisibleWalletProviderProps> = (
         setState(prev => ({ ...prev, connecting: true }));
         await solanaConnect();
       } catch (error) {
-        console.warn('Auto-connect failed, continuing in offline mode');
+        SecureLogger.warn('Auto-connect failed, continuing in offline mode');
         setState(prev => ({
           ...prev,
           connecting: false,
@@ -98,7 +99,7 @@ export const InvisibleWalletProvider: React.FC<InvisibleWalletProviderProps> = (
       setState(prev => ({ ...prev, offlineMode: false }));
       walletEmitter.emit('invisibleWallet:connected', publicKey);
     } catch (error) {
-      console.error('Failed to connect wallet:', error);
+      SecureLogger.error('Failed to connect wallet:', error);
       setState(prev => ({ ...prev, connecting: false, offlineMode: true }));
       walletEmitter.emit('invisibleWallet:connectError', error);
     }
@@ -131,7 +132,7 @@ export const InvisibleWalletProvider: React.FC<InvisibleWalletProviderProps> = (
         }));
         walletEmitter.emit('invisibleWallet:balanceUpdated', formattedBalance);
       } catch (error) {
-        console.error('Failed to update balance:', error);
+        SecureLogger.error('Failed to update balance:', error);
         // В оффлайн режиме сохраняем предыдущий баланс
         if (!state.offlineMode) {
           setState(prev => ({ ...prev, offlineMode: true }));

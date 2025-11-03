@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +55,7 @@ export function TonWalletOverview({
         setIsLoading(false);
       }, 1000);
     } catch (error) {
-      console.error("Error loading balance:", error);
+      SecureLogger.error("Error loading balance:", error);
       toast({
         title: "Ошибка",
         description: "Не удалось загрузить баланс кошелька",
@@ -72,7 +73,7 @@ export function TonWalletOverview({
         description: "Адрес кошелька скопирован в буфер обмена",
       });
     } catch (err) {
-      console.error("Failed to copy:", err);
+      SecureLogger.error("Failed to copy:", err);
       toast({
         title: "Ошибка",
         description: "Не удалось скопировать в буфер обмена",

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -45,7 +46,7 @@ export function TelegramUserProfile({
     try {
       await navigator.clipboard.writeText(text);
     } catch (err) {
-      console.error("Failed to copy:", err);
+      SecureLogger.error("Failed to copy:", err);
     }
   };
 

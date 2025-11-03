@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { EthereumConnectButton } from '@/components/wallet/EthereumConnectButton';
 'use client'
 
@@ -80,7 +81,7 @@ export default function SignInPage() {
       router.refresh()
       
     } catch (err) {
-      console.error('Sign message error:', err)
+      SecureLogger.error('Sign message error:', err)
       setError(err instanceof Error ? err.message : 'Failed to sign message')
     } finally {
       setIsLoading(false)
@@ -96,7 +97,7 @@ export default function SignInPage() {
       await signIn(provider, { callbackUrl: '/' })
       
     } catch (err) {
-      console.error('OAuth sign in error:', err)
+      SecureLogger.error('OAuth sign in error:', err)
       setError(err instanceof Error ? err.message : 'Failed to sign in')
     } finally {
       setIsLoading(false)
@@ -108,7 +109,7 @@ export default function SignInPage() {
     try {
       setVisible(true)
     } catch (err) {
-      console.error('Wallet connection error:', err)
+      SecureLogger.error('Wallet connection error:', err)
       setError(err instanceof Error ? err.message : 'Failed to connect wallet')
     }
   }

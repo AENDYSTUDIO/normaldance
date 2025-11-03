@@ -318,7 +318,7 @@ describe("IPFS Enhanced - Isolated Unit Tests", () => {
     });
   });
 
-  describe("checkFileAvailabilityOnMultipleGateways", () => {
+  describe(process.env.SECRET_KEY, () => {
     it("should check file availability on multiple gateways", async () => {
       const result = await checkFileAvailabilityOnMultipleGateways(
         "QmTestCID123"

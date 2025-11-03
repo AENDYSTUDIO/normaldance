@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔐 Sumsub Service - Identity Verification Integration
  *
@@ -138,7 +139,7 @@ export class SumsubService {
         message: "Applicant created successfully",
       };
     } catch (error) {
-      console.error("Error creating Sumsub applicant:", error);
+      SecureLogger.error("Error creating Sumsub applicant:", error);
       return {
         success: false,
         message: `Failed to create applicant: ${
@@ -184,7 +185,7 @@ export class SumsubService {
         message: "Access token generated successfully",
       };
     } catch (error) {
-      console.error("Error generating Sumsub access token:", error);
+      SecureLogger.error("Error generating Sumsub access token:", error);
       return {
         success: false,
         message: `Failed to generate access token: ${
@@ -234,7 +235,7 @@ export class SumsubService {
         customAttributes: result.customAttributes,
       };
     } catch (error) {
-      console.error("Error fetching Sumsub applicant info:", error);
+      SecureLogger.error("Error fetching Sumsub applicant info:", error);
       return null;
     }
   }
@@ -287,7 +288,7 @@ export class SumsubService {
           : undefined,
       }));
     } catch (error) {
-      console.error("Error fetching Sumsub applicant checks:", error);
+      SecureLogger.error("Error fetching Sumsub applicant checks:", error);
       return [];
     }
   }
@@ -349,7 +350,7 @@ export class SumsubService {
         message: "Document submitted successfully",
       };
     } catch (error) {
-      console.error("Error submitting document to Sumsub:", error);
+      SecureLogger.error("Error submitting document to Sumsub:", error);
       return {
         success: false,
         message: `Failed to submit document: ${
@@ -415,7 +416,7 @@ export class SumsubService {
         additionalChecks: result.checks || [],
       };
     } catch (error) {
-      console.error("Error fetching Sumsub verification level:", error);
+      SecureLogger.error("Error fetching Sumsub verification level:", error);
       return null;
     }
   }
@@ -429,7 +430,7 @@ export class SumsubService {
       // В реальной реализации здесь должна быть проверка подписи
       // const expectedSignature = this.calculateWebhookSignature(payload);
       // if (signature !== expectedSignature) {
-      //   console.error("Invalid webhook signature");
+      //   SecureLogger.error("Invalid webhook signature");
       //   return false;
       // }
     }
@@ -448,7 +449,7 @@ export class SumsubService {
 
       return true;
     } catch (error) {
-      console.error("Error handling Sumsub webhook:", error);
+      SecureLogger.error("Error handling Sumsub webhook:", error);
       return false;
     }
   }
@@ -472,7 +473,7 @@ export class SumsubService {
       });
 
       if (!kycProfile) {
-        console.error(`KYC profile not found for applicant ID: ${applicantId}`);
+        SecureLogger.error(`KYC profile not found for applicant ID: ${applicantId}`);
         return;
       }
 
@@ -536,7 +537,7 @@ export class SumsubService {
         severity: newStatus === "REJECTED" ? "HIGH" : "MEDIUM",
       });
     } catch (error) {
-      console.error("Error updating KYC status from webhook:", error);
+      SecureLogger.error("Error updating KYC status from webhook:", error);
     }
   }
 
@@ -610,7 +611,7 @@ export class SumsubService {
     // return crypto.createHmac('sha256', secret).update(message).digest('hex');
 
     // Для браузера: реализация через Web Crypto API
-    console.warn(
+    SecureLogger.warn(
       "HMAC calculation needs to be implemented based on runtime environment"
     );
     return "IMPLEMENT_HMAC_CALCULATION"; // Заглушка

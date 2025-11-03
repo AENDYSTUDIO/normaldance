@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import {
   DifficultyLevel,
   Test,
@@ -36,7 +37,7 @@ export class LMSIntegration {
           );
       }
     } catch (error) {
-      console.error("Ошибка при отправке результата в LMS:", error);
+      SecureLogger.error("Ошибка при отправке результата в LMS:", error);
       return false;
     }
   }
@@ -61,7 +62,7 @@ export class LMSIntegration {
           );
       }
     } catch (error) {
-      console.error("Ошибка при получении тестов из LMS:", error);
+      SecureLogger.error("Ошибка при получении тестов из LMS:", error);
       return [];
     }
   }
@@ -86,7 +87,7 @@ export class LMSIntegration {
           );
       }
     } catch (error) {
-      console.error("Ошибка при синхронизации профиля с LMS:", error);
+      SecureLogger.error("Ошибка при синхронизации профиля с LMS:", error);
       return userProfile;
     }
   }

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -15,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.status(200).json(stats)
   } catch (error) {
-    console.error('Stats API error:', error)
+    SecureLogger.error('Stats API error:', error)
     res.status(500).json({ error: 'Failed to fetch stats' })
   }
 }

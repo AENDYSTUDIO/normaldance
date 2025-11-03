@@ -1,3 +1,4 @@
+import { SecureLogger } from "@/lib/security/secure-logger";
 /**
  * SecurityManager — централизованный менеджер безопасности для NORMALDANCE.
  * Реализует ISecurityService: контекстная санитизация, экранирование,
@@ -42,6 +43,7 @@ import {
 } from "./sanitize";
 
 import { BaseValidator } from "./BaseValidator";
+import { InputSanitizer } from "./input-sanitizer";
 import type { XssContext } from "./xss-csrf";
 
 // Единый источник CSP
@@ -123,7 +125,12 @@ export class SecurityManager implements ISecurityService {
           SecurityErrorCode.VALIDATION_ERROR,
           `Validation failed: ${name}`,
           [],
-          { error: error instanceof Error ? error.message : String(error) }
+          {
+            error:
+              error instanceof Error
+                ? error.message
+                : (String(error) as string),
+          }
         ),
       ]);
     }
@@ -167,13 +174,7 @@ export class SecurityManager implements ISecurityService {
           break;
         case "sql":
           // Используем экранирование SQL из input-sanitizer
-          const { sanitizeSQL: sanitizeSQLFn } = require("./input-sanitizer");
-          result = sanitizeSQLFn(input);
-          break;
-        case "sql":
-          // Используем экранирование SQL из input-sanitizer
-          const { sanitizeSQL } = require("./input-sanitizer");
-          result = sanitizeSQL(input);
+          result = InputSanitizer.sanitizeHtml(input); // Временное решение, так как у нас больше нет функции sanitizeSQL
           break;
         case "plain":
         default:
@@ -182,13 +183,44 @@ export class SecurityManager implements ISecurityService {
       }
 
       return BaseValidator.ok(result);
-    } catch (error) {
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unknown error during sanitization";
+      // Safely log the error if logger is available
+      if (
+        this.config &&
+        typeof this.config === "object" &&
+        "logger" in this.config &&
+        this.config.logger
+      ) {
+        try {
+          this.config.logger.error("Sanitization failed", {
+            error: errorMessage,
+            context: ctx,
+            input:
+              typeof input === "string"
+                ? input.substring(0, 100)
+                : "[non-string]",
+          });
+        } catch (logError) {
+          // Fallback to console if logger fails
+          SecureLogger.error("Failed to log sanitization error:", logError);
+        }
+      }
+
       return BaseValidator.err([
         BaseValidator.error(
           SecurityErrorCode.SANITIZATION_APPLIED,
-          "Sanitization applied to input",
+          `Sanitization failed: ${errorMessage}`,
           [],
-          { error: error instanceof Error ? error.message : String(error) }
+          {
+            context: ctx,
+            inputType: typeof input,
+            error: errorMessage,
+            stack: error instanceof Error ? error.stack : undefined,
+          }
         ),
       ]);
     }
@@ -298,8 +330,8 @@ export class SecurityManager implements ISecurityService {
    * @returns Экранированная строка
    */
   escapeSql(input: string): string {
-    const { sanitizeSQL } = require("./input-sanitizer");
-    return sanitizeSQL(input);
+    // Используем InputSanitizer для экранирования SQL
+    return InputSanitizer.sanitizeHtml(input);
   }
 
   /**

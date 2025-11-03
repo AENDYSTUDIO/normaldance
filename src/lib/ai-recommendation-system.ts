@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { Track } from '@/store/use-audio-store'
 
 export interface AudioFeatures {
@@ -69,7 +70,7 @@ export class AIRecommendationSystem {
         }
       }
     } catch (error) {
-      console.error('Failed to initialize AI model:', error)
+      SecureLogger.error('Failed to initialize AI model:', error)
     }
   }
 

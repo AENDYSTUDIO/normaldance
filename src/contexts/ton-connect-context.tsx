@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { useTonConnectUI } from "@tonconnect/ui-react";
@@ -50,7 +51,7 @@ export function TonConnectProvider({
     try {
       await tonConnectUI.connectWallet();
     } catch (error) {
-      console.error("Error connecting wallet:", error);
+      SecureLogger.error("Error connecting wallet:", error);
       throw error;
     }
   };
@@ -59,7 +60,7 @@ export function TonConnectProvider({
     try {
       await tonConnectUI.disconnect();
     } catch (error) {
-      console.error("Error disconnecting wallet:", error);
+      SecureLogger.error("Error disconnecting wallet:", error);
       throw error;
     }
   };
@@ -68,7 +69,7 @@ export function TonConnectProvider({
     try {
       return await tonConnectUI.sendTransaction(params);
     } catch (error) {
-      console.error("Error sending transaction:", error);
+      SecureLogger.error("Error sending transaction:", error);
       throw error;
     }
   };

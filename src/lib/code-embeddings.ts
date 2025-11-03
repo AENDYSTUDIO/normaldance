@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import fs from "fs/promises";
 import path from "path";
 import kiloCodeService from "./kilocode-service";
@@ -34,21 +35,21 @@ class CodeEmbeddings {
       await qdrantService.initCollection();
       const files = await this.getAllCodeFiles(projectPath);
 
-      console.log(`Найдено ${files.length} файлов для индексации`);
+      SecureLogger.log(`Найдено ${files.length} файлов для индексации`);
 
       for (const file of files) {
         try {
           const analysis = await this.analyzeCodeFile(file);
           await this.indexCodeFile(analysis);
-          console.log(`Индексация завершена для: ${file}`);
+          SecureLogger.log(`Индексация завершена для: ${file}`);
         } catch (error) {
-          console.error(`Ошибка при индексации файла ${file}:`, error);
+          SecureLogger.error(`Ошибка при индексации файла ${file}:`, error);
         }
       }
 
-      console.log("Индексация кодовой базы завершена");
+      SecureLogger.log("Индексация кодовой базы завершена");
     } catch (error) {
-      console.error("Ошибка при индексации кодовой базы:", error);
+      SecureLogger.error("Ошибка при индексации кодовой базы:", error);
       throw error;
     }
   }
@@ -84,7 +85,7 @@ class CodeEmbeddings {
     try {
       rooCodeAnalysis = await rooCodeService.analyzeCode(content, language);
     } catch (error) {
-      console.error(
+      SecureLogger.error(
         `Ошибка при анализе файла ${filePath} с помощью RooCode:`,
         error
       );
@@ -95,7 +96,7 @@ class CodeEmbeddings {
     try {
       kiloCodeMetrics = await kiloCodeService.analyzeMetrics(content);
     } catch (error) {
-      console.error(
+      SecureLogger.error(
         `Ошибка при получении метрик файла ${filePath} с помощью KiloCode:`,
         error
       );

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
@@ -109,7 +110,7 @@ export async function POST(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error updating balance:', error)
+    SecureLogger.error('Error updating balance:', error)
     return NextResponse.json(
       { error: 'Failed to update balance' },
       { status: 500 }
@@ -154,7 +155,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    console.error('Error getting balance:', error)
+    SecureLogger.error('Error getting balance:', error)
     return NextResponse.json(
       { error: 'Failed to get balance' },
       { status: 500 }

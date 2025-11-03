@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔗 Chainalysis Portfolio Risk API
  *
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis portfolio risk API:", error);
+    SecureLogger.error("Error in Chainalysis portfolio risk API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -97,7 +98,7 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis portfolio risk GET API:", error);
+    SecureLogger.error("Error in Chainalysis portfolio risk GET API:", error);
     return NextResponse.json(
       {
         success: false,

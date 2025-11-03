@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { DeflationaryModel } from '../deflationary-model';
 import { PrismaClient } from '@prisma/client';
 import { Connection, PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
@@ -116,7 +117,7 @@ export class DeflationaryTokenManager {
         netAmount
       };
     } catch (error) {
-      console.error('Error creating deflationary transaction:', error);
+      SecureLogger.error('Error creating deflationary transaction:', error);
       return {
         success: false,
         burnedAmount: 0,

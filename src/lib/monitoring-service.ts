@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { checkFileAvailabilityOnMultipleGateways, getFileFromBestGateway } from './ipfs-enhanced'
 import { filecoinService } from './filecoin-service'
 
@@ -40,7 +41,7 @@ export class MonitoringService {
 
   // Запуск мониторинга
   startMonitoring(): void {
-    console.log('Starting file monitoring service...')
+    SecureLogger.log('Starting file monitoring service...')
     
     this.monitoringInterval = setInterval(async () => {
       await this.runMonitoringCycle()
@@ -55,14 +56,14 @@ export class MonitoringService {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval)
       this.monitoringInterval = null
-      console.log('File monitoring service stopped')
+      SecureLogger.log('File monitoring service stopped')
     }
   }
 
   // Запуск цикла мониторинга
   private async runMonitoringCycle(): Promise<void> {
     try {
-      console.log('Running monitoring cycle...')
+      SecureLogger.log('Running monitoring cycle...')
       
       const metrics = await this.collectMetrics()
       this.metrics.push(metrics)
@@ -75,9 +76,9 @@ export class MonitoringService {
         this.metrics = this.metrics.slice(-1000)
       }
       
-      console.log('Monitoring cycle completed')
+      SecureLogger.log('Monitoring cycle completed')
     } catch (error) {
-      console.error('Monitoring cycle failed:', error)
+      SecureLogger.error('Monitoring cycle failed:', error)
       this.createAlert('performance', 'high', 'Monitoring cycle failed', { error })
     }
   }
@@ -125,7 +126,7 @@ export class MonitoringService {
           }
           
         } catch (error) {
-          console.warn(`Failed to check track ${track.id}:`, error)
+          SecureLogger.warn(`Failed to check track ${track.id}:`, error)
           failedUploads++
         }
       })
@@ -150,7 +151,7 @@ export class MonitoringService {
       
       return metrics
     } catch (error) {
-      console.error('Failed to collect metrics:', error)
+      SecureLogger.error('Failed to collect metrics:', error)
       throw error
     }
   }
@@ -214,7 +215,7 @@ export class MonitoringService {
     }
     
     this.alerts.push(alert)
-    console.log(`Alert created: [${severity.toUpperCase()}] ${message}`)
+    SecureLogger.log(`Alert created: [${severity.toUpperCase()}] ${message}`)
     
     // Оставляем только последние 100 оповещений
     if (this.alerts.length > 100) {
@@ -229,7 +230,7 @@ export class MonitoringService {
       // Пока возвращаем пустой массив
       return []
     } catch (error) {
-      console.error('Failed to get tracks from database:', error)
+      SecureLogger.error('Failed to get tracks from database:', error)
       return []
     }
   }
@@ -255,7 +256,7 @@ export class MonitoringService {
     const alert = this.alerts.find(a => a.id === alertId)
     if (alert) {
       alert.resolved = true
-      console.log(`Alert resolved: ${alertId}`)
+      SecureLogger.log(`Alert resolved: ${alertId}`)
       return true
     }
     return false
@@ -317,7 +318,7 @@ export class MonitoringService {
         failedUploads,
       }
     } catch (error) {
-      console.error('Failed to get upload performance:', error)
+      SecureLogger.error('Failed to get upload performance:', error)
       return {
         averageTime: 0,
         successRate: 0,

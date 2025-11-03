@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useEffect, useState, Suspense, lazy, ComponentType, ReactNode } from 'react'
@@ -439,7 +440,7 @@ export function ResourcePreloader() {
       try {
         await fetch('/api/health', { method: 'HEAD' })
       } catch (error) {
-        console.warn('Failed to preload API:', error)
+        SecureLogger.warn('Failed to preload API:', error)
       }
     }
 

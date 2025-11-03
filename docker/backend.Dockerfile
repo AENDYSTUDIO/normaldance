@@ -1,20 +1,20 @@
 # Multi-stage Dockerfile for Backend service with Prisma and Socket.io
 FROM node:20-alpine AS base
-RUN apk add --no-cache libc6-compat openssl
+RUN apk add --no-cache libc6-compat openssl python3 build-base
 WORKDIR /app
 
 # Dependencies stage
 FROM base AS deps
 COPY package*.json ./
 COPY prisma ./prisma/
-RUN npm ci --only=production
+RUN npm ci --only=production --legacy-peer-deps
 RUN npx prisma generate
 
 # Build stage
 FROM base AS builder
 COPY package*.json ./
 COPY prisma ./prisma/
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY . .
 RUN npx prisma generate
 RUN npm run build

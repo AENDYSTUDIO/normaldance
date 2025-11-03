@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { ethers } from 'ethers'
 
 export interface Proposal {
@@ -156,7 +157,7 @@ export class DAOGovernance {
       
       throw new Error('Failed to extract proposal ID from transaction')
     } catch (error) {
-      console.error('Error creating proposal:', error)
+      SecureLogger.error('Error creating proposal:', error)
       throw error
     }
   }
@@ -183,7 +184,7 @@ export class DAOGovernance {
       
       await tx.wait()
     } catch (error) {
-      console.error('Error voting:', error)
+      SecureLogger.error('Error voting:', error)
       throw error
     }
   }
@@ -198,7 +199,7 @@ export class DAOGovernance {
       const tx = await this.governanceContract.execute(proposalId)
       await tx.wait()
     } catch (error) {
-      console.error('Error executing proposal:', error)
+      SecureLogger.error('Error executing proposal:', error)
       throw error
     }
   }
@@ -243,7 +244,7 @@ export class DAOGovernance {
         updatedAt: new Date()
       }
     } catch (error) {
-      console.error('Error getting proposal:', error)
+      SecureLogger.error('Error getting proposal:', error)
       return null
     }
   }
@@ -268,7 +269,7 @@ export class DAOGovernance {
         createdAt: new Date()
       }
     } catch (error) {
-      console.error('Error getting user votes:', error)
+      SecureLogger.error('Error getting user votes:', error)
       return null
     }
   }
@@ -283,7 +284,7 @@ export class DAOGovernance {
       const tx = await this.tokenContract.delegate(delegatee)
       await tx.wait()
     } catch (error) {
-      console.error('Error delegating votes:', error)
+      SecureLogger.error('Error delegating votes:', error)
       throw error
     }
   }
@@ -298,7 +299,7 @@ export class DAOGovernance {
       const delegate = await this.tokenContract.delegates(userAddress)
       return delegate === ethers.ZeroAddress ? null : delegate
     } catch (error) {
-      console.error('Error getting delegate:', error)
+      SecureLogger.error('Error getting delegate:', error)
       return null
     }
   }
@@ -313,7 +314,7 @@ export class DAOGovernance {
       const balance = await this.tokenContract.balanceOf(userAddress)
       return balance.toString()
     } catch (error) {
-      console.error('Error getting token balance:', error)
+      SecureLogger.error('Error getting token balance:', error)
       return '0'
     }
   }
@@ -328,7 +329,7 @@ export class DAOGovernance {
       const votes = await this.tokenContract.getVotes(userAddress)
       return votes.toString()
     } catch (error) {
-      console.error('Error getting voting power:', error)
+      SecureLogger.error('Error getting voting power:', error)
       return '0'
     }
   }
@@ -363,7 +364,7 @@ export class DAOGovernance {
         timelockDelay: Number(timelockDelay)
       }
     } catch (error) {
-      console.error('Error getting governance settings:', error)
+      SecureLogger.error('Error getting governance settings:', error)
       throw error
     }
   }
@@ -391,7 +392,7 @@ export class DAOGovernance {
         circulatingSupply: totalSupply.toString() // Упрощенно
       }
     } catch (error) {
-      console.error('Error getting token info:', error)
+      SecureLogger.error('Error getting token info:', error)
       return null
     }
   }
@@ -451,7 +452,7 @@ export class DAOGovernance {
         proposalThreshold: proposalThreshold.toString()
       }
     } catch (error) {
-      console.error('Error checking user permissions:', error)
+      SecureLogger.error('Error checking user permissions:', error)
       throw error
     }
   }

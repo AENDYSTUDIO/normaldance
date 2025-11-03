@@ -1,36 +1,13 @@
-import * as Sentry from "@sentry/nextjs";
 import { logger } from "./src/lib/logger";
 
-// Инициализация Sentry при старте приложения
+// Инициализация Sentry через next.config.ts с помощью @sentry/nextjs плагина
+// Sentry инициализируется автоматически при использовании withSentryConfig
 export async function register() {
-  if (process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN) {
-    try {
-      // Импорт Sentry конфигурации
-      const SentryConfig = {
-        dsn: process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.SENTRY_DSN,
-        tracesSampleRate: parseFloat(
-          process.env.SENTRY_TRACES_SAMPLE_RATE || "0.2"
-        ),
-        profilesSampleRate: parseFloat(
-          process.env.SENTRY_PROFILES_SAMPLE_RATE || "0.2"
-        ),
-        environment: process.env.NODE_ENV || "development",
-        release: process.env.npm_package_version || "1.0.0",
-        integrations: [],
-      };
-
-      // Инициализация Sentry
-      Sentry.init(SentryConfig);
-
-      logger.info("Sentry initialized successfully", {
-        environment: SentryConfig.environment,
-        release: SentryConfig.release,
-        tracesSampleRate: SentryConfig.tracesSampleRate,
-      });
-    } catch (error) {
-      logger.error("Failed to initialize Sentry", error);
-    }
-  }
+  // Инициализация Sentry происходит через next.config.ts с помощью withSentryConfig
+  // Это предотвращает конфликты с OpenTelemetry в Server Components
+  logger.info(
+    "Sentry initialization handled via next.config.ts withSentryConfig"
+  );
 }
 
 // Обработка ошибок на сервере
@@ -41,10 +18,31 @@ export function onError(error: Error) {
     name: error.name,
   });
 
-  // Отправка ошибки в Sentry, если он инициализирован
+  // Sentry автоматически обрабатывает ошибки через next.config.ts конфигурацию
+  // Не нужно вызывать Sentry.captureException напрямую здесь
+}
+
+// Обработка ошибок запросов (для улучшения интеграции с Sentry)
+export async function onRequestError(error: Error) {
+  logger.error("Request error captured by instrumentation", {
+    message: error.message,
+    stack: error.stack,
+    name: error.name,
+  });
+
+  // Используем Sentry для отложенного логирования ошибок, избегая конфликта с OpenTelemetry
   try {
-    Sentry.captureException(error);
+    // Проверяем наличие Sentry и его методов перед использованием
+    const hasSentry =
+      typeof process !== "undefined" && process.env.NODE_ENV !== "development";
+    if (hasSentry) {
+      // Отложенная загрузка Sentry для избежания конфликта с OpenTelemetry
+      const Sentry = await import("@sentry/nextjs").catch(() => null);
+      if (Sentry && Sentry.captureException) {
+        Sentry.captureException(error);
+      }
+    }
   } catch (sentryError) {
-    logger.error("Failed to send error to Sentry", sentryError);
+    logger.error("Failed to send request error to Sentry", sentryError);
   }
 }

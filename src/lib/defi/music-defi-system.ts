@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🎵 NormalDance DeFi System 2025 - Comprehensive Music Financial Protocol
  * 
@@ -351,7 +352,7 @@ export class MusicDeFiSystem {
       }
 
     } catch (error) {
-      console.error('Royalty distribution failed:', error)
+      SecureLogger.error('Royalty distribution failed:', error)
       await this.updateDistributionStatus(distributionId, 'FAILED')
       throw error
     }
@@ -569,7 +570,7 @@ export class MusicDeFiSystem {
 
   private async setupRoyaltyDistribution(nft: MusicNFT): Promise<void> {
     // Настройка автоматического распределения роялти
-    console.log('Setting up royalty distribution for:', nft.title)
+    SecureLogger.log('Setting up royalty distribution for:', nft.title)
   }
 
   private async validateRoyaltyData(revenue: RoyaltyDistribution): Promise<void> {
@@ -614,7 +615,7 @@ export class MusicDeFiSystem {
     transactionHash?: string
   ): Promise<void> {
     // Обновление статуса распределения
-    console.log(`Distribution ${distributionId} status: ${status}`)
+    SecureLogger.log(`Distribution ${distributionId} status: ${status}`)
   }
 
   private async validateYieldFarm(farm: MusicYieldFarm): Promise<void> {
@@ -631,7 +632,7 @@ export class MusicDeFiSystem {
 
   private async configureRewards(address: string, rewards: Record<string, unknown>[]): Promise<void> {
     // Настройка наград для фермы
-    console.log('Configuring rewards for farm:', address)
+    SecureLogger.log('Configuring rewards for farm:', address)
   }
 
   private async validateDeposits(
@@ -664,7 +665,7 @@ export class MusicDeFiSystem {
 
   private async depositToFarm(farmId: string, positionId: string, deposits: Record<string, unknown>[]): Promise<void> {
     // Депозит токенов в ферму
-    console.log(`Depositing to farm ${farmId} for position ${positionId}`)
+    SecureLogger.log(`Depositing to farm ${farmId} for position ${positionId}`)
   }
 
   private async validateLicense(license: License): Promise<void> {
@@ -686,12 +687,12 @@ export class MusicDeFiSystem {
 
   private async recordDIDOnChain(profile: MusicProfile): Promise<void> {
     // Запись DID в блокчейн
-    console.log('Recording DID on chain:', profile.did)
+    SecureLogger.log('Recording DID on chain:', profile.did)
   }
 
   private async verifyBasicCredentials(profile: MusicProfile): Promise<void> {
     // Базовая верификация учетных данных
-    console.log('Verifying credentials for:', profile.did)
+    SecureLogger.log('Verifying credentials for:', profile.did)
   }
 
   private async getTrackHistoricalData(trackId: string): Promise<any> {

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * ⚡ Music Scaling Solution - Layer 2 Architecture for High-Performance Music Platform
  * 
@@ -567,7 +568,7 @@ export class MusicScalingSolution {
 
   private async depositToChannel(channel: RoyaltyStateChannel): Promise<void> {
     // Депозит средств в мульти-сиг кошелек
-    console.log(`Depositing to channel ${channel.id}`)
+    SecureLogger.log(`Depositing to channel ${channel.id}`)
   }
 
   private async validateChannelSignatures(update: ChannelUpdate): Promise<boolean> {
@@ -652,7 +653,7 @@ export class MusicScalingSolution {
 
   private async submitZKRollupToMainnet(rollup: StreamingZKRollup): Promise<void> {
     // Отправка агрегированных данных в главную цепь
-    console.log(`Submitting ZK rollup ${rollup.id} to mainnet`)
+    SecureLogger.log(`Submitting ZK rollup ${rollup.id} to mainnet`)
   }
 
   private calculateCompressedSize(transactions: StreamingTransaction[]): number {
@@ -685,7 +686,7 @@ export class MusicScalingSolution {
   }
 
   private async submitNFTRollupToMainnet(rollup: NFTOptimisticRollup): Promise<void> {
-    console.log(`Submitting NFT rollup ${rollup.rollupId} to mainnet`)
+    SecureLogger.log(`Submitting NFT rollup ${rollup.rollupId} to mainnet`)
   }
 
   private async startChallengePeriod(rollupId: string): Promise<void> {
@@ -696,7 +697,7 @@ export class MusicScalingSolution {
     setTimeout(async () => {
       if (rollup.status === 'PENDING' && !rollup.fraudProof) {
         rollup.status = 'CONFIRMED'
-        console.log(`Rollup ${rollupId} confirmed after challenge period`)
+        SecureLogger.log(`Rollup ${rollupId} confirmed after challenge period`)
       }
     }, rollup.challengePeriod * 1000)
   }
@@ -723,7 +724,7 @@ export class MusicScalingSolution {
   }
 
   private async deployPlasmaContract(plasmaChain: MusicPlasmaChain): Promise<void> {
-    console.log(`Deploying plasma contract for chain ${plasmaChain.chainId}`)
+    SecureLogger.log(`Deploying plasma contract for chain ${plasmaChain.chainId}`)
   }
 
   private async createPlasmaDepositTx(
@@ -759,7 +760,7 @@ export class MusicScalingSolution {
   }
 
   private async initializeValidators(sidechain: MusicDeFiSidechain): Promise<void> {
-    console.log(`Initializing ${sidechain.validators.length} validators for sidechain ${sidechain.chainId}`)
+    SecureLogger.log(`Initializing ${sidechain.validators.length} validators for sidechain ${sidechain.chainId}`)
   }
 
   private async estimateCrossChainGas(
@@ -786,7 +787,7 @@ export class MusicScalingSolution {
   }
 
   private async sendThroughBridge(message: CrossChainMessage): Promise<void> {
-    console.log(`Sending cross-chain message ${message.messageId} from ${message.sourceChain} to ${message.targetChain}`)
+    SecureLogger.log(`Sending cross-chain message ${message.messageId} from ${message.sourceChain} to ${message.targetChain}`)
   }
 
   private calculateRetentionRate(transactions: StreamingTransaction[]): number {

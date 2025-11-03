@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import { useTelegram } from "@/contexts/telegram-context";
@@ -19,7 +20,7 @@ export function useTelegramStars() {
   // Check if we're in Telegram Mini App
   useEffect(() => {
     if (!isTMA) {
-      console.warn(
+      SecureLogger.warn(
         "useTelegramStars should only be used in Telegram Mini Apps"
       );
     }
@@ -49,7 +50,7 @@ export function useTelegramStars() {
       // 3. Open the invoice in Telegram
 
       // For demonstration, we'll simulate the process
-      console.log("Initiating Telegram Stars payment:", {
+      SecureLogger.log("Initiating Telegram Stars payment:", {
         amount,
         description,
         payload,
@@ -79,7 +80,7 @@ export function useTelegramStars() {
       setPaymentResult(successResult);
       return successResult;
     } catch (error) {
-      console.error("Stars payment error:", error);
+      SecureLogger.error("Stars payment error:", error);
       const errorResult: StarsPaymentResult = {
         status: "failed",
         error: error instanceof Error ? error.message : "Payment failed",
@@ -105,7 +106,7 @@ export function useTelegramStars() {
       // 3. Update your database with the payment status
 
       // For demonstration, we'll simulate validation
-      console.log("Validating Telegram Stars payment:", transactionId);
+      SecureLogger.log("Validating Telegram Stars payment:", transactionId);
 
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -113,7 +114,7 @@ export function useTelegramStars() {
       // For demo purposes, we'll assume all payments are valid
       return true;
     } catch (error) {
-      console.error("Payment validation error:", error);
+      SecureLogger.error("Payment validation error:", error);
       return false;
     }
   };
@@ -125,7 +126,7 @@ export function useTelegramStars() {
       // 2. Process the refund through Telegram Bot API
 
       // For demonstration, we'll simulate refund processing
-      console.log(
+      SecureLogger.log(
         "Processing refund for Telegram Stars payment:",
         transactionId
       );
@@ -137,7 +138,7 @@ export function useTelegramStars() {
       showToast("Refund processed successfully", "default");
       return true;
     } catch (error) {
-      console.error("Refund processing error:", error);
+      SecureLogger.error("Refund processing error:", error);
       showToast("Failed to process refund", "destructive");
       return false;
     }
@@ -153,7 +154,7 @@ export function useTelegramStars() {
       // 1 Star = 0.01 USD
       return 0.01;
     } catch (error) {
-      console.error("Error fetching exchange rate:", error);
+      SecureLogger.error("Error fetching exchange rate:", error);
       // Return default rate
       return 0.01;
     }
@@ -173,7 +174,7 @@ export function useTelegramStars() {
 
       return Math.round(stars);
     } catch (error) {
-      console.error("Error converting to Stars:", error);
+      SecureLogger.error("Error converting to Stars:", error);
       return 0;
     }
   };

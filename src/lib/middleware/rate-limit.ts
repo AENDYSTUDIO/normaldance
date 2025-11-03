@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 // Rate limiting middleware for NORMAL DANCE API
 // Implements multiple tiers of rate limiting based on endpoint sensitivity
 
@@ -107,7 +108,7 @@ export async function rateLimitMiddleware(
 
     const limiter = rateLimiters.get(tier);
     if (!limiter) {
-      console.warn(`No rate limiter found for tier: ${tier}`);
+      SecureLogger.warn(`No rate limiter found for tier: ${tier}`);
       return null;
     }
 
@@ -144,7 +145,7 @@ export async function rateLimitMiddleware(
 
     return response;
   } catch (error) {
-    console.error("Rate limiting error:", error);
+    SecureLogger.error("Rate limiting error:", error);
     // Don't block requests if rate limiting fails
     return null;
   }

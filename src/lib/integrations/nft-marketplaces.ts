@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * Интеграция с NFT маркетплейсами для NormalDance
  * Поддержка OpenSea, Rarible, Foundation и других платформ
@@ -276,7 +277,7 @@ export class NFTMarketplaces {
 
       return collections
     } catch (error) {
-      console.error(`Error fetching collections from ${marketplaceId}:`, error)
+      SecureLogger.error(`Error fetching collections from ${marketplaceId}:`, error)
       return []
     }
   }
@@ -331,7 +332,7 @@ export class NFTMarketplaces {
 
       return nfts
     } catch (error) {
-      console.error(`Error fetching NFTs from ${marketplaceId}:`, error)
+      SecureLogger.error(`Error fetching NFTs from ${marketplaceId}:`, error)
       return []
     }
   }
@@ -374,7 +375,7 @@ export class NFTMarketplaces {
 
       return listings
     } catch (error) {
-      console.error(`Error fetching listings from ${marketplaceId}:`, error)
+      SecureLogger.error(`Error fetching listings from ${marketplaceId}:`, error)
       return []
     }
   }
@@ -430,7 +431,7 @@ export class NFTMarketplaces {
       // Симуляция отправки листинга
       await new Promise(resolve => setTimeout(resolve, 1000))
       
-      console.log(`Listing submitted to ${marketplace.name}:`, listing)
+      SecureLogger.log(`Listing submitted to ${marketplace.name}:`, listing)
     } catch (error) {
       listing.status = 'cancelled'
       this.listings.set(listing.id, listing)
@@ -536,7 +537,7 @@ export class NFTMarketplaces {
 
       return nfts
     } catch (error) {
-      console.error(`Error searching NFTs on ${marketplaceId}:`, error)
+      SecureLogger.error(`Error searching NFTs on ${marketplaceId}:`, error)
       return []
     }
   }
@@ -581,7 +582,7 @@ export class NFTMarketplaces {
         topCollections: stats.topCollections
       }
     } catch (error) {
-      console.error(`Error fetching sales stats from ${marketplaceId}:`, error)
+      SecureLogger.error(`Error fetching sales stats from ${marketplaceId}:`, error)
       return {
         volume: 0,
         sales: 0,
@@ -630,7 +631,7 @@ export class NFTMarketplaces {
 
       return nfts
     } catch (error) {
-      console.error(`Error fetching trending NFTs from ${marketplaceId}:`, error)
+      SecureLogger.error(`Error fetching trending NFTs from ${marketplaceId}:`, error)
       return []
     }
   }

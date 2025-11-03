@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import { useState } from 'react'
@@ -69,7 +70,7 @@ export default function SignUpPage() {
       }, 2000)
 
     } catch (err) {
-      console.error('Signup error:', err)
+      SecureLogger.error('Signup error:', err)
       setError(err instanceof Error ? err.message : 'Failed to create account')
     } finally {
       setIsLoading(false)

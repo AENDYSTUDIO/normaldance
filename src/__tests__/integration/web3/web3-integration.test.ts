@@ -165,7 +165,7 @@ describe("Web3 Integration Tests", () => {
       // Mock the spl-token module
       jest.mock("@solana/spl-token", () => ({
         TOKEN_PROGRAM_ID: new PublicKey(
-          "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+          process.env.SECRET_KEY
         ),
         AccountLayout: {
           decode: jest.fn().mockReturnValue({

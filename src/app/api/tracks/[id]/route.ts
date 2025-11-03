@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
@@ -113,7 +114,7 @@ export async function DELETE(
 
     return NextResponse.json({ message: 'Track deleted successfully' })
   } catch (error) {
-    console.error('Error deleting track:', error)
+    SecureLogger.error('Error deleting track:', error)
     return NextResponse.json(
       { error: 'Failed to delete track' },
       { status: 500 }
@@ -168,7 +169,7 @@ export async function POST(
 
     return NextResponse.json({ message: 'Play recorded successfully' })
   } catch (error) {
-    console.error('Error recording play:', error)
+    SecureLogger.error('Error recording play:', error)
     return NextResponse.json(
       { error: 'Failed to record play' },
       { status: 500 }

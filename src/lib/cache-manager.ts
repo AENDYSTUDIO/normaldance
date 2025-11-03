@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import Redis from "ioredis";
 
 /**
@@ -57,7 +58,7 @@ class CacheManager {
         maxRetriesPerRequest: 3,
       });
       this.config.strategy = "redis";
-      console.log("Redis cache manager initialized.");
+      SecureLogger.log("Redis cache manager initialized.");
     } else if (this.config.strategy === "hybrid") {
       // Загрузка кеша из localStorage на клиенте
       try {
@@ -68,7 +69,7 @@ class CacheManager {
           this.currentSize = parsed.size || 0;
         }
       } catch (error) {
-        console.warn("Failed to load cache from localStorage:", error);
+        SecureLogger.warn("Failed to load cache from localStorage:", error);
       }
     }
   }
@@ -168,7 +169,7 @@ class CacheManager {
 
     // Проверка размера
     if (entrySize > this.config.maxSize) {
-      console.warn(`Cache entry too large: ${entrySize} bytes`);
+      SecureLogger.warn(`Cache entry too large: ${entrySize} bytes`);
       return;
     }
 
@@ -220,7 +221,7 @@ class CacheManager {
         };
         localStorage.setItem("normaldance_cache", JSON.stringify(cacheData));
       } catch (error) {
-        console.warn("Failed to save cache to localStorage:", error);
+        SecureLogger.warn("Failed to save cache to localStorage:", error);
       }
     }
 
@@ -307,7 +308,7 @@ class CacheManager {
           };
           localStorage.setItem("normaldance_cache", JSON.stringify(cacheData));
         } catch (error) {
-          console.warn("Failed to save updated cache to localStorage:", error);
+          SecureLogger.warn("Failed to save updated cache to localStorage:", error);
         }
       }
 
@@ -361,7 +362,7 @@ class CacheManager {
     params?: Record<string, any>
   ): Promise<void> {
     // В реальном приложении здесь будет логика предзагрузки
-    console.log(`Preloading ${prefix}:${id}`);
+    SecureLogger.log(`Preloading ${prefix}:${id}`);
   }
 }
 
@@ -418,7 +419,7 @@ class AudioCacheManager extends CacheManager {
   async cleanupOldAudio(): Promise<void> {
     // В этой реализации очистка будет происходить автоматически через TTL
     // Этот метод оставлен для совместимости, но не используется напрямую
-    console.log("Audio cleanup is handled automatically by TTL");
+    SecureLogger.log("Audio cleanup is handled automatically by TTL");
   }
 }
 

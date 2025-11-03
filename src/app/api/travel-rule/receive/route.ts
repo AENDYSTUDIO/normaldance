@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 📥 Travel Rule Receive API
  *
@@ -140,7 +141,7 @@ export async function POST(request: NextRequest) {
       );
     }
   } catch (error) {
-    console.error("Error in Travel Rule receive API:", error);
+    SecureLogger.error("Error in Travel Rule receive API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -200,7 +201,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("Error in Travel Rule receive GET API:", error);
+    SecureLogger.error("Error in Travel Rule receive GET API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -264,7 +265,7 @@ export async function PUT(
       );
     }
   } catch (error) {
-    console.error("Error in Travel Rule acknowledge API:", error);
+    SecureLogger.error("Error in Travel Rule acknowledge API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -373,7 +374,7 @@ async function verifyMessageSignature(message: any, signature: string): Promise<
     
     return signature === expectedSignature;
   } catch (error) {
-    console.error("Error verifying message signature:", error);
+    SecureLogger.error("Error verifying message signature:", error);
     return false;
   }
 }
@@ -389,12 +390,12 @@ async function saveIncomingMessage(
 ): Promise<void> {
   try {
     // В реальной системе здесь будет сохранение в базу данных
-    console.log(`Saving incoming message: ${messageId}, protocol: ${protocol}`);
+    SecureLogger.log(`Saving incoming message: ${messageId}, protocol: ${protocol}`);
     
     // Моковое сохранение
     await new Promise(resolve => setTimeout(resolve, 100));
   } catch (error) {
-    console.error("Error saving incoming message:", error);
+    SecureLogger.error("Error saving incoming message:", error);
   }
 }
 
@@ -426,7 +427,7 @@ async function getIncomingMessages(filters: {
       },
     ];
   } catch (error) {
-    console.error("Error getting incoming messages:", error);
+    SecureLogger.error("Error getting incoming messages:", error);
     return [];
   }
 }
@@ -452,7 +453,7 @@ async function getIncomingMessagesStats(): Promise<{
       rejectedToday: 2,
     };
   } catch (error) {
-    console.error("Error getting incoming messages stats:", error);
+    SecureLogger.error("Error getting incoming messages stats:", error);
     return {
       totalMessages: 0,
       receivedToday: 0,
@@ -473,14 +474,14 @@ async function updateMessageStatus(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     // В реальной системе здесь будет обновление в базе данных
-    console.log(`Updating message status: ${messageId} -> ${status}`);
+    SecureLogger.log(`Updating message status: ${messageId} -> ${status}`);
     
     // Моковое обновление
     await new Promise(resolve => setTimeout(resolve, 100));
     
     return { success: true };
   } catch (error) {
-    console.error("Error updating message status:", error);
+    SecureLogger.error("Error updating message status:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

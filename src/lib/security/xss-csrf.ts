@@ -180,20 +180,10 @@ async function getHmacSigner(): Promise<HmacSigner> {
     };
   }
 
-  // Fallback на node:crypto
-  try {
-    const nodeCrypto = await import("node:crypto");
-    return async (key, data) => {
-      const hmac = nodeCrypto.createHmac("sha256", Buffer.from(key));
-      hmac.update(Buffer.from(data));
-      return new Uint8Array(hmac.digest());
-    };
-  } catch {
-    // Нет поддержки HMAC
-    return async () => {
-      throw new Error("HMAC unsupported");
-    };
-  }
+  // Возвращаем ошибку, если WebCrypto недоступен
+  return async () => {
+    throw new Error("HMAC unsupported - WebCrypto not available");
+  };
 }
 
 async function getRandomBytes(): Promise<RandomBytesFn> {
@@ -207,20 +197,10 @@ async function getRandomBytes(): Promise<RandomBytesFn> {
     };
   }
 
-  // Fallback: node:crypto.randomBytes
-  try {
-    const nodeCrypto = await import("node:crypto");
-    return async (n: number) => new Uint8Array(nodeCrypto.randomBytes(n));
-  } catch {
-    // Последний fallback (небезопасно)
-    return async (n: number) => {
-      const arr = new Uint8Array(n);
-      for (let i = 0; i < n; i++) {
-        arr[i] = Math.floor(Math.random() * 256);
-      }
-      return arr;
-    };
-  }
+  // Если WebCrypto недоступен, возвращаем ошибку
+  return async (n: number) => {
+    throw new Error("Crypto not supported - getRandomValues not available");
+  };
 }
 
 async function randomNonceHex(bytes = 16): Promise<string> {
@@ -315,24 +295,33 @@ export function sanitizeURL(input: string): string {
  */
 export function stripDangerousHtml(input: string): string {
   if (typeof input !== "string") return "";
-  
+
   let clean = input;
-  
+
   // Remove script tags and their content
-  clean = clean.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
-  
+  clean = clean.replace(
+    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
+    ""
+  );
+
   // Remove event handler attributes
   clean = clean.replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, "");
-  
+
   // Remove javascript: URLs
-  clean = clean.replace(/(href|src)\s*=\s*["']\s*javascript:[^"']*["']/gi, "$1=\"\"");
-  
+  clean = clean.replace(
+    /(href|src)\s*=\s*["']\s*javascript:[^"']*["']/gi,
+    '$1=""'
+  );
+
   // Remove data: URLs
-  clean = clean.replace(/(href|src)\s*=\s*["']\s*data:[^"']*["']/gi, "$1=\"\"");
-  
+  clean = clean.replace(/(href|src)\s*=\s*["']\s*data:[^"']*["']/gi, '$1=""');
+
   // Remove vbscript: URLs
-  clean = clean.replace(/(href|src)\s*=\s*["']\s*vbscript:[^"']*["']/gi, "$1=\"\"");
-  
+  clean = clean.replace(
+    /(href|src)\s*=\s*["']\s*vbscript:[^"']*["']/gi,
+    '$1=""'
+  );
+
   return clean;
 }
 

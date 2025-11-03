@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { getAIRecommendationEngine } from '@/lib/ai-recommendations';
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
     // Track recommendation for analytics
     if (recommendations.length > 0) {
       // Implementation would log to analytics service
-      console.log(`Generated ${recommendations.length} recommendations for user ${userId}`);
+      SecureLogger.log(`Generated ${recommendations.length} recommendations for user ${userId}`);
     }
 
     return new Response(JSON.stringify({
@@ -76,7 +77,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
 <<<<<<< HEAD
-    console.error('Recommendation error:', error);
+    SecureLogger.error('Recommendation error:', error);
     return new Response(JSON.stringify({
       error: 'Failed to generate recommendations',
       message: error.message
@@ -146,7 +147,7 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
 <<<<<<< HEAD
-    console.error('Search error:', error);
+    SecureLogger.error('Search error:', error);
     return new Response(JSON.stringify({
       error: 'Search failed',
       message: error.message

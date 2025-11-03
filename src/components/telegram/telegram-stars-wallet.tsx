@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -44,7 +45,7 @@ export function TelegramStarsWallet({
         description: "Информация скопирована в буфер обмена",
       });
     } catch (err) {
-      console.error("Failed to copy:", err);
+      SecureLogger.error("Failed to copy:", err);
       toast({
         title: "Ошибка",
         description: "Не удалось скопировать в буфер обмена",

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client';
 
 import React, { useState } from 'react';
@@ -54,7 +55,7 @@ export default function ATRPaymentMethods({
     setIsProcessing(false);
     
     // Handle payment success
-    console.log('Payment processed with:', selectedPaymentMethod);
+    SecureLogger.log('Payment processed with:', selectedPaymentMethod);
   };
 
   const getMethodIcon = (method: ATRPaymentMethod) => {

@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔐 Sumsub Webhook Handler
  *
@@ -15,7 +16,7 @@ export async function POST(request: NextRequest) {
     const body = await request.text();
 
     if (!signature) {
-      console.error("Missing Sumsub webhook signature");
+      SecureLogger.error("Missing Sumsub webhook signature");
       return NextResponse.json({ error: "Missing signature" }, { status: 401 });
     }
 
@@ -24,13 +25,13 @@ export async function POST(request: NextRequest) {
     try {
       payload = JSON.parse(body);
     } catch (error) {
-      console.error("Invalid JSON in webhook payload:", error);
+      SecureLogger.error("Invalid JSON in webhook payload:", error);
       return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
     }
 
     // Проверка типа события
     if (!payload.type) {
-      console.error("Missing event type in webhook payload");
+      SecureLogger.error("Missing event type in webhook payload");
       return NextResponse.json(
         { error: "Missing event type" },
         { status: 400 }
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
     const validation = validateSumsubConfig(sumsubConfig);
 
     if (!validation.isValid) {
-      console.error("Invalid Sumsub configuration:", validation.errors);
+      SecureLogger.error("Invalid Sumsub configuration:", validation.errors);
       return NextResponse.json(
         { error: "Configuration error", details: validation.errors },
         { status: 500 }
@@ -59,12 +60,12 @@ export async function POST(request: NextRequest) {
     );
 
     if (!result.success) {
-      console.error("Error processing Sumsub webhook:", result.message);
+      SecureLogger.error("Error processing Sumsub webhook:", result.message);
       return NextResponse.json({ error: result.message }, { status: 500 });
     }
 
     // Логирование успешной обработки
-    console.log(
+    SecureLogger.log(
       `Sumsub webhook processed successfully for applicant: ${payload.applicantId}`
     );
 
@@ -75,7 +76,7 @@ export async function POST(request: NextRequest) {
       eventType: payload.type,
     });
   } catch (error) {
-    console.error("Error in Sumsub webhook handler:", error);
+    SecureLogger.error("Error in Sumsub webhook handler:", error);
     return NextResponse.json(
       {
         error: "Internal server error",
@@ -165,7 +166,7 @@ export async function GET(request: NextRequest) {
       data: status,
     });
   } catch (error) {
-    console.error("Error getting Sumsub verification status:", error);
+    SecureLogger.error("Error getting Sumsub verification status:", error);
     return NextResponse.json(
       {
         error: "Internal server error",

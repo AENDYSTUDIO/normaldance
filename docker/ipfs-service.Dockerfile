@@ -6,13 +6,13 @@ WORKDIR /app
 # Dependencies stage
 FROM base AS deps
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --only=production --legacy-peer-deps
 
 # Build stage
 FROM base AS builder
 COPY package*.json ./
 COPY tsconfig.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 COPY src/ ./src/
 RUN npm run build
 

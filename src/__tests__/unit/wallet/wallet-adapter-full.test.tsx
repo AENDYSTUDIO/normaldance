@@ -351,7 +351,7 @@ describe("Wallet Adapter - Full Unit Tests", () => {
 
         return {
           TOKEN_PROGRAM_ID: new MockPublicKey(
-            "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+            process.env.SECRET_KEY
           ),
           AccountLayout: {
             decode: jest.fn(),

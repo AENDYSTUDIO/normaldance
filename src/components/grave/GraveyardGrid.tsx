@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
 import React, { useState, useEffect } from 'react'
@@ -34,7 +35,7 @@ export default function GraveyardGrid() {
         setMemorials(data.data.memorials || [])
       }
     } catch (error) {
-      console.error('Ошибка загрузки мемориалов:', error)
+      SecureLogger.error('Ошибка загрузки мемориалов:', error)
       // Показываем демо-данные
       setMemorials([
         {

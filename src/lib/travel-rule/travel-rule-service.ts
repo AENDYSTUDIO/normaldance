@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🌍 Travel Rule Service - FATF Compliance Implementation
  *
@@ -170,7 +171,7 @@ export class TravelRuleService {
         timestamp,
       };
     } catch (error) {
-      console.error("Error sending Travel Rule message:", error);
+      SecureLogger.error("Error sending Travel Rule message:", error);
       return {
         success: false,
         status: "FAILED",
@@ -248,7 +249,7 @@ export class TravelRuleService {
         hasMore: (request.offset || 0) + messages.length < totalCount,
       };
     } catch (error) {
-      console.error("Error receiving Travel Rule messages:", error);
+      SecureLogger.error("Error receiving Travel Rule messages:", error);
       return {
         success: false,
         messages: [],
@@ -292,7 +293,7 @@ export class TravelRuleService {
       try {
         decryptedMessage = await this.crypto.decryptMessage(message.messageData);
       } catch (error) {
-        console.error("Error decrypting message:", error);
+        SecureLogger.error("Error decrypting message:", error);
         await this.updateMessageStatus(messageId, "FAILED");
         return {
           success: false,
@@ -350,7 +351,7 @@ export class TravelRuleService {
         status: "ACKNOWLEDGED",
       };
     } catch (error) {
-      console.error("Error processing incoming message:", error);
+      SecureLogger.error("Error processing incoming message:", error);
       return {
         success: false,
         status: "FAILED",
@@ -403,7 +404,7 @@ export class TravelRuleService {
         success: true,
       };
     } catch (error) {
-      console.error("Error acknowledging message:", error);
+      SecureLogger.error("Error acknowledging message:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -458,7 +459,7 @@ export class TravelRuleService {
         averageProcessingTime: Number(averageProcessingTime),
       };
     } catch (error) {
-      console.error("Error getting Travel Rule statistics:", error);
+      SecureLogger.error("Error getting Travel Rule statistics:", error);
       return {
         totalMessages: 0,
         sentMessages: 0,
@@ -600,7 +601,7 @@ export class TravelRuleService {
 
       return screeningResult;
     } catch (error) {
-      console.error("Error performing screening:", error);
+      SecureLogger.error("Error performing screening:", error);
       return {
         requiresBlocking: false,
         requiresReview: true, // При ошибке требуем ручной проверки

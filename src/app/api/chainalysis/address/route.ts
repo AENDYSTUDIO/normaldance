@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔗 Chainalysis Address Analysis API
  *
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
-    console.error("Error in Chainalysis address analysis API:", error);
+    SecureLogger.error("Error in Chainalysis address analysis API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -88,7 +89,7 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis address risk API:", error);
+    SecureLogger.error("Error in Chainalysis address risk API:", error);
     return NextResponse.json(
       {
         success: false,

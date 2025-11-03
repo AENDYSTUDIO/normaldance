@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🔗 Chainalysis AML Integration API
  *
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis AML integration API:", error);
+    SecureLogger.error("Error in Chainalysis AML integration API:", error);
     return NextResponse.json(
       {
         success: false,
@@ -76,7 +77,7 @@ export async function GET(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error in Chainalysis AML integration GET API:", error);
+    SecureLogger.error("Error in Chainalysis AML integration GET API:", error);
     return NextResponse.json(
       {
         success: false,

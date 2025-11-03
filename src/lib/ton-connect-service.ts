@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { Address, beginCell, Transaction, Cell } from "@ton/ton";
 import { TonConnectUI } from "@tonconnect/ui-react";
 
@@ -56,7 +57,7 @@ export class TonConnectService {
 
       return await this.tonConnectUI.sendTransaction(transaction);
     } catch (error) {
-      console.error("TON transaction error:", error);
+      SecureLogger.error("TON transaction error:", error);
       throw error instanceof Error ? error : new Error(String(error));
     }
   }

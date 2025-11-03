@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 📊 Advanced Analytics System 2025
  * 
@@ -155,7 +156,7 @@ export class AdvancedAnalyticsSystem {
         this.scanArbitrageOpportunities()
       ])
     } catch (error) {
-      console.error('Error collecting analytics data:', error)
+      SecureLogger.error('Error collecting analytics data:', error)
     }
   }
 

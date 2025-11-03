@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { Recommendations } from '@/components/tracks/Recommendations';
 'use client'
 
@@ -103,10 +104,10 @@ export default function TrackDetailPage() {
         const data = await response.json()
         setTrack(data)
       } else {
-        console.error('Failed to fetch track details')
+        SecureLogger.error('Failed to fetch track details')
       }
     } catch (error) {
-      console.error('Error fetching track details:', error)
+      SecureLogger.error('Error fetching track details:', error)
     } finally {
       setLoading(false)
     }
@@ -150,7 +151,7 @@ export default function TrackDetailPage() {
     if (!newComment.trim() || !session) return
     
     // Implement comment logic
-    console.log('Add comment:', newComment)
+    SecureLogger.log('Add comment:', newComment)
     setNewComment('')
   }
 

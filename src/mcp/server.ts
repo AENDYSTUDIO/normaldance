@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { MusicContextProvider } from './providers/music.js';
@@ -132,7 +133,7 @@ export class NormalDanceMCPServer {
   async start() {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log('NORMAL DANCE MCP Server started');
+    SecureLogger.log('NORMAL DANCE MCP Server started');
   }
 }
 

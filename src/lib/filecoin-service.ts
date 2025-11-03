@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { fetch } from 'undici'
 
 // Интерфейс для Filecoin сделки
@@ -59,7 +60,7 @@ export class FilecoinService {
     } = {}
   ): Promise<FilecoinDeal> {
     try {
-      console.log(`Creating Filecoin deal for IPFS CID: ${ipfsCid}`)
+      SecureLogger.log(`Creating Filecoin deal for IPFS CID: ${ipfsCid}`)
       
       const {
         sizeInBytes = 100 * 1024 * 1024, // 100MB по умолчанию
@@ -101,10 +102,10 @@ export class FilecoinService {
         storageProvider: miner,
       }
 
-      console.log(`Filecoin deal created: ${deal.dealId}`)
+      SecureLogger.log(`Filecoin deal created: ${deal.dealId}`)
       return deal
     } catch (error) {
-      console.error('Failed to create Filecoin deal:', error)
+      SecureLogger.error('Failed to create Filecoin deal:', error)
       throw new Error(`Failed to create Filecoin deal: ${error}`)
     }
   }
@@ -115,7 +116,7 @@ export class FilecoinService {
     durationInDays: number
   ): Promise<StorageCost> {
     try {
-      console.log(`Calculating storage cost for ${sizeInBytes} bytes, ${durationInDays} days`)
+      SecureLogger.log(`Calculating storage cost for ${sizeInBytes} bytes, ${durationInDays} days`)
       
       const sizeInGB = sizeInBytes / (1024 * 1024 * 1024)
       const costPerGBPerDay = 0.0001 // $0.0001 за GB в день
@@ -131,10 +132,10 @@ export class FilecoinService {
         totalDuration: durationInDays,
       }
 
-      console.log(`Storage cost calculated: $${cost.totalCost}`)
+      SecureLogger.log(`Storage cost calculated: $${cost.totalCost}`)
       return cost
     } catch (error) {
-      console.error('Failed to calculate storage cost:', error)
+      SecureLogger.error('Failed to calculate storage cost:', error)
       throw new Error(`Failed to calculate storage cost: ${error}`)
     }
   }
@@ -142,7 +143,7 @@ export class FilecoinService {
   // Проверка доступности файла
   async checkFileAvailability(ipfsCid: string): Promise<FileAvailability> {
     try {
-      console.log(`Checking file availability for IPFS CID: ${ipfsCid}`)
+      SecureLogger.log(`Checking file availability for IPFS CID: ${ipfsCid}`)
       
       // Проверяем доступность на IPFS шлюзах
       const ipfsGateways = [
@@ -162,7 +163,7 @@ export class FilecoinService {
             availableGateways.push(gateway)
           }
         } catch (error) {
-          console.warn(`Gateway ${gateway} not available:`, error)
+          SecureLogger.warn(`Gateway ${gateway} not available:`, error)
         }
       }
       
@@ -176,10 +177,10 @@ export class FilecoinService {
         lastChecked: new Date().toISOString(),
       }
 
-      console.log(`File availability checked: ${availability.available}`)
+      SecureLogger.log(`File availability checked: ${availability.available}`)
       return availability
     } catch (error) {
-      console.error('Failed to check file availability:', error)
+      SecureLogger.error('Failed to check file availability:', error)
       throw new Error(`Failed to check file availability: ${error}`)
     }
   }
@@ -187,7 +188,7 @@ export class FilecoinService {
   // Получение информации о сделке
   async getDeal(dealId: string): Promise<FilecoinDeal | null> {
     try {
-      console.log(`Getting deal information: ${dealId}`)
+      SecureLogger.log(`Getting deal information: ${dealId}`)
       
       // Здесь должна быть реальная интеграция с Filecoin API
       // Пока возвращаем симулированный ответ
@@ -204,10 +205,10 @@ export class FilecoinService {
         storageProvider: 'storage-provider-1',
       }
 
-      console.log(`Deal information retrieved: ${deal.dealId}`)
+      SecureLogger.log(`Deal information retrieved: ${deal.dealId}`)
       return deal
     } catch (error) {
-      console.error('Failed to get deal information:', error)
+      SecureLogger.error('Failed to get deal information:', error)
       return null
     }
   }
@@ -215,7 +216,7 @@ export class FilecoinService {
   // Получение списка активных сделок
   async listActiveDeals(): Promise<FilecoinDeal[]> {
     try {
-      console.log('Listing active deals...')
+      SecureLogger.log('Listing active deals...')
       
       // Здесь должна быть реальная интеграция с Filecoin API
       // Пока возвращаем симулированный ответ
@@ -246,10 +247,10 @@ export class FilecoinService {
         },
       ]
 
-      console.log(`Found ${deals.length} active deals`)
+      SecureLogger.log(`Found ${deals.length} active deals`)
       return deals
     } catch (error) {
-      console.error('Failed to list active deals:', error)
+      SecureLogger.error('Failed to list active deals:', error)
       throw new Error(`Failed to list active deals: ${error}`)
     }
   }
@@ -257,14 +258,14 @@ export class FilecoinService {
   // Отмена сделки
   async cancelDeal(dealId: string): Promise<boolean> {
     try {
-      console.log(`Canceling deal: ${dealId}`)
+      SecureLogger.log(`Canceling deal: ${dealId}`)
       
       // Здесь должна быть реальная интеграция с Filecoin API
       // Пока симулируем успешное завершение
-      console.log(`Deal canceled successfully: ${dealId}`)
+      SecureLogger.log(`Deal canceled successfully: ${dealId}`)
       return true
     } catch (error) {
-      console.error('Failed to cancel deal:', error)
+      SecureLogger.error('Failed to cancel deal:', error)
       return false
     }
   }
@@ -272,7 +273,7 @@ export class FilecoinService {
   // Получение списка доступных майнеров
   private async getAvailableMiners(requiredSizeGB: number): Promise<string[]> {
     try {
-      console.log(`Getting available miners for ${requiredSizeGB}GB`)
+      SecureLogger.log(`Getting available miners for ${requiredSizeGB}GB`)
       
       // Здесь должна быть реальная интеграция с Filecoin API
       // Пока возвращаем симулированный список
@@ -284,10 +285,10 @@ export class FilecoinService {
         'f12345', // miner5
       ]
       
-      console.log(`Found ${miners.length} available miners`)
+      SecureLogger.log(`Found ${miners.length} available miners`)
       return miners
     } catch (error) {
-      console.error('Failed to get available miners:', error)
+      SecureLogger.error('Failed to get available miners:', error)
       return []
     }
   }
@@ -300,7 +301,7 @@ export class FilecoinService {
     totalStorage: number
   }> {
     try {
-      console.log('Monitoring deals...')
+      SecureLogger.log('Monitoring deals...')
       
       const activeDeals = await this.listActiveDeals()
       
@@ -311,10 +312,10 @@ export class FilecoinService {
         totalStorage: activeDeals.reduce((sum, deal) => sum + deal.size, 0),
       }
 
-      console.log('Deal monitoring completed')
+      SecureLogger.log('Deal monitoring completed')
       return stats
     } catch (error) {
-      console.error('Failed to monitor deals:', error)
+      SecureLogger.error('Failed to monitor deals:', error)
       throw new Error(`Failed to monitor deals: ${error}`)
     }
   }
@@ -322,14 +323,14 @@ export class FilecoinService {
   // Обновление статуса сделки
   async updateDealStatus(dealId: string, newStatus: FilecoinDeal['status']): Promise<boolean> {
     try {
-      console.log(`Updating deal status: ${dealId} -> ${newStatus}`)
+      SecureLogger.log(`Updating deal status: ${dealId} -> ${newStatus}`)
       
       // Здесь должна быть реальная интеграция с Filecoin API
       // Пока симулируем успешное обновление
-      console.log(`Deal status updated successfully: ${dealId}`)
+      SecureLogger.log(`Deal status updated successfully: ${dealId}`)
       return true
     } catch (error) {
-      console.error('Failed to update deal status:', error)
+      SecureLogger.error('Failed to update deal status:', error)
       return false
     }
   }

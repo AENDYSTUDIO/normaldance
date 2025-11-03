@@ -1,3 +1,4 @@
+import { SecureLogger } from '@/lib/security/secure-logger';
 "use client";
 
 import React, { useState, useCallback, useRef } from "react";
@@ -49,7 +50,7 @@ export function AdvancedTelegramFeatures() {
           });
         }
       } catch (error) {
-        console.error("Failed to request notification permission:", error);
+        SecureLogger.error("Failed to request notification permission:", error);
       }
     } else {
       hapticFeedback("impact");
@@ -89,7 +90,7 @@ export function AdvancedTelegramFeatures() {
         description: `${content.title} shared with your friends`,
       });
     } catch (error) {
-      console.error("Share failed:", error);
+      SecureLogger.error("Share failed:", error);
       toast({
         title: "Share failed",
         description: "Please try again",
@@ -148,7 +149,7 @@ export function AdvancedTelegramFeatures() {
         description: "You'll earn rewards when friends join",
       });
     } catch (error) {
-      console.error("Referral share failed:", error);
+      SecureLogger.error("Referral share failed:", error);
     }
 
     hapticFeedback("impact");
@@ -170,7 +171,7 @@ export function AdvancedTelegramFeatures() {
       });
       return true;
     } catch (error) {
-      console.error("Notification failed:", error);
+      SecureLogger.error("Notification failed:", error);
       return false;
     }
   }, [notificationPermission]);
@@ -321,9 +322,9 @@ export function AdvancedTelegramFeatures() {
               size="sm"
               variant="outline"
               onClick={() => showInlineKeyboard([
-                { text: 'Create Playlist', callback: () => console.log('Create playlist') },
-                { text: 'Share Music', callback: () => console.log('Share music') },
-                { text: 'Support', callback: () => console.log('Support') }
+                { text: 'Create Playlist', callback: () => SecureLogger.log('Create playlist') },
+                { text: 'Share Music', callback: () => SecureLogger.log('Share music') },
+                { text: 'Support', callback: () => SecureLogger.log('Support') }
               ])}
             >
               <MessageCircle className="h-4 w-4" />
@@ -430,7 +431,7 @@ export function AdvancedTelegramFeatures() {
                   tgWebApp.requestVoiceQuery({
                     prompt: "What would you like to listen to?",
                     callback: (voiceQuery, voiceId) => {
-                      console.log("Voice query:", voiceQuery);
+                      SecureLogger.log("Voice query:", voiceQuery);
                       hapticFeedback("notification");
                     }
                   });
@@ -454,7 +455,7 @@ export function AdvancedTelegramFeatures() {
                   tgWebApp.requestLocationData({
                     action: "share_location",
                     callback: (locationData) => {
-                      console.log("Location shared:", locationData);
+                      SecureLogger.log("Location shared:", locationData);
                       hapticFeedback("impact");
                     }
                   });
@@ -478,7 +479,7 @@ export function AdvancedTelegramFeatures() {
                   tgWebApp.showScanQrPopup({
                     text: "Scan a QR code to access content quickly",
                     callback: (data) => {
-                      console.log("QR code scanned:", data);
+                      SecureLogger.log("QR code scanned:", data);
                       hapticFeedback("selection");
                     }
                   });
