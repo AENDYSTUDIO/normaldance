@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { useTelegram } from "@/contexts/telegram-context";
 import { useEffect, useState } from "react";

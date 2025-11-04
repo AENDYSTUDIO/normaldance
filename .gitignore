@@ -4,6 +4,28 @@
 /node_modules
 /.pnp
 .pnp.*
+
+# Sensitive files with secrets or API keys
+.env.local
+.env.production
+.env.*.local
+.env.*.production
+.lighthouse-*.json
+*.log
+*.key
+*.pem
+*.p12
+
+# Security reports and analysis
+lighthouse-*
+security-*
+SECURITY_TESTING_*
+
+# Temporary build files
+.next/
+out/
+build/
+dist/
 .yarn/*
 !.yarn/patches
 !.yarn/plugins

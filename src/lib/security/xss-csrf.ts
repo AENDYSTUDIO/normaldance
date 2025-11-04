@@ -20,6 +20,20 @@
  * Типы и конфигурации
  * ========================================= */
 
+// Import duplicate functions from sanitize.ts to avoid duplication
+import {
+  escapeHTML,
+  escapeAttribute,
+  sanitizeURL,
+  stripDangerousHtml,
+  sanitizeString,
+  sanitizeForContext,
+  sanitizeObjectForContext,
+  safeAttr,
+  safeHtmlText,
+  safeUrl,
+} from './sanitize';
+
 export type XssContext = "html" | "attr" | "url" | "raw";
 
 export interface CsrfTokenPayload {

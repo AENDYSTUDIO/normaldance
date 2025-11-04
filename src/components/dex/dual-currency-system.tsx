@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 // Note: This file needs full type refactoring - tracked in GitHub issue #XXX
 
 import { useState, useEffect } from 'react'

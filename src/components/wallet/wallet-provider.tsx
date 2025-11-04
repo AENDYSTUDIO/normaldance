@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { Button } from "@/components/ui/button";
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";

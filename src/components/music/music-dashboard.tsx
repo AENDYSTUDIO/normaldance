@@ -1,3 +1,5 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 🎵 Music Dashboard 2025
@@ -7,11 +9,7 @@ import { SecureLogger } from '@/lib/security/secure-logger';
  * - NFT треки и их стоимость
  * - Роялти и доходы
  * - Музыкальные тренды
- */
-
-'use client'
-
-import React, { useState, useEffect } from 'react'
+ */import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, Tabs, TabsContent, TabsList, TabsTrigger, Progress } from '@/components/ui'
 import { 
   Music, 

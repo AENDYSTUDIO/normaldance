@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { Address } from "@ton/core";
 import { useTonConnectUI } from "@tonconnect/ui-react";

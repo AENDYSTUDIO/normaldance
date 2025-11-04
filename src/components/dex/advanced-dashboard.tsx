@@ -1,14 +1,12 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
 /**
  * 📊 Advanced Analytics Dashboard 2025
  * 
  * Современный dashboard с реальным временем,
  * ML-прогнозами и интерактивными графиками
- */
-
-'use client'
-
-import React, { useState, useEffect } from 'react'
+ */import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, Badge, Button, Tabs, TabsContent, TabsList, TabsTrigger, Progress } from '@/components/ui'
 import { 
   TrendingUp, 

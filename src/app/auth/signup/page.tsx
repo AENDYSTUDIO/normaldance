@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input, Label, Textarea, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Alert, AlertDescription } from '@/components/ui'

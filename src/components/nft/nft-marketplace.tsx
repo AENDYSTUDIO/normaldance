@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { useState, useEffect, useCallback } from 'react'
 import { nftMarketplaces } from '@/lib/integrations/nft-marketplaces'
 import { Button, Input, Card, CardContent, CardHeader, CardTitle, Badge, Avatar, AvatarFallback, AvatarImage, Tabs, TabsContent, TabsList, TabsTrigger, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, Slider } from '@/components/ui'

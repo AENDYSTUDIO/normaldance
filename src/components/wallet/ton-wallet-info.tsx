@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";

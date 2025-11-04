@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-'use client';
+;
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge, Input, Label } from '@/components/ui';

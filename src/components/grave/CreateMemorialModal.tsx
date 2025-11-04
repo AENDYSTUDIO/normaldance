@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import React, { useState } from 'react'
 
 interface CreateMemorialModalProps {

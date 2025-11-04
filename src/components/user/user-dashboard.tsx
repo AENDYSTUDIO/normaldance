@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { NFTGallery } from "@/components/nft/nft-gallery";
 import { TelegramStarsInfo } from "@/components/telegram/telegram-stars-info";

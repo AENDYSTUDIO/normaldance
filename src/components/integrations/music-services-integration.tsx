@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, Button, Badge, Tabs, TabsContent, TabsList, TabsTrigger, Input, Label, Textarea, Alert, AlertDescription } from '@/components/ui'
 import { 

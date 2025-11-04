@@ -1,8 +1,7 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
-import { Recommendations } from '@/components/tracks/Recommendations';
 'use client'
 
-import { useState, useEffect } from 'react'
+import { SecureLogger } from '@/lib/security/secure-logger';
+import { Recommendations } from '@/components/tracks/Recommendations';import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge, Avatar, AvatarFallback, AvatarImage, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'

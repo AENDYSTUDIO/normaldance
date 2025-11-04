@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { useState } from 'react'
 import { SecretProgressBar } from '@/components/gamification/secret-progress-bar'
 import { Card, CardContent, CardHeader, CardTitle, Button, Badge } from '@/components/ui'

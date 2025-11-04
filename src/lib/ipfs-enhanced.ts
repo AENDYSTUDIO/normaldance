@@ -542,13 +542,10 @@ export interface IPFSTrackMetadata {
   key?: string;
   isExplicit: boolean;
   fileSize: number;
-<<<<<<< HEAD
-  mimeType: string;
-=======
-  format: string;
-  sampleRate: number;
-  bitDepth: number;
->>>>>>> bc71d7127c2a35bd8fe59f3b81f67380bae7d337
+  mimeType?: string;
+  format?: string;
+  sampleRate?: number;
+  bitDepth?: number;
 }
 
 // Интерфейс для результата загрузки

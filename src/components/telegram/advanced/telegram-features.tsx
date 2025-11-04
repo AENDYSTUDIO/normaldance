@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import React, { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";

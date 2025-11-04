@@ -1,7 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
-
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button, Badge, Progress } from '@/components/ui'
 import { useWalletContext } from './wallet-provider'

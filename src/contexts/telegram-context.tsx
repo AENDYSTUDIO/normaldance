@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 interface TelegramContextType {

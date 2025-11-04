@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useAudioStore } from '@/store/use-audio-store'
 import useNetworkStatus from '@/hooks/useNetworkStatus'

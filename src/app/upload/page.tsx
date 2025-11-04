@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { MainLayout } from '@/components/layout/main-layout'
 import { AudioPlayer } from '@/components/audio/audio-player'
 import { Button, Input, Label, Textarea, Card, CardContent, CardHeader, CardTitle, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Switch, Badge } from '@/components/ui'

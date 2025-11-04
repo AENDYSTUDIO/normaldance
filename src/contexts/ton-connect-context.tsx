@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import React, { createContext, useContext, useEffect, useState } from "react";

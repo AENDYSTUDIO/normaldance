@@ -40,12 +40,8 @@ export * from "./ISecurityService";
 
 // Менеджер и базовый валидатор
 export { BaseValidator } from "./BaseValidator";
-/**
- * TODO: Экспорт SecurityManager временно отключён до завершения реализации класса в
- * [TypeScript.SecurityManager.ts](src/lib/security/SecurityManager.ts:1).
- * Индекс остаётся единой точкой входа для остальных модулей безопасности.
- */
-// export { SecurityManager } from "./SecurityManager";
+// Теперь SecurityManager доступен для использования
+export { SecurityManager } from "./SecurityManager";
 
 // Лимиты и телеграм-валидатор
 export * from "./rate-limiter";
@@ -68,6 +64,15 @@ export {
 // Дополнительные алиасы для старых имён функций (camelCase)
 export { sanitizeSQL as sanitizeSql } from "./input-sanitizer";
 export { sanitizeURL as sanitizeUrl } from "./sanitize";
+
+// Дедупликация функций: единый источник истины
+// Предупреждения о миграции для дублирующихся функций
+/**
+ * @deprecated since v1.5.0 - Use escapeHTML from './sanitize' instead
+ */
+export const escapeHTML_deprecated = () => {
+  SecureLogger.warn('[SECURITY] Deprecation: escapeHTML should be imported from "@/lib/security", not from individual modules');
+};
 
 // Легаси-класс и утилиты без конфликтов имён:
 // - InputValidator: упрощённый валидатор без внешних зависимостей

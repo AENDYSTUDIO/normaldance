@@ -44,6 +44,7 @@ import {
 
 import { BaseValidator } from "./BaseValidator";
 import { InputSanitizer } from "./input-sanitizer";
+import { detectSuspiciousPatterns } from "./security-utils";
 import type { XssContext } from "./xss-csrf";
 
 // Единый источник CSP
@@ -197,7 +198,7 @@ export class SecurityManager implements ISecurityService {
       ) {
         try {
           this.config.logger.error("Sanitization failed", {
-            error: errorMessage,
+            message: errorMessage,
             context: ctx,
             input:
               typeof input === "string"
@@ -206,7 +207,10 @@ export class SecurityManager implements ISecurityService {
           });
         } catch (logError) {
           // Fallback to console if logger fails
-          SecureLogger.error("Failed to log sanitization error:", logError);
+          SecureLogger.error(
+            "Failed to log sanitization error:",
+            logError instanceof Error ? logError : new Error(String(logError))
+          );
         }
       }
 
@@ -331,7 +335,7 @@ export class SecurityManager implements ISecurityService {
    */
   escapeSql(input: string): string {
     // Используем InputSanitizer для экранирования SQL
-    return InputSanitizer.sanitizeHtml(input);
+    return InputSanitizer.sanitizeSQL(input);
   }
 
   /**
@@ -362,6 +366,14 @@ export class SecurityManager implements ISecurityService {
     // В реальной реализации нужно получить токен из куки
     // Здесь используем упрощённую проверку
     if (headerToken) {
+      // Проверяем токен на подозрительные паттерны
+      const suspicious = detectSuspiciousPatterns(headerToken);
+      if (suspicious.length > 0) {
+        return {
+          valid: false,
+          reason: "CSRF token contains suspicious patterns",
+        };
+      }
       return { valid: true };
     }
     return { valid: false, reason: "Missing CSRF token" };

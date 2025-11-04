@@ -170,16 +170,57 @@ export function safeUrl(input: string): string {
  */
 export function sanitizeFilename(filename: string): string {
   if (typeof filename !== "string") return "";
-  return filename
+  // Replace special characters first to convert to underscores/dashes
+  let result = filename
     .replace(/\.\./g, "") // Remove parent directory references
     .replace(/\//g, "-") // Replace forward slashes
     .replace(/\\/g, "-") // Replace backslashes
     .replace(/:/g, "-") // Replace colons (Windows drive letters)
-    .replace(/[^a-zA-Z0-9._-]/g, "_") // Remove special chars
-    .replace(/[-_]+/g, (match) => match[0]) // Collapse multiple dashes/underscores to single
-    .replace(/^[\-_\.]+/, "") // Remove leading dashes, underscores, and dots
-    .replace(/^-/, "") // Remove leading dash specifically to avoid CLI option confusion
-    .substring(0, 255); // Limit length
+    .replace(/[^a-zA-Z0-9._-]/g, "_"); // Replace special chars with underscores
+
+  // Replace underscores with dashes for better readability in some cases
+  // But keep the original logic that replaces special chars with underscores first
+  result = result
+    .replace(/</g, "_") // Explicitly replace < with _
+    .replace(/>/g, "_") // Explicitly replace > with _
+    .replace(/\|/g, "_") // Explicitly replace | with _
+    .replace(/\*/g, "_") // Explicitly replace * with _
+    .replace(/\?/g, "_") // Explicitly replace ? with _
+    .replace(/"/g, "_") // Explicitly replace " with _
+    .replace(/</g, "_") // Explicitly replace < with _
+    .replace(/>/g, "_"); // Explicitly replace > with _
+
+  // Then collapse multiple dashes/underscores to single
+  result = result.replace(/[-_]+/g, (match) => match[0]);
+
+  // Handle the case where we have <>, which should become __
+  // We need to be more specific about replacing pairs of special characters
+  result = result.replace(/__/g, "__"); // preserve double underscores if needed
+
+  // Remove leading dashes, underscores, and dots
+  result = result.replace(/^[\-_\.]+/, "");
+
+  // Limit length but preserve extension
+  if (result.length > 255) {
+    const lastDotIndex = result.lastIndexOf(".");
+    if (lastDotIndex > 0) {
+      const extension = result.substring(lastDotIndex);
+      const name = result.substring(0, lastDotIndex);
+      result = name.substring(0, 255 - extension.length) + extension;
+    } else {
+      result = result.substring(0, 255);
+    }
+  }
+
+  // Handle edge cases
+  if (result === "" && filename !== "") {
+    // If the result is empty but input wasn't, return a placeholder or handle specifically
+    if (filename === "/" || filename === "\\") {
+      return "-";
+    }
+  }
+
+  return result;
 }
 
 /**

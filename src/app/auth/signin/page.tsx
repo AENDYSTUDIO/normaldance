@@ -1,8 +1,7 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
-import { EthereumConnectButton } from '@/components/wallet/EthereumConnectButton';
 'use client'
 
-import { useState } from 'react'
+import { SecureLogger } from '@/lib/security/secure-logger';
+import { EthereumConnectButton } from '@/components/wallet/EthereumConnectButton';import { useState } from 'react'
 import { signIn, getProviders } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Tabs, TabsContent, TabsList, TabsTrigger, Input, Label, Textarea, Alert, AlertDescription } from '@/components/ui'

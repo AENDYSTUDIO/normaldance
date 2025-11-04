@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { AlertCircle, CheckCircle, Wallet } from "@/components/icons";
 

@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { useEffect, useState } from 'react'
 import WebApp from '@twa-dev/sdk'
 import GraveyardGrid from '@/components/grave/GraveyardGrid'

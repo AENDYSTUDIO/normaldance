@@ -1,6 +1,6 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
 'use client'
 
+import { SecureLogger } from '@/lib/security/secure-logger';
 import { InvisibleDeflationAdapter } from './invisible-deflation-adapter';
 import { TransactionFeeCalculator } from '../../lib/wallet/transaction-fee-calculator';
 import { DeflationaryModel } from '../../lib/deflationary-model';

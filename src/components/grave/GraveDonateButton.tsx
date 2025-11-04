@@ -1,5 +1,7 @@
+'use client'
+
 import { SecureLogger } from '@/lib/security/secure-logger';
-"use client";
+;
 
 import { useState, useCallback } from "react";
 import { useGraveContract } from "@/hooks/grave/useGraveContract";
