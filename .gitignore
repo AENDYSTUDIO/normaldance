@@ -21,6 +21,16 @@ lighthouse-*
 security-*
 SECURITY_TESTING_*
 
+# Security and configuration files
+.kilocode/
+.amazonq/
+.cursor/
+.gemini/
+.gigaide/
+.roo/
+.vscode/
+.idea/
+
 # Temporary build files
 .next/
 out/
