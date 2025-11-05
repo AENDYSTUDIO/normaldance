@@ -5,6 +5,41 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 и этот проект придерживается [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-11-05
+
+### ✨ Features
+
+- **deployment**: Полная поддержка деплоя на Vercel с автоматизацией
+- **env-management**: Автоматизированные скрипты для управления переменными окружения
+- **scripts**: Добавлены скрипты upload-env-to-vercel.sh, check-env-vercel.sh, deploy-vercel.sh
+- **architecture**: Подготовка к разделению на 70% OSS / 30% Commercial IP
+- **bridge-api**: Реализован мост для безопасного взаимодействия между публичным и приватным кодом
+- **security**: Улучшенный мониторинг безопасности для enterprise deployment
+
+### 📚 Documentation
+
+- **VERCEL_ENV_SETUP.md**: Полная инструкция по настройке переменных окружения для Vercel
+- **VERCEL_DEPLOYMENT_ROADMAP.md**: 11-дневный план развертывания с 6 фазами
+- **ARCHITECTURE_SEPARATION_GUIDE.md**: Стратегия разделения архитектуры для защиты IP
+- **POST_DEPLOYMENT_VERIFICATION.md**: 11-этапный чеклист верификации после деплоя
+- Русскоязычная документация: VERCEL_DEPLOYMENT_GUIDE_RU.md, БЫСТРАЯ_РАЗВЕРТКА.md
+
+### 🔧 Инструменты
+
+- Автоматическая загрузка переменных окружения в Vercel
+- Проверка наличия критических переменных перед деплоем
+- Интерактивный скрипт деплоя с валидацией
+- TypeScript и линтинг проверки перед деплоем
+- Автоматическая верификация после успешного деплоя
+
+### 🚀 Deployment
+
+- Production-ready конфигурация для Vercel
+- Поддержка preview и production окружений
+- Интеграция с GitHub для автоматического деплоя
+- Cron jobs для рекомендаций, аналитики и очистки
+- Настроенные функции API с таймаутами и memory limits
+
 ## [0.3.0] - 2025-10-28
 
 ### ⚠️ BREAKING CHANGES
