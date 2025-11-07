@@ -16,10 +16,22 @@ import {
   OfflineManager,
   TelegramStarsBridge,
   RecoverySystem,
-  SecurityManager
+  SecurityManager,
+  ExtendedWalletAdapter
 } from "@/types/wallet";
-import { PublicKey, Transaction } from "@solana/web3.js";
+import { 
+  PublicKey, 
+  Transaction, 
+  Connection,
+  Keypair
+} from "@solana/web3.js";
 import { WalletAdapter, WalletAdapterNetwork } from "@solana/wallet-adapter-base";
+import { 
+  TOKEN_PROGRAM_ID,
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  getAssociatedTokenAddress,
+  createAssociatedTokenAccountInstruction
+} from "@solana/spl-token";
 import { KeyManagerImpl } from "@/lib/wallet/key-manager";
 import { getInvisibleWalletConfig } from "@/lib/wallet/config";
 import { TelegramUtils, ErrorUtils } from "@/lib/wallet/utils";
@@ -30,21 +42,25 @@ import { RecoverySystemImpl } from "@/lib/wallet/recovery-system";
 import { TelegramContactsManager } from "@/lib/wallet/telegram-contacts";
 import { AuthManager } from "@/lib/wallet/auth-manager";
 import { SecurityManager } from "@/components/wallet/security-manager";
+import { createMusicTokenManager, MusicTokenManager, musicTokenUtils } from "@/lib/wallet/music-token-manager";
+import { createConnection } from "./wallet-adapter";
 
 /**
  * Основной адаптер для Invisible Wallet
  */
-export class InvisibleWalletAdapterImpl implements InvisibleWalletAdapter, WalletAdapter {
+export class InvisibleWalletAdapterImpl implements InvisibleWalletAdapter, WalletAdapter, ExtendedWalletAdapter {
   private config: InvisibleWalletConfig;
+  private connection: Connection;
   private keyManager: KeyManager;
- private sessionManager: SessionManagerImpl;
+  private sessionManager: SessionManagerImpl;
   private offlineManager: OfflineManager;
   private starsBridge: TelegramStarsBridge;
   private recoverySystem: RecoverySystemImpl;
   private securityManager: SecurityManager;
   private contactsManager: TelegramContactsManager;
   private authManager: AuthManager;
- private eventHandlers: EventHandlerMap = {};
+  private musicTokenManager: MusicTokenManager;
+  private eventHandlers: EventHandlerMap = {};
   private isInitializedFlag: boolean = false;
   private connectedFlag: boolean = false;
   private publicKeyValue: PublicKey | null = null;
@@ -58,6 +74,7 @@ export class InvisibleWalletAdapterImpl implements InvisibleWalletAdapter, Walle
   
   constructor(config?: Partial<InvisibleWalletConfig>) {
     this.config = config || getInvisibleWalletConfig();
+    this.connection = createConnection();
     this.initializeComponents();
   }
   
@@ -74,6 +91,8 @@ export class InvisibleWalletAdapterImpl implements InvisibleWalletAdapter, Walle
     this.contactsManager = new TelegramContactsManager();
     this.authManager = new AuthManager();
     this.securityManager = new SecurityManager(this.config);
+    // Инициализируем менеджер музыкальных токенов
+    this.musicTokenManager = createMusicTokenManager(this.connection);
   }
   
   /**
@@ -626,6 +645,162 @@ export function useInvisibleWallet() {
 // Импорт React для хука
 import { useState, useEffect } from "react";
 
+  // ========================================
+// Методы для работы с музыкальными токенами
+// ========================================
+
+  /**
+   * Получить или создать токен аккаунт для пользователя
+   */
+  async getOrCreateTokenAccount(mint?: PublicKey): Promise<{ address: PublicKey; transaction?: Transaction }> {
+    if (!this.publicKeyValue) {
+      throw new InvisibleWalletError("Wallet not connected", "WALLET_NOT_CONNECTED");
+    }
+
+    return await this.musicTokenManager.getOrCreateTokenAccount(
+      this.publicKeyValue,
+      mint
+    );
+  }
+
+  /**
+   * Получить баланс музыкальных токенов
+   */
+  async getMusicTokenBalance(mint?: PublicKey): Promise<number> {
+    if (!this.publicKeyValue) {
+      throw new InvisibleWalletError("Wallet not connected", "WALLET_NOT_CONNECTED");
+    }
+
+    return await this.musicTokenManager.getTokenBalance(
+      this.publicKeyValue,
+      mint
+    );
+  }
+
+  /**
+   * Mint токены доступу к музыке
+   */
+  async mintMusicTokens(amount: number, trackId: string): Promise<Transaction> {
+    if (!this.publicKeyValue) {
+      throw new InvisibleWalletError("Wallet not connected", "WALLET_NOT_CONNECTED");
+    }
+
+    const transaction = await this.musicTokenManager.mintToUser(
+      this.publicKeyValue,
+      amount
+    );
+
+    this.emit(InvisibleWalletEvent.MUSIC_TOKENS_MINTED, {
+      amount,
+      trackId,
+      wallet: this.publicKeyValue.toBase58()
+    });
+
+    return transaction;
+  }
+
+  /**
+   * Купить доступ к треку через Stars
+   */
+  async purchaseTrackWithStars(trackId: string, price: number): Promise<{
+    transaction: Transaction;
+    tokenAmount: number;
+  }> {
+    try {
+      if (!this.publicKeyValue) {
+        throw new InvisibleWalletError("Wallet not connected", "WALLET_NOT_CONNECTED");
+      }
+
+      // 1. Покупка NDT токенов за Stars
+      const starsResult = await this.purchaseWithStars(price, `Purchase access to track ${trackId}`);
+      
+      if (!starsResult.success) {
+        throw new InvisibleWalletError("Stars purchase failed", "STARS_PURCHASE_FAILED", starsResult);
+      }
+
+      // 2. Mint музыкальных токенов
+      const tokenAmount = Math.floor(starsResult.ndtAmount * 0.95); // Комиссия 5%
+      const transaction = await this.mintMusicTokens(tokenAmount, trackId);
+
+      this.emit(InvisibleWalletEvent.TRACK_PURCHASED, {
+        trackId,
+        starsPaid: starsResult.starsAmount,
+        tokensReceived: tokenAmount,
+        wallet: this.publicKeyValue.toBase58()
+      });
+
+      return { transaction, tokenAmount };
+    } catch (error) {
+      logger.error("Failed to purchase track with Stars", error as Error);
+      throw new InvisibleWalletError("Track purchase failed", "TRACK_PURCHASE_FAILED", { error });
+    }
+  }
+
+  /**
+   * Проверить доступ к треку
+   */
+  async checkTrackAccess(trackId: string, accessData: any): Promise<boolean> {
+    if (!this.publicKeyValue) {
+      return false;
+    }
+
+    return await this.musicTokenManager.checkTrackAccess(
+      this.publicKeyValue,
+      trackId,
+      accessData
+    );
+  }
+
+  /**
+   * Transfer токенов другому пользователю
+   */
+  async transferMusicTokens(toWallet: PublicKey, amount: number): Promise<Transaction> {
+    if (!this.publicKeyValue) {
+      throw new InvisibleWalletError("Wallet not connected", "WALLET_NOT_CONNECTED");
+    }
+
+    return await this.musicTokenManager.transferTokens(
+      this.publicKeyValue,
+      toWallet,
+      amount
+    );
+  }
+
+  /**
+   * Burn токены (отмена доступа)
+   */
+  async burnMusicTokens(amount: number): Promise<Transaction> {
+    if (!this.publicKeyValue) {
+      throw new InvisibleWalletError("Wallet not connected", "WALLET_NOT_CONNECTED");
+    }
+
+    const transaction = await this.musicTokenManager.burnTokens(
+      this.publicKeyValue,
+      amount
+    );
+
+    this.emit(InvisibleWalletEvent.MUSIC_TOKENS_BURNED, {
+      amount,
+      wallet: this.publicKeyValue.toBase58()
+    });
+
+    return transaction;
+  }
+
+  /**
+   * Получить информацию о музыкальных токенах
+   */
+  async getMusicTokenInfo(mint?: PublicKey): Promise<any> {
+    return await this.musicTokenManager.getTokenInfo(mint);
+  }
+
+  /**
+   * Получить статистику токенов
+   */
+  async getTokenStats(mint?: PublicKey): Promise<any> {
+    return await this.musicTokenManager.getTokenStats(mint);
+  }
+
   /**
    * Аутентификация пользователя
    */
@@ -647,5 +822,18 @@ import { useState, useEffect } from "react";
   async validateTransaction(transaction: Transaction): Promise<boolean> {
     const userId = await this.getUserId();
     return await this.securityManager.validateTransaction(transaction, userId);
+  }
+
+  // Utility методы для форматирования токенов
+  formatTokenAmount(amount: number, decimals?: number): string {
+    return musicTokenUtils.formatTokenAmount(amount, decimals);
+  }
+
+  calculateAccessPrice(basePrice: number, durationMinutes: number): number {
+    return musicTokenUtils.calculateAccessPrice(basePrice, durationMinutes);
+  }
+
+  tokensToSol(tokenAmount: number, tokenPrice: number): number {
+    return musicTokenUtils.tokensToSol(tokenAmount, tokenPrice);
   }
 }

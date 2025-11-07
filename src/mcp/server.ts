@@ -5,6 +5,7 @@ import { MusicContextProvider } from './providers/music.js';
 import { UserContextProvider } from './providers/user.js';
 import { NFTContextProvider } from './providers/nft.js';
 import { StakingContextProvider } from './providers/staking.js';
+import { FigmaContextProvider } from './providers/figma.js';
 
 export class NormalDanceMCPServer {
   private server: Server;
@@ -13,6 +14,7 @@ export class NormalDanceMCPServer {
     users: UserContextProvider;
     nft: NFTContextProvider;
     staking: StakingContextProvider;
+    figma: FigmaContextProvider;
   };
 
   constructor() {
@@ -31,7 +33,8 @@ export class NormalDanceMCPServer {
       music: new MusicContextProvider(),
       users: new UserContextProvider(),
       nft: new NFTContextProvider(),
-      staking: new StakingContextProvider()
+      staking: new StakingContextProvider(),
+      figma: new FigmaContextProvider()
     };
 
     this.setupHandlers();
@@ -43,7 +46,9 @@ export class NormalDanceMCPServer {
         { uri: 'track://', name: 'Music Tracks', mimeType: 'application/json' },
         { uri: 'user://', name: 'User Profiles', mimeType: 'application/json' },
         { uri: 'nft://', name: 'NFT Collections', mimeType: 'application/json' },
-        { uri: 'staking://', name: 'Staking Data', mimeType: 'application/json' }
+        { uri: 'staking://', name: 'Staking Data', mimeType: 'application/json' },
+        { uri: 'design://', name: 'Design System', mimeType: 'application/json' },
+        { uri: 'figma://', name: 'Figma Design Tokens', mimeType: 'application/json' }
       ]
     }));
 
@@ -64,6 +69,20 @@ export class NormalDanceMCPServer {
           break;
         case 'staking':
           data = await this.providers.staking.getPosition(path);
+          break;
+        case 'design':
+          data = await this.providers.figma.generateDesignSystemReport();
+          break;
+        case 'figma':
+          const [fileKey, token] = path.split('/');
+          if (fileKey) {
+            // Use token from path if provided, otherwise fallback to environment variable
+            const figmaToken = token || process.env.FIGMA_ACCESS_TOKEN || '';
+            data = await this.providers.figma.getFigmaTokens(fileKey, figmaToken);
+          } else {
+            // No fileKey provided, return local tokens
+            data = { tokens: await this.providers.figma.getLocalDesignTokens() };
+          }
           break;
         default:
           throw new Error(`Unknown protocol: ${protocol}`);
@@ -102,6 +121,62 @@ export class NormalDanceMCPServer {
               count: { type: 'number', default: 20 }
             }
           }
+        },
+        {
+          name: 'analyze_component_design',
+          description: 'Analyze UI component design and provide recommendations',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              componentPath: { type: 'string', description: 'Path to component file' }
+            },
+            required: ['componentPath']
+          }
+        },
+        {
+          name: 'get_figma_tokens',
+          description: 'Get design tokens from Figma file',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              fileKey: { type: 'string', description: 'Figma file key' },
+              accessToken: { type: 'string', description: 'Figma access token (optional, uses env var)' }
+            },
+            required: ['fileKey']
+          }
+        },
+        {
+          name: 'generate_design_recommendations',
+          description: 'Generate design improvement recommendations',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              componentPath: { type: 'string', description: 'Optional component path for specific analysis' }
+            }
+          }
+        },
+        {
+          name: 'check_accessibility',
+          description: 'Check component accessibility compliance (WCAG 2.1 AA)',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              componentPath: { type: 'string', description: 'Path to component file' }
+            },
+            required: ['componentPath']
+          }
+        },
+        {
+          name: 'compare_design_systems',
+          description: 'Compare Figma design system with local design tokens',
+          inputSchema: {
+            type: 'object',
+            properties: {
+              figmaFileKey: { type: 'string', description: 'Figma file key' },
+              accessToken: { type: 'string', description: 'Figma access token (optional)' }
+            },
+            required: ['figmaFileKey']
+          }
         }
       ]
     }));
@@ -116,6 +191,25 @@ export class NormalDanceMCPServer {
           break;
         case 'get_recommendations':
           result = await this.providers.music.getRecommendations(args.userId);
+          break;
+        case 'analyze_component_design':
+          result = await this.providers.figma.analyzeComponent(args.componentPath);
+          break;
+        case 'get_figma_tokens':
+          const token = args.accessToken || process.env.FIGMA_ACCESS_TOKEN || '';
+          result = await this.providers.figma.getFigmaTokens(args.fileKey, token);
+          break;
+        case 'generate_design_recommendations':
+          result = await this.providers.figma.generateDesignRecommendations(args.componentPath);
+          break;
+        case 'check_accessibility':
+          result = await this.providers.figma.checkAccessibility(args.componentPath);
+          break;
+        case 'compare_design_systems':
+          const figmaToken = args.accessToken || process.env.FIGMA_ACCESS_TOKEN || '';
+          const figmaTokens = await this.providers.figma.getFigmaTokens(args.figmaFileKey, figmaToken);
+          const localTokens = await this.providers.figma.getLocalDesignTokens();
+          result = await this.providers.figma.compareWithFigma(figmaTokens, localTokens);
           break;
         default:
           throw new Error(`Unknown tool: ${name}`);

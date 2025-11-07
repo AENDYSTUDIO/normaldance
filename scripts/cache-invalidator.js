@@ -1,8 +1,8 @@
-#!/usr/bin/env node
+.#!/usr/bin/env node
 
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { execSync  } from 'child_process';
 import CacheManager from './cache-manager';
 
 class CacheInvalidator extends CacheManager {

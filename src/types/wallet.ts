@@ -148,6 +148,11 @@ export enum InvisibleWalletEvent {
   INITIALIZED = 'initialized',
   CONNECTED = 'connected',
   DISCONNECTED = 'disconnected',
+  // Музыкальные события
+  MUSIC_TOKENS_MINTED = 'music_tokens_minted',
+  TRACK_PURCHASED = 'track_purchased',
+  MUSIC_TOKENS_BURNED = 'music_tokens_burned',
+  ACCESS_GRANTED = 'access_granted',
   AUTO_CONNECTED = 'auto_connected',
   KEYS_GENERATED = 'keys_generated',
   TRANSACTION_SENT = 'transaction_sent',
@@ -202,4 +207,23 @@ export interface InvisibleWalletAdapter {
   connecting: boolean;
   publicKey: any | null;
   autoApprove: boolean;
+}
+
+// Расширенный интерфейс для поддержки музыки
+export interface ExtendedWalletAdapter extends InvisibleWalletAdapter {
+  // Методы для работы с музыкальными токенами
+  getOrCreateTokenAccount(mint?: PublicKey): Promise<{ address: PublicKey; transaction?: Transaction }>;
+  getMusicTokenBalance(mint?: PublicKey): Promise<number>;
+  mintMusicTokens(amount: number, trackId: string): Promise<Transaction>;
+  purchaseTrackWithStars(trackId: string, price: number): Promise<{ transaction: Transaction; tokenAmount: number }>;
+  checkTrackAccess(trackId: string, accessData: any): Promise<boolean>;
+  transferMusicTokens(toWallet: PublicKey, amount: number): Promise<Transaction>;
+  burnMusicTokens(amount: number): Promise<Transaction>;
+  getMusicTokenInfo(mint?: PublicKey): Promise<any>;
+  getTokenStats(mint?: PublicKey): Promise<any>;
+  
+  // Utility методы
+  formatTokenAmount(amount: number): string;
+  calculateAccessPrice(basePrice: number, durationMinutes: number): number;
+  tokensToSol(tokenAmount: number, tokenPrice: number): number;
 }
