@@ -43,8 +43,8 @@ import {
 } from "./sanitize";
 
 import { BaseValidator } from "./BaseValidator";
-import { InputSanitizer } from "./input-sanitizer";
-import { detectSuspiciousPatterns } from "./security-utils";
+import { escapeHTML, stripDangerousHtml, sanitizeSQL } from "./sanitize";
+import { detectSuspiciousPatterns } from "./security-utils";
 import type { XssContext } from "./xss-csrf";
 
 // Единый источник CSP
@@ -175,7 +175,7 @@ export class SecurityManager implements ISecurityService {
           break;
         case "sql":
           // Используем экранирование SQL из input-sanitizer
-          result = InputSanitizer.sanitizeHtml(input); // Временное решение, так как у нас больше нет функции sanitizeSQL
+          result = escapeHTML(stripDangerousHtml(input));
           break;
         case "plain":
         default:
@@ -334,8 +334,8 @@ export class SecurityManager implements ISecurityService {
    * @returns Экранированная строка
    */
   escapeSql(input: string): string {
-    // Используем InputSanitizer для экранирования SQL
-    return InputSanitizer.sanitizeSQL(input);
+    // Используем sanitizeSQL для экранирования SQL
+    return sanitizeSQL(input);
   }
 
   /**

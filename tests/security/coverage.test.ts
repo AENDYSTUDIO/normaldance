@@ -28,13 +28,13 @@ import {
 } from "@/lib/security";
 import {
   isValidEmail,
-  isValidEthereumAddress,
-  isValidIPFSCID,
-  isValidSolanaAddress,
-  isValidTONAddress,
-  sanitizeSQL,
-} from "@/lib/security/input-sanitizer";
-import { InputValidator } from "@/lib/security/input-validator";
+  isValidEthereumAddress,
+  isValidIPFSCID,
+  isValidSolanaAddress,
+  isValidTONAddress,
+  sanitizeSQL,
+} from "@/lib/security";
+import { InputValidator } from "@/lib/security";
 import {
   detectSuspiciousPatterns,
   validateNumber,

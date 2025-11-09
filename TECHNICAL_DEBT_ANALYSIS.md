@@ -3,18 +3,18 @@
 **Дата анализа**: 2024-01-15  
 **Версия проекта**: 0.3.0  
 **Статус**: ⚠️ ТРЕБУЕТ ВНИМАНИЯ  
-**Ссылка на issue**: [#1](https://github.com/NORMALDANCE/NORMALDANCE/issues/1)
+**Ссылка на issue**: [#1](https://github.com/AENDYSTUDIO/NORMALDANCE/issues/1)
 
 ---
 
 ## 📊 Общая оценка
 
-| Категория | Статус | Критичность | Время |
-|-----------|--------|-------------|-------|
-| Security Vulnerabilities | 🔴 КРИТИЧНО | ВЫСОКАЯ | 4-6 ч |
-| Dependency Conflicts | ⚠️ ВАЖНО | СРЕДНЯЯ | 20-30 ч |
-| Test Coverage | 🟡 НАДО УЛУЧШИТЬ | СРЕДНЯЯ | 80-120 ч |
-| Code Quality | 🟢 ПРИЕМЛЕМО | НИЗКАЯ | 40-60 ч |
+| Категория                | Статус           | Критичность | Время    |
+| ------------------------ | ---------------- | ----------- | -------- |
+| Security Vulnerabilities | 🔴 КРИТИЧНО      | ВЫСОКАЯ     | 4-6 ч    |
+| Dependency Conflicts     | ⚠️ ВАЖНО         | СРЕДНЯЯ     | 20-30 ч  |
+| Test Coverage            | 🟡 НАДО УЛУЧШИТЬ | СРЕДНЯЯ     | 80-120 ч |
+| Code Quality             | 🟢 ПРИЕМЛЕМО     | НИЗКАЯ      | 40-60 ч  |
 
 **Общее время на устранение**: 144-216 часов (3-4 недели)
 
@@ -23,12 +23,13 @@
 ## 🚨 КРИТИЧЕСКИЕ ПРОБЛЕМЫ (Приоритет 1)
 
 ### 1. Security Vulnerabilities [Issue #2]
+
 - **Статус**: 🔴 КРИТИЧНО
 - **Найдено**: 7 уязвимостей
   - 3 critical
   - 4 high
 - **Риск**: Потенциальная компрометация безопасности
-- **Решение**: 
+- **Решение**:
   ```bash
   npm audit fix
   npm audit fix --force
@@ -37,6 +38,7 @@
 - **Приоритет**: НЕМЕДЛЕННО
 
 **Действия**:
+
 1. Запустить полный audit: `npm audit --json > security-audit.json`
 2. Проанализировать каждую уязвимость
 3. Применить исправления
@@ -46,6 +48,7 @@
 ---
 
 ### 2. Merge Conflicts ✅ РЕШЕНО
+
 - **Было**: 79 конфликтов в 24 файлах
 - **Статус**: ✅ Разрешено автоматически
 - **Метод**: Использован скрипт `scripts/fix-merge-conflicts.cjs`
@@ -55,6 +58,7 @@
   - Components: 1 файл, 1 конфликт
 
 **Разрешенные файлы**:
+
 - `src/app/api/**/*` - API endpoints
 - `src/lib/ipfs-enhanced.ts` - IPFS интеграция
 - `src/lib/security/**/*` - Security модули
@@ -63,6 +67,7 @@
 ---
 
 ### 3. Git Repository State
+
 - **Проблема**: Незакоммиченные изменения после разрешения конфликтов
 - **Риск**: Потеря работы, проблемы с синхронизацией
 - **Решение**:
@@ -80,27 +85,31 @@
 ## ⚠️ СЕРЬЕЗНЫЕ ПРОБЛЕМЫ (Приоритет 2)
 
 ### 4. Dependency Conflicts [Issue #3]
+
 - **Проблема**: Storybook версии конфликтуют
   - Установлено: `storybook@8.6.14`
   - Требуется: `@storybook/nextjs@9.1.16`
 - **Влияние**: Storybook может не работать корректно
 - **Решение**:
+
   ```bash
   # Вариант 1: Синхронизировать на 8.x
   npm install @storybook/nextjs@8.6.14 --save-exact
-  
+
   # Вариант 2: Обновить на 9.x
   npm install @storybook/nextjs@9.1.16 storybook@9.1.16
   ```
+
 - **Время**: 2-3 часа
 - **Приоритет**: СРЕДНИЙ
 
 ---
 
 ### 5. Prisma Version Mismatch ✅ РЕШЕНО
+
 - **Было**: `prisma@5.22.0` vs `@prisma/client@6.18.0`
 - **Статус**: ✅ Синхронизировано на 5.22.0
-- **Метод**: 
+- **Метод**:
   ```bash
   npm install prisma@5.22.0 @prisma/client@5.22.0 --save-exact --legacy-peer-deps
   npx prisma generate
@@ -109,6 +118,7 @@
 ---
 
 ### 6. Legacy Peer Dependencies
+
 - **Проблема**: Требуется флаг `--legacy-peer-deps` для установки
 - **Причина**: Устаревшие или конфликтующие зависимости
 - **Риск**: Потенциальная несовместимость пакетов
@@ -121,6 +131,7 @@
 ## 📝 ТЕХНИЧЕСКИЙ ДОЛГ (Приоритет 3)
 
 ### 7. TypeScript Configuration
+
 - **Проблема**: Расслабленные правила для Web3 совместимости
   - `noImplicitAny: false`
   - `no-non-null-assertion: off`
@@ -132,9 +143,10 @@
 ---
 
 ### 8. Prisma Schema Simplification
+
 - **Проблема**: Json поля заменены на String для SQLite
 - **Причина**: SQLite в dev не поддерживает Json
-- **Решение**: 
+- **Решение**:
   - Dev: Оставить SQLite с String
   - Prod: PostgreSQL с Json типами
 - **Время**: 4-6 часов
@@ -143,6 +155,7 @@
 ---
 
 ### 9. Test Coverage [Issue #4]
+
 - **Текущее**: ~70% покрытие
 - **Целевое**: >85%
 - **Проблемные зоны**:
@@ -155,6 +168,7 @@
 - **Приоритет**: СРЕДНИЙ
 
 **План тестирования**:
+
 - Phase 1: Unit Tests (Web3, IPFS, Auth)
 - Phase 2: Integration Tests (API, DB, Uploads)
 - Phase 3: E2E Tests (User flows, Critical paths)
@@ -162,6 +176,7 @@
 ---
 
 ### 10. Code Duplication
+
 - **Проблема**: Повторяющийся код в API routes
   - Аутентификация
   - Валидация
@@ -175,6 +190,7 @@
 ## 🏗️ АРХИТЕКТУРНЫЕ ПРОБЛЕМЫ
 
 ### 11. Custom Server (server.ts)
+
 - **Статус**: ⚠️ Не рекомендуется Next.js
 - **Проблема**: Усложняет deployment на Vercel/Netlify
 - **Причина**: Нужен для Socket.IO
@@ -186,7 +202,8 @@
 ---
 
 ### 12. IPFS Multiple Implementations
-- **Проблема**: 
+
+- **Проблема**:
   - `src/lib/ipfs-helia-complete.ts`
   - `src/lib/ipfs-enhanced.ts`
   - Два разных подхода
@@ -198,6 +215,7 @@
 ---
 
 ### 13. Global Prisma Instance
+
 - **Статус**: ✅ Правильно реализовано
 - **Файл**: `src/lib/db.ts`
 - **Проблема**: Документация не всегда соблюдается
@@ -209,6 +227,7 @@
 ## 📦 ЗАВИСИМОСТИ
 
 ### 14. Outdated Packages
+
 - **next**: 15.5.6 ✅ Актуально
 - **react**: 18.0.0 → можно обновить до 18.3.x
 - **prisma**: 5.22.0 → можно обновить до 6.x
@@ -218,6 +237,7 @@
 ---
 
 ### 15. Bundle Size
+
 - **Проблема**: Неоптимизированный размер
 - **Причины**:
   - Множество Radix UI компонентов
@@ -235,6 +255,7 @@
 ## 🧪 TESTING
 
 ### 16. E2E Tests Configuration
+
 - **Playwright**: Настроен
 - **Тестов**: ~20 E2E тестов
 - **Нужно**: Критические флоу
@@ -250,6 +271,7 @@
 ## 📱 MOBILE APP
 
 ### 17. Mobile Dependencies
+
 - **Статус**: ⚠️ Не установлены
 - **Проблема**: Требуется `--legacy-peer-deps`
 - **Решение**:
@@ -265,22 +287,26 @@
 ## 🔒 SECURITY
 
 ### 18. Environment Variables
+
 - **Проблема**: `.env` может быть в git
 - **Риск**: КРИТИЧЕСКИЙ - утечка секретов
 - **Решение**:
+
   ```bash
   # Проверить .gitignore
   cat .gitignore | grep .env
-  
+
   # Если .env в git, удалить
   git rm --cached .env
   git commit -m "security: remove .env from git"
   ```
+
 - **Приоритет**: КРИТИЧЕСКИЙ
 
 ---
 
 ### 19. Hardcoded Secrets
+
 - **Статус**: ⚠️ Нужна проверка
 - **Команда**: `npm run security:secrets`
 - **Решение**: Переменные окружения
@@ -292,17 +318,20 @@
 ## 📊 СТАТИСТИКА ПРОЕКТА
 
 ### Кодовая база
+
 - **Строк кода**: ~50,000+
 - **TypeScript файлов**: ~500
 - **Компонентов**: ~100
 - **API endpoints**: ~50
 
 ### Зависимости
+
 - **Dependencies**: 80 пакетов
 - **DevDependencies**: 40 пакетов
 - **Всего (с транзитивными)**: 3,134 пакета
 
 ### Тесты
+
 - **Unit тесты**: ~100+
 - **Integration тесты**: ~50+
 - **E2E тесты**: ~20+
@@ -313,6 +342,7 @@
 ## 🎯 ПЛАН УСТРАНЕНИЯ
 
 ### Неделя 1 (КРИТИЧНО) ⚠️
+
 - [x] Разрешить merge conflicts ✅
 - [ ] Исправить security vulnerabilities [#2]
 - [ ] Удалить .env из git (если есть)
@@ -320,6 +350,7 @@
 - [ ] Закоммитить изменения
 
 ### Неделя 2 (ВЫСОКИЙ ПРИОРИТЕТ)
+
 - [ ] Исправить Storybook конфликты [#3]
 - [ ] Обновить критичные зависимости
 - [ ] Провести security audit
@@ -327,6 +358,7 @@
 - [ ] Оптимизировать bundle size
 
 ### Неделя 3-4 (СРЕДНИЙ ПРИОРИТЕТ)
+
 - [ ] Консолидировать IPFS код
 - [ ] Улучшить TypeScript strict mode
 - [ ] E2E тесты для критических флоу [#4]
@@ -338,6 +370,7 @@
 ## 💡 РЕКОМЕНДАЦИИ
 
 ### Немедленно ⚡
+
 ```bash
 # 1. Security fixes
 npm audit fix
@@ -352,12 +385,14 @@ npm run dev
 ```
 
 ### Краткосрочно (1 неделя)
+
 - Настроить pre-commit hooks (Husky)
 - Добавить ESLint правила для Web3
 - Создать PR template
 - Настроить CI/CD проверки
 
 ### Долгосрочно (1 месяц)
+
 - Постепенная миграция на Prisma 6.x
 - Улучшение test coverage до 85%
 - Оптимизация performance
@@ -367,14 +402,14 @@ npm run dev
 
 ## 📈 ОЦЕНКА РИСКОВ
 
-| Проблема | Вероятность | Влияние | Риск |
-|----------|-------------|---------|------|
-| Security vulnerabilities | Высокая | Критическое | 🔴 КРИТИЧЕСКИЙ |
-| Dependency conflicts | Средняя | Высокое | 🟠 ВЫСОКИЙ |
-| Merge conflicts | Низкая (решено) | Критическое | ✅ РЕШЕН |
-| Bundle size | Средняя | Среднее | 🟡 СРЕДНИЙ |
-| Test coverage | Низкая | Среднее | 🟡 СРЕДНИЙ |
-| TypeScript strict | Низкая | Низкое | 🟢 НИЗКИЙ |
+| Проблема                 | Вероятность     | Влияние     | Риск           |
+| ------------------------ | --------------- | ----------- | -------------- |
+| Security vulnerabilities | Высокая         | Критическое | 🔴 КРИТИЧЕСКИЙ |
+| Dependency conflicts     | Средняя         | Высокое     | 🟠 ВЫСОКИЙ     |
+| Merge conflicts          | Низкая (решено) | Критическое | ✅ РЕШЕН       |
+| Bundle size              | Средняя         | Среднее     | 🟡 СРЕДНИЙ     |
+| Test coverage            | Низкая          | Среднее     | 🟡 СРЕДНИЙ     |
+| TypeScript strict        | Низкая          | Низкое      | 🟢 НИЗКИЙ      |
 
 ---
 
@@ -393,7 +428,7 @@ npm run dev
 
 ## 📞 Следующие шаги
 
-1. **Прочитать issues**: [#1](https://github.com/NORMALDANCE/NORMALDANCE/issues/1), [#2](https://github.com/NORMALDANCE/NORMALDANCE/issues/2), [#3](https://github.com/NORMALDANCE/NORMALDANCE/issues/3), [#4](https://github.com/NORMALDANCE/NORMALDANCE/issues/4)
+1. **Прочитать issues**: [#1](https://github.com/AENDYSTUDIO/NORMALDANCE/issues/1), [#2](https://github.com/AENDYSTUDIO/NORMALDANCE/issues/2), [#3](https://github.com/AENDYSTUDIO/NORMALDANCE/issues/3), [#4](https://github.com/AENDYSTUDIO/NORMALDANCE/issues/4)
 2. **Исправить security** (Приоритет 1)
 3. **Закоммитить изменения**
 4. **Создать PR** для review
@@ -404,6 +439,6 @@ npm run dev
 **Версия документа**: 1.0.0  
 **Создан**: 2024-01-15  
 **Обновлен**: 2024-01-15  
-**Автор**: Technical Analysis Team  
+**Автор**: Technical Analysis Team
 
 **Статус проекта**: ⚠️ ТРЕБУЕТ ВНИМАНИЯ, НО ФУНКЦИОНАЛЕН

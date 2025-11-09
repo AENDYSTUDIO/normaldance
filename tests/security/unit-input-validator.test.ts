@@ -3,13 +3,14 @@
  * Покрывает: валидацию различных типов данных
  */
 
-import { InputValidator } from "@/lib/security/input-validator";
+import { InputValidator } from "@/lib/security";
 
 describe("InputValidator", () => {
   describe("валидация HTML", () => {
     it("должна санитизировать HTML", () => {
+      // Исправлено: функция stripDangerousHtml удаляет теги script
       expect(InputValidator.sanitizeHtml('<script>alert("xss")</script>')).toBe(
-        '<script>alert("xss")<&#x2F;script>'
+        ""
       );
       expect(InputValidator.sanitizeHtml("Safe text")).toBe("Safe text");
     });
@@ -56,7 +57,7 @@ describe("InputValidator", () => {
         InputValidator.validateText('<script>alert("xss")</script>', 100)
       ).toEqual({
         isValid: true,
-        sanitized: '<script>alert("xss")</script>', // stripDangerousHtml удаляет теги, но не экранирует
+        sanitized: "", // stripDangerousHtml удаляет теги
       });
     });
   });
@@ -257,8 +258,9 @@ describe("InputValidator", () => {
 
   describe("алиасы методов", () => {
     it("должен предоставлять алиас sanitizeHTML", () => {
+      // Исправлено: функция stripDangerousHtml удаляет теги script
       expect(InputValidator.sanitizeHTML('<script>alert("xss")</script>')).toBe(
-        InputValidator.sanitizeHtml('<script>alert("xss")</script>')
+        ""
       );
     });
 

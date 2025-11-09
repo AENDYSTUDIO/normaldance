@@ -5,7 +5,7 @@
   "description": "Децентрализованная музыкальная платформа",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AENDYSTUDIO/NORMALDANCE-REVOLUTION.git"
+    "url": "https://github.com/AENDYSTUDIO/NORMALDANCE.git"
   },
   "main": "index.js",
   "scripts": {

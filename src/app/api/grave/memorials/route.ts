@@ -1,8 +1,8 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import { validateTelegramInitData } from "@/lib/security/telegram-validator";
-import { sanitizeHTML } from "@/lib/security/input-sanitizer";
+import { SecureLogger } from '@/lib/security/secure-logger';
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { validateTelegramInitData } from "@/lib/security/telegram-validator";
+import { escapeHTML, stripDangerousHtml } from "@/lib/security";
 import { memorialSchema } from "@/lib/schemas";
 import { db } from "@/lib/db";
 import { BrowserProvider, Contract, ethers } from "ethers";

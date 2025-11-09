@@ -1,4 +1,4 @@
-import { InputSanitizer } from "./input-sanitizer";
+import { sanitizeLog } from "./log-sanitizer";
 
 // Dynamically import Winston only on server (not in Edge Runtime)
 let logger: any = null;
@@ -51,9 +51,9 @@ const getLogger = () => {
 };
 
 export class SecureLogger {
-  static info(message: string, data?: unknown) {
-    const sanitizedMsg = InputSanitizer.sanitizeLog(message);
-    const sanitizedData = data ? InputSanitizer.sanitizeLog(data) : "";
+  static info(message: string, data?: unknown) {
+    const sanitizedMsg = sanitizeLog(message);
+    const sanitizedData = data ? sanitizeLog(data) : "";
 
     const winstonLogger = getLogger();
     if (winstonLogger) {
@@ -63,10 +63,10 @@ export class SecureLogger {
     }
   }
 
-  static error(message: string, error?: Error) {
-    const sanitizedMsg = InputSanitizer.sanitizeLog(message);
-    const errorMsg = error?.message
-      ? InputSanitizer.sanitizeLog(error.message)
+  static error(message: string, error?: Error) {
+    const sanitizedMsg = sanitizeLog(message);
+    const errorMsg = error?.message
+      ? sanitizeLog(error.message)
       : "";
 
     const winstonLogger = getLogger();
@@ -77,9 +77,9 @@ export class SecureLogger {
     }
   }
 
-  static warn(message: string, data?: unknown) {
-    const sanitizedMsg = InputSanitizer.sanitizeLog(message);
-    const sanitizedData = data ? InputSanitizer.sanitizeLog(data) : "";
+  static warn(message: string, data?: unknown) {
+    const sanitizedMsg = sanitizeLog(message);
+    const sanitizedData = data ? sanitizeLog(data) : "";
 
     const winstonLogger = getLogger();
     if (winstonLogger) {
@@ -89,9 +89,9 @@ export class SecureLogger {
     }
   }
 
-  static log(level: string, message: string, data?: unknown) {
-    const sanitizedMsg = InputSanitizer.sanitizeLog(message);
-    const sanitizedData = data ? InputSanitizer.sanitizeLog(data) : "";
+  static debug(message: string, data?: unknown) {
+    const sanitizedMsg = sanitizeLog(message);
+    const sanitizedData = data ? sanitizeLog(data) : "";
 
     const winstonLogger = getLogger();
     if (winstonLogger) {
@@ -101,9 +101,9 @@ export class SecureLogger {
     }
   }
 
-  static security(message: string, context?: unknown) {
-    const sanitizedMsg = InputSanitizer.sanitizeLog(message);
-    const sanitizedCtx = context ? InputSanitizer.sanitizeLog(context) : "";
+  static log(message: string, context?: string) {
+    const sanitizedMsg = sanitizeLog(message);
+    const sanitizedCtx = context ? sanitizeLog(context) : "";
 
     const winstonLogger = getLogger();
     if (winstonLogger) {

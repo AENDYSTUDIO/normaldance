@@ -42,12 +42,15 @@ npm run dev
 ## 📋 ЧТО ПРОИЗОЙДЕТ
 
 ### Команда 1: `git pull`
+
 ⏱️ **10-30 секунд**
+
 - Скачает 5 новых файлов
 - Обновит 24 файла с разрешенными конфликтами
 - Добавит 3 новых скрипта
 
 **Вывод будет примерно такой:**
+
 ```
 Updating ca6e575..b8f109f
 Fast-forward
@@ -61,9 +64,11 @@ Fast-forward
 ---
 
 ### Команда 2: `node scripts/security-fix-automated.cjs`
+
 ⏱️ **2-5 минут**
 
 **Вывод будет:**
+
 ```
 ========================================
   Automated Security Fix
@@ -91,9 +96,11 @@ Remaining vulnerabilities: 0-2
 ---
 
 ### Команда 3: `npm run dev`
+
 ⏱️ **5-10 секунд**
 
 **Вывод будет:**
+
 ```
  ✓ Ready in 3.2s
  ▲ Next.js 15.5.6
@@ -138,12 +145,14 @@ git push origin fix/security-streaming-socketio-csp-rate
 ## 🎉 РЕЗУЛЬТАТ
 
 ### ДО:
+
 - ❌ 79 merge конфликтов
 - ❌ Prisma не синхронизирована
 - ❌ 7 security уязвимостей
 - ❌ Нет документации
 
 ### ПОСЛЕ:
+
 - ✅ 0 merge конфликтов
 - ✅ Prisma синхронизирована
 - ✅ 0-2 уязвимости (все критичные устранены)
@@ -154,6 +163,7 @@ git push origin fix/security-streaming-socketio-csp-rate
 ## 🆘 ЕСЛИ ВОЗНИКЛИ ПРОБЛЕМЫ
 
 ### Проблема: git pull не работает
+
 ```powershell
 git status  # Проверить состояние
 git stash   # Сохранить локальные изменения
@@ -162,18 +172,22 @@ git stash pop  # Вернуть изменения
 ```
 
 ### Проблема: npm audit fix не исправил всё
+
 ```powershell
 npm audit fix --force
 ```
+
 ⚠️ Это может вызвать breaking changes, проверьте работу приложения!
 
 ### Проблема: npm run dev падает с ошибкой
+
 ```powershell
 npm install  # Переустановить зависимости
 npm run dev  # Попробовать снова
 ```
 
 ### Проблема: Порт 3000 занят
+
 ```powershell
 # Windows
 netstat -ano | findstr :3000
@@ -191,14 +205,17 @@ $env:PORT=3001; npm run dev
 
 1. **Создайте коммит** (команды выше)
 2. **Проверьте Issues**:
-   - [#1 Технический долг](https://github.com/NORMALDANCE/NORMALDANCE/issues/1)
-   - [#2 Security](https://github.com/NORMALDANCE/NORMALDANCE/issues/2)
+
+- [#1 Технический долг](https://github.com/AENDYSTUDIO/NORMALDANCE/issues/1)
+- [#2 Security](https://github.com/AENDYSTUDIO/NORMALDANCE/issues/2)
+
 3. **Закройте Issue #2** (security исправлены)
 4. **Продолжайте разработку!** 🚀
 
 ### На будущее:
 
 Еженедельно запускайте:
+
 ```powershell
 npm audit  # Проверка security
 npm outdated  # Проверка устаревших пакетов
@@ -209,6 +226,7 @@ npm outdated  # Проверка устаревших пакетов
 ## 📚 ДОКУМЕНТАЦИЯ
 
 Созданные документы:
+
 - [TECHNICAL_DEBT_ANALYSIS.md](TECHNICAL_DEBT_ANALYSIS.md) - Полный анализ
 - [SOLO_DEV_TODO.md](SOLO_DEV_TODO.md) - Ваш TODO
 - [SECURITY_FIX_INSTRUCTIONS.md](SECURITY_FIX_INSTRUCTIONS.md) - Детальные инструкции
@@ -220,6 +238,7 @@ npm outdated  # Проверка устаревших пакетов
 ## 💬 ОБРАТНАЯ СВЯЗЬ
 
 После выполнения напишите в Issue #2:
+
 - "✅ Готово" - если всё прошло гладко
 - "❌ Ошибка: [текст]" - если проблемы
 - "❓ Вопрос: [что]" - если непонятно

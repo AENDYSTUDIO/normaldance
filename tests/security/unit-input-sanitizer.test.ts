@@ -1,16 +1,16 @@
-/**
- * Модульные тесты для функций input-sanitizer из src/lib/security/input-sanitizer.ts
- * Покрывает: sanitizeSQL, isValidEmail, isValidSolanaAddress, isValidEthereumAddress, isValidTONAddress, isValidIPFSCID
- */
-
-import {
-  isValidEmail,
-  isValidEthereumAddress,
-  isValidIPFSCID,
-  isValidSolanaAddress,
-  isValidTONAddress,
-  sanitizeSQL,
-} from "@/lib/security/input-sanitizer";
+/**
+ * Модульные тесты для функций input-sanitizer из src/lib/security/input-sanitizer.ts
+ * Покрывает: sanitizeSQL, isValidEmail, isValidSolanaAddress, isValidEthereumAddress, isValidTONAddress, isValidIPFSCID
+ */
+
+import {
+  isValidEmail,
+  isValidEthereumAddress,
+  isValidIPFSCID,
+  isValidSolanaAddress,
+  isValidTONAddress,
+  sanitizeSQL,
+} from "@/lib/security";
 
 describe("Функции input-sanitizer", () => {
   describe("sanitizeSQL", () => {

@@ -1,10 +1,10 @@
-import { SecureLogger } from '@/lib/security/secure-logger';
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import { validateTelegramInitData } from "@/lib/security/telegram-validator";
-import { sanitizeHTML } from "@/lib/security/input-sanitizer";
-import { donationSchema } from "@/lib/schemas";
-import { db } from "@/lib/db";
+import { SecureLogger } from '@/lib/security/secure-logger';
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { validateTelegramInitData } from "@/lib/security/telegram-validator";
+import { escapeHTML, stripDangerousHtml } from "@/lib/security";
+import { donationSchema } from "@/lib/schemas";
+import { db } from "@/lib/db";
 import { ethers } from "ethers";
 
 // 🔐 SECURITY: Rate limiting map (in-memory for now)
@@ -99,9 +99,9 @@ export async function POST(request: NextRequest) {
       donorAddress,
     } = donationSchema.parse(body);
 
-    // 🔐 SECURITY 4: Sanitize message (prevent XSS)
-    const sanitizedMessage = message
-      ? sanitizeHTML(message.substring(0, 500))
+    // 🔐 SECURITY 4: Sanitize message (prevent XSS)
+    const sanitizedMessage = message
+      ? escapeHTML(stripDangerousHtml(message.substring(0, 500)))
       : "";
 
     // Validate amount
