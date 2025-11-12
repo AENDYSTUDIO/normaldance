@@ -29,14 +29,14 @@ export default [
       react: react,
     },
     rules: {
-      // Allow explicit any for Web3 functionality as per project requirements
-      "@typescript-eslint/no-explicit-any": "off",
+      // ✅ IMPROVED: Warn about explicit any to encourage better typing
+      "@typescript-eslint/no-explicit-any": "warn",
 
-      // Allow unused variables during development (will be addressed in phases)
-      "@typescript-eslint/no-unused-vars": "warn", // Changed from error to warning for development
+      // ✅ IMPROVED: Error on unused variables to maintain code quality
+      "@typescript-eslint/no-unused-vars": "error",
 
       // Allow non-null assertions for Web3 functionality
-      "@typescript-eslint/no-non-null-assertion": "off",
+      "@typescript-eslint/no-non-null-assertion": "warn",
 
       // Allow require imports (for Web3 libraries)
       "@typescript-eslint/no-require-imports": "warn",

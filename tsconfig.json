@@ -6,10 +6,10 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "noImplicitAny": false, // Allow implicit any for Web3 compatibility as per AGENTS.md
+    "noImplicitAny": true, // ✅ IMPROVED: Enabled for better type safety
     "strictNullChecks": true, // Keep strict null checks for safety
-    "noUnusedLocals": false, // Allow unused locals during development
-    "noUnusedParameters": false, // Allow unused parameters during development
+    "noUnusedLocals": true, // ✅ IMPROVED: Enabled to catch unused variables
+    "noUnusedParameters": false, // Allow unused parameters for Web3 callbacks
     "exactOptionalPropertyTypes": false, // Allow optional properties for Web3 compatibility
     "esModuleInterop": true,
     "module": "esnext",
@@ -50,8 +50,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "scripts/**/*.ts",
-    "scripts/**/*.js",
     "tests/**/*.ts",
     "tests/**/*.js"
   ],

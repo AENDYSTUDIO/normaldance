@@ -51,8 +51,8 @@ const getLogger = () => {
 };
 
 export class SecureLogger {
-  static info(message: string, data?: unknown) {
-    const sanitizedMsg = sanitizeLog(message);
+  static info(message: string, data?: unknown) {
+    const sanitizedMsg = sanitizeLog(message);
     const sanitizedData = data ? sanitizeLog(data) : "";
 
     const winstonLogger = getLogger();
@@ -63,10 +63,10 @@ export class SecureLogger {
     }
   }
 
-  static error(message: string, error?: Error) {
-    const sanitizedMsg = sanitizeLog(message);
-    const errorMsg = error?.message
-      ? sanitizeLog(error.message)
+  static error(message: string, error?: Error) {
+    const sanitizedMsg = sanitizeLog(message);
+    const errorMsg = error?.message
+      ? sanitizeLog(error.message)
       : "";
 
     const winstonLogger = getLogger();
@@ -77,8 +77,8 @@ export class SecureLogger {
     }
   }
 
-  static warn(message: string, data?: unknown) {
-    const sanitizedMsg = sanitizeLog(message);
+  static warn(message: string, data?: unknown) {
+    const sanitizedMsg = sanitizeLog(message);
     const sanitizedData = data ? sanitizeLog(data) : "";
 
     const winstonLogger = getLogger();
@@ -89,20 +89,20 @@ export class SecureLogger {
     }
   }
 
-  static debug(message: string, data?: unknown) {
-    const sanitizedMsg = sanitizeLog(message);
+  static debug(message: string, data?: unknown) {
+    const sanitizedMsg = sanitizeLog(message);
     const sanitizedData = data ? sanitizeLog(data) : "";
 
     const winstonLogger = getLogger();
     if (winstonLogger) {
-      winstonLogger.log(level, sanitizedMsg, sanitizedData);
+      winstonLogger.debug(sanitizedMsg, sanitizedData);
     } else {
-      console.log(`[${level.toUpperCase()}] ${sanitizedMsg}`, sanitizedData);
+      console.debug(`[DEBUG] ${sanitizedMsg}`, sanitizedData);
     }
   }
 
-  static log(message: string, context?: string) {
-    const sanitizedMsg = sanitizeLog(message);
+  static log(message: string, context?: string) {
+    const sanitizedMsg = sanitizeLog(message);
     const sanitizedCtx = context ? sanitizeLog(context) : "";
 
     const winstonLogger = getLogger();

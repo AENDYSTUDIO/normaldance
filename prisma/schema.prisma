@@ -32,6 +32,7 @@ model User {
   playlists   Playlist[]
   likes       Like[]
   comments    Comment[]
+  rewards     Reward[]
   kycProfile  KYCProfile?
   monitoredTransactions MonitoredTransaction[]
 
@@ -86,6 +87,21 @@ model Playlist {
   tracks      PlaylistTrack[]
 
   @@map("playlists")
+}
+
+// Reward model for user rewards (NFT creation, staking, etc.)
+model Reward {
+  id        String   @id @default(cuid())
+  type      String   // NFT, STAKING, REFERRAL, etc.
+  amount    Float    // Reward amount in $NDT
+  reason    String   // Description of the reward
+  createdAt DateTime @default(now())
+
+  // Relations
+  userId  String
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("rewards")
 }
 
 // Junction table for many-to-many relationship between playlists and tracks

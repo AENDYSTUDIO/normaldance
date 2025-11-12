@@ -108,17 +108,31 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = nftSchema.parse(body)
 
-    // For now, use a default artist ID - in real app this would come from auth context
-    const defaultArtistId = 'default-artist-id'
+    // Get artist ID from request body or use wallet address as fallback
+    // In production, this should come from authenticated session
+    const artistId = body.artistId || body.wallet || 'anonymous-artist'
+    
+    // Verify artist exists
+    const artist = await db.user.findUnique({
+      where: { id: artistId }
+    })
+
+    if (!artist) {
+      return NextResponse.json(
+        { error: 'Artist not found. Please authenticate first.' },
+        { status: 401 }
+      )
+    }
     
     // Apply deflationary model for NFT creation reward (2% burn)
-    const burnAmount = Math.floor(50 * 0.02) // 2% burn
-    const rewardAmount = 50 - burnAmount
+    const NFT_CREATION_REWARD = 50 // Base reward in $NDT
+    const burnAmount = Math.floor(NFT_CREATION_REWARD * 0.02) // 2% burn
+    const rewardAmount = NFT_CREATION_REWARD - burnAmount
 
     const nft = await db.nft.create({
       data: {
         ...validatedData,
-        artistId: defaultArtistId,
+        artistId,
         mintedAt: new Date(),
       },
       include: {
@@ -136,17 +150,23 @@ export async function POST(request: NextRequest) {
     // Award NFT creation reward to artist
     await db.reward.create({
       data: {
-        userId: defaultArtistId,
+        userId: artistId,
         type: 'NFT',
-        amount: rewardAmount, // $NDT tokens for NFT creation with deflation
+        amount: rewardAmount,
         reason: `NFT creation reward: ${nft.title}`
       }
     })
 
     // Update user balance
     await db.user.update({
-      where: { id: defaultArtistId },
+      where: { id: artistId },
       data: { balance: { increment: rewardAmount } }
+    })
+
+    SecureLogger.info('NFT created successfully', { 
+      nftId: nft.id, 
+      artistId, 
+      rewardAmount 
     })
 
     return NextResponse.json(nft, { status: 201 })
@@ -158,7 +178,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    SecureLogger.error('Error creating NFT:', error)
+    SecureLogger.error('Error creating NFT:', error as Error)
     return NextResponse.json(
       { error: 'Failed to create NFT' },
       { status: 500 }
