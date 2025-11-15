@@ -14,7 +14,11 @@
     "build-storybook": "storybook build -o static/storybook",
     "analyze": "node scripts/bundle-analyzer.js",
     "analyze:bundle": "node scripts/bundle-analyzer.js --bundle",
-    "analyze:deps": "node scripts/bundle-analyzer.js --deps"
+    "analyze:deps": "node scripts/bundle-analyzer.js --deps",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "react": "^19.0.0",
