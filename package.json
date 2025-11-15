@@ -11,7 +11,10 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o static/storybook"
+    "build-storybook": "storybook build -o static/storybook",
+    "analyze": "node scripts/bundle-analyzer.js",
+    "analyze:bundle": "node scripts/bundle-analyzer.js --bundle",
+    "analyze:deps": "node scripts/bundle-analyzer.js --deps"
   },
   "dependencies": {
     "react": "^19.0.0",
