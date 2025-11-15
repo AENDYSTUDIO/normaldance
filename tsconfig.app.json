@@ -1,23 +1,32 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": true
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "jsx": "preserve",
+    "allowJs": false,
+    "checkJs": false,
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
-    "src/app/page.tsx",
-    "src/app/layout.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",
-    "tests",
-    "mobile-app/**",
-    "src/app/api/**",
-    "src/components/**",
-    "src/lib/**",
-    "programs/**",
-    "scripts/**",
-    "mcp/**"
+    ".next",
+    "dist",
+    "build",
+    "coverage",
+    "test-results",
+    "playwright-report"
   ]
 }
 
