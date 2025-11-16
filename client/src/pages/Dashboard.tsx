@@ -1,6 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Music, Wallet, Send, Sparkles, LogOut } from "lucide-react";
+import { Music, Wallet, Send, Sparkles, LogOut, Upload } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { APP_TITLE, getLoginUrl } from "@/const";
 import { WalletConnect } from "@/components/WalletConnect";
@@ -80,9 +80,11 @@ export default function Dashboard() {
             </div>
 
             <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground hidden md:block">
-                {user?.name || "User"}
-              </span>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/profile">
+                  <span className="text-sm">{user?.name || "User"}</span>
+                </Link>
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -106,6 +108,22 @@ export default function Dashboard() {
             <p className="text-muted-foreground">
               Your personal Web3 music experience awaits
             </p>
+          </div>
+
+          {/* Upload Track CTA */}
+          <div className="glass p-6 rounded-xl mb-8 flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold mb-1">Share Your Music</h2>
+              <p className="text-sm text-muted-foreground">
+                Upload tracks to IPFS and reach a global audience
+              </p>
+            </div>
+            <Button className="vinyl-glow" asChild>
+              <Link href="/upload">
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Track
+              </Link>
+            </Button>
           </div>
 
           {/* Quick Actions */}

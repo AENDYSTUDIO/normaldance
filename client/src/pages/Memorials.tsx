@@ -3,7 +3,105 @@ import { Music, Heart, Plus } from "lucide-react";
 import { Link } from "wouter";
 import { APP_TITLE } from "@/const";
 import { VinylMemorial } from "@/components/VinylMemorial";
+import { MemorialCard } from "@/components/MemorialCard";
 import { useState } from "react";
+import { trpc } from "@/lib/trpc";
+
+function MemorialGallery() {
+  const { data: memorials, isLoading } = trpc.memorials.list.useQuery({ limit: 20 });
+
+  // Mock data for demo
+  const mockMemorials = [
+    {
+      id: 1,
+      artistName: "David Bowie",
+      artistBio: "Legendary musician and cultural icon who revolutionized rock music",
+      birthDate: new Date("1947-01-08"),
+      deathDate: new Date("2016-01-10"),
+      totalDonations: 125000,
+      donorCount: 1250,
+    },
+    {
+      id: 2,
+      artistName: "Amy Winehouse",
+      artistBio: "Soulful voice that touched millions with her powerful performances",
+      birthDate: new Date("1983-09-14"),
+      deathDate: new Date("2011-07-23"),
+      totalDonations: 89000,
+      donorCount: 890,
+    },
+    {
+      id: 3,
+      artistName: "Prince",
+      artistBio: "Musical genius and innovator who redefined pop and funk",
+      birthDate: new Date("1958-06-07"),
+      deathDate: new Date("2016-04-21"),
+      totalDonations: 210000,
+      donorCount: 2100,
+    },
+    {
+      id: 4,
+      artistName: "Kurt Cobain",
+      artistBio: "Voice of a generation and pioneer of grunge music",
+      birthDate: new Date("1967-02-20"),
+      deathDate: new Date("1994-04-05"),
+      totalDonations: 156000,
+      donorCount: 1560,
+    },
+    {
+      id: 5,
+      artistName: "Whitney Houston",
+      artistBio: "One of the greatest voices in music history",
+      birthDate: new Date("1963-08-09"),
+      deathDate: new Date("2012-02-11"),
+      totalDonations: 178000,
+      donorCount: 1780,
+    },
+    {
+      id: 6,
+      artistName: "Freddie Mercury",
+      artistBio: "Iconic frontman of Queen with unparalleled stage presence",
+      birthDate: new Date("1946-09-05"),
+      deathDate: new Date("1991-11-24"),
+      totalDonations: 245000,
+      donorCount: 2450,
+    },
+  ];
+
+  if (isLoading) {
+    return (
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="glass p-6 rounded-xl animate-pulse">
+            <div className="aspect-square bg-muted rounded-lg mb-4" />
+            <div className="h-6 bg-muted rounded mb-2" />
+            <div className="h-4 bg-muted rounded w-2/3" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  const displayMemorials = memorials && memorials.length > 0 ? memorials : mockMemorials;
+
+  return (
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {displayMemorials.map((memorial: any) => (
+        <MemorialCard
+          key={memorial.id}
+          id={memorial.id}
+          artistName={memorial.artistName}
+          artistBio={memorial.artistBio}
+          birthDate={memorial.birthDate}
+          deathDate={memorial.deathDate}
+          profileImageUrl={memorial.profileImageUrl}
+          totalDonations={memorial.totalDonations || 0}
+          donorCount={memorial.donorCount || 0}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function Memorials() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -92,6 +190,12 @@ export default function Memorials() {
                 All metadata encrypted and stored permanently on IPFS for eternal preservation
               </p>
             </div>
+          </div>
+
+          {/* Memorial Gallery */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6">Memorial Gallery</h2>
+            <MemorialGallery />
           </div>
 
           {/* 3D Vinyl Memorial Demo */}

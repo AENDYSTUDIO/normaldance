@@ -9,6 +9,9 @@ import Explore from "./pages/Explore";
 import Memorials from "./pages/Memorials";
 import Player from "./pages/Player";
 import Dashboard from "./pages/Dashboard";
+import UploadTrack from "./pages/UploadTrack";
+import MemorialDetail from "./pages/MemorialDetail";
+import Profile from "./pages/Profile";
 
 function Router() {
   return (
@@ -18,6 +21,9 @@ function Router() {
       <Route path={"/memorials"} component={Memorials} />
       <Route path={"/player"} component={Player} />
       <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/upload"} component={UploadTrack} />
+      <Route path={"/memorials/:id"} component={MemorialDetail} />
+      <Route path={"/profile"} component={Profile} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
