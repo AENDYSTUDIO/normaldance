@@ -2,8 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Music, Heart, Plus } from "lucide-react";
 import { Link } from "wouter";
 import { APP_TITLE } from "@/const";
+import { VinylMemorial } from "@/components/VinylMemorial";
+import { useState } from "react";
 
 export default function Memorials() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
@@ -90,19 +94,55 @@ export default function Memorials() {
             </div>
           </div>
 
-          {/* Coming Soon Message */}
-          <div className="glass p-12 rounded-2xl text-center">
-            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 animate-glow">
-              <Heart className="w-12 h-12 text-primary" />
+          {/* 3D Vinyl Memorial Demo */}
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold mb-2">Interactive 3D Memorial</h2>
+                <p className="text-muted-foreground">
+                  Drag to rotate, scroll to zoom. Each candle represents a year of legacy.
+                </p>
+              </div>
+              <Button variant="outline" onClick={() => setIsPlaying(!isPlaying)}>
+                {isPlaying ? "⏸ Pause" : "▶ Play"}
+              </Button>
             </div>
-            <h2 className="text-2xl font-bold mb-2">Memorial System Coming Soon</h2>
-            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-              We're building a revolutionary way to honor legendary artists with blockchain-powered 
-              memorials featuring 3D vinyl visualizations and smart contract donations
-            </p>
-            <Button asChild>
-              <Link href="/">Back to Home</Link>
-            </Button>
+            <VinylMemorial artistName="LEGEND" isPlaying={isPlaying} />
+          </div>
+
+          {/* Memorial Info */}
+          <div className="glass p-8 rounded-xl">
+            <h3 className="text-xl font-bold mb-4">About G.Rave Memorials</h3>
+            <div className="grid md:grid-cols-2 gap-6 text-sm">
+              <div>
+                <h4 className="font-semibold mb-2 text-primary">🕯️ 27 Candles</h4>
+                <p className="text-muted-foreground">
+                  Each candle represents a track or milestone in the artist's career, 
+                  creating an eternal flame of remembrance.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2 text-primary">💎 Smart Contracts</h4>
+                <p className="text-muted-foreground">
+                  Donations are automatically distributed: 98% to designated heirs, 
+                  2% to platform maintenance.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2 text-primary">🔗 Blockchain Verified</h4>
+                <p className="text-muted-foreground">
+                  All memorials are permanently stored on Ethereum/Polygon with 
+                  IPFS metadata for eternal preservation.
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold mb-2 text-primary">🎵 Interactive 3D</h4>
+                <p className="text-muted-foreground">
+                  Explore the memorial in 3D space with realistic vinyl physics 
+                  and ambient candle lighting effects.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </main>

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Music, Wallet, Heart, Sparkles, Play, TrendingUp } from "lucide-react";
 import { APP_LOGO, APP_TITLE, getLoginUrl } from "@/const";
 import { Link } from "wouter";
+import { WalletConnect } from "@/components/WalletConnect";
 
 export default function Home() {
   const { user, isAuthenticated } = useAuth();
@@ -39,11 +40,12 @@ export default function Home() {
             <div className="flex items-center gap-4">
               {isAuthenticated ? (
                 <div className="flex items-center gap-3">
+                  <WalletConnect />
                   <span className="text-sm text-muted-foreground">
                     {user?.name || "User"}
                   </span>
-                  <Button variant="outline" size="sm">
-                    Dashboard
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/dashboard">Dashboard</Link>
                   </Button>
                 </div>
               ) : (

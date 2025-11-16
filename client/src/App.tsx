@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import Memorials from "./pages/Memorials";
 import Player from "./pages/Player";
+import Dashboard from "./pages/Dashboard";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path={"/explore"} component={Explore} />
       <Route path={"/memorials"} component={Memorials} />
       <Route path={"/player"} component={Player} />
+      <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
