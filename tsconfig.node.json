@@ -1,0 +1,32 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "scripts/**/*.js",
+    "next.config.ts",
+    "jest.config.js",
+    "jest.setup.js",
+    ".eslintrc.*",
+    "prettier.config.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "src",
+    "tests",
+    "coverage",
+    "dist",
+    "build"
+  ]
+}
