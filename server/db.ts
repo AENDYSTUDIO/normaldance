@@ -1,6 +1,16 @@
-import { eq } from "drizzle-orm";
+import { eq, desc, and, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { 
+  InsertUser, users, 
+  tracks, InsertTrack, Track,
+  playlists, InsertPlaylist, Playlist,
+  playlistTracks, InsertPlaylistTrack,
+  memorials, InsertMemorial, Memorial,
+  donations, InsertDonation,
+  recommendations, InsertRecommendation,
+  listeningHistory, InsertListeningHistory,
+  telegramTransactions, InsertTelegramTransaction
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -17,6 +27,8 @@ export async function getDb() {
   }
   return _db;
 }
+
+// ==================== USER OPERATIONS ====================
 
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
@@ -35,7 +47,7 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     };
     const updateSet: Record<string, unknown> = {};
 
-    const textFields = ["name", "email", "loginMethod"] as const;
+    const textFields = ["name", "email", "loginMethod", "solanaAddress", "tonAddress", "ethereumAddress", "telegramUserId", "telegramUsername"] as const;
     type TextField = (typeof textFields)[number];
 
     const assignNullable = (field: TextField) => {
@@ -89,4 +101,180 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// ==================== TRACK OPERATIONS ====================
+
+export async function createTrack(track: InsertTrack): Promise<Track> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(tracks).values(track);
+  const insertedId = Number(result[0].insertId);
+  
+  const inserted = await db.select().from(tracks).where(eq(tracks.id, insertedId)).limit(1);
+  return inserted[0];
+}
+
+export async function getTrackById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(tracks).where(eq(tracks.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getAllTracks(limit: number = 50, offset: number = 0) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(tracks).orderBy(desc(tracks.createdAt)).limit(limit).offset(offset);
+}
+
+export async function searchTracks(query: string, limit: number = 20) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(tracks)
+    .where(
+      sql`${tracks.title} LIKE ${`%${query}%`} OR ${tracks.artist} LIKE ${`%${query}%`} OR ${tracks.album} LIKE ${`%${query}%`}`
+    )
+    .limit(limit);
+}
+
+export async function incrementPlayCount(trackId: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(tracks)
+    .set({ playCount: sql`${tracks.playCount} + 1` })
+    .where(eq(tracks.id, trackId));
+}
+
+// ==================== PLAYLIST OPERATIONS ====================
+
+export async function createPlaylist(playlist: InsertPlaylist): Promise<Playlist> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(playlists).values(playlist);
+  const insertedId = Number(result[0].insertId);
+  
+  const inserted = await db.select().from(playlists).where(eq(playlists.id, insertedId)).limit(1);
+  return inserted[0];
+}
+
+export async function getUserPlaylists(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(playlists)
+    .where(eq(playlists.userId, userId))
+    .orderBy(desc(playlists.updatedAt));
+}
+
+export async function addTrackToPlaylist(playlistId: number, trackId: number, position: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.insert(playlistTracks).values({
+    playlistId,
+    trackId,
+    position,
+  });
+}
+
+// ==================== MEMORIAL OPERATIONS ====================
+
+export async function createMemorial(memorial: InsertMemorial): Promise<Memorial> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(memorials).values(memorial);
+  const insertedId = Number(result[0].insertId);
+  
+  const inserted = await db.select().from(memorials).where(eq(memorials.id, insertedId)).limit(1);
+  return inserted[0];
+}
+
+export async function getAllMemorials(limit: number = 20) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(memorials)
+    .orderBy(desc(memorials.createdAt))
+    .limit(limit);
+}
+
+export async function getMemorialById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db.select().from(memorials).where(eq(memorials.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// ==================== DONATION OPERATIONS ====================
+
+export async function createDonation(donation: InsertDonation) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(donations).values(donation);
+  return Number(result[0].insertId);
+}
+
+export async function getMemorialDonations(memorialId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(donations)
+    .where(eq(donations.memorialId, memorialId))
+    .orderBy(desc(donations.createdAt));
+}
+
+// ==================== AI RECOMMENDATION OPERATIONS ====================
+
+export async function createRecommendation(recommendation: InsertRecommendation) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.insert(recommendations).values(recommendation);
+}
+
+export async function getUserRecommendations(userId: number, limit: number = 10) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(recommendations)
+    .where(eq(recommendations.userId, userId))
+    .orderBy(desc(recommendations.score))
+    .limit(limit);
+}
+
+// ==================== LISTENING HISTORY OPERATIONS ====================
+
+export async function recordListeningHistory(history: InsertListeningHistory) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db.insert(listeningHistory).values(history);
+}
+
+export async function getUserListeningHistory(userId: number, limit: number = 50) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return await db.select().from(listeningHistory)
+    .where(eq(listeningHistory.userId, userId))
+    .orderBy(desc(listeningHistory.playedAt))
+    .limit(limit);
+}
+
+// ==================== TELEGRAM OPERATIONS ====================
+
+export async function createTelegramTransaction(transaction: InsertTelegramTransaction) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(telegramTransactions).values(transaction);
+  return Number(result[0].insertId);
+}
