@@ -9,6 +9,8 @@ import Explore from "./pages/Explore";
 import Memorials from "./pages/Memorials";
 import Player from "./pages/Player";
 import Dashboard from "./pages/Dashboard";
+import DashboardNew from "./pages/DashboardNew";
+import DemoPage from "./pages/DemoPage";
 import UploadTrack from "./pages/UploadTrack";
 import MemorialDetail from "./pages/MemorialDetail";
 import Profile from "./pages/Profile";
@@ -16,11 +18,14 @@ import Profile from "./pages/Profile";
 function Router() {
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
+      <Route path={"/"} component={DemoPage} />
+      <Route path={"/home"} component={Home} />
       <Route path={"/explore"} component={Explore} />
       <Route path={"/memorials"} component={Memorials} />
       <Route path={"/player"} component={Player} />
-      <Route path={"/dashboard"} component={Dashboard} />
+      <Route path={"/demo"} component={DemoPage} />
+      <Route path={"/dashboard"} component={DashboardNew} />
+      <Route path={"/dashboard-old"} component={Dashboard} />
       <Route path={"/upload"} component={UploadTrack} />
       <Route path={"/memorials/:id"} component={MemorialDetail} />
       <Route path={"/profile"} component={Profile} />
