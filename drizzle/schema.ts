@@ -2,7 +2,6 @@ import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, boolean, decimal 
 
 /**
  * Core user table backing auth flow.
- * Extended with Web3 and platform-specific fields.
  */
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -14,15 +13,20 @@ export const users = mysqlTable("users", {
   
   // Web3 wallet addresses
   solanaAddress: varchar("solanaAddress", { length: 64 }),
-  tonAddress: varchar("tonAddress", { length: 64 }),
   ethereumAddress: varchar("ethereumAddress", { length: 64 }),
+  tonAddress: varchar("tonAddress", { length: 64 }),
   
   // Telegram integration
-  telegramUserId: varchar("telegramUserId", { length: 64 }),
+  telegramId: varchar("telegramId", { length: 64 }),
   telegramUsername: varchar("telegramUsername", { length: 64 }),
   
-  // User preferences
-  preferredWallet: mysqlEnum("preferredWallet", ["solana", "ton", "ethereum"]),
+  // User level and stats
+  userLevel: mysqlEnum("userLevel", ["BRONZE", "SILVER", "GOLD", "PLATINUM"]).default("BRONZE").notNull(),
+  totalListens: int("totalListens").default(0).notNull(),
+  totalUploads: int("totalUploads").default(0).notNull(),
+  
+  // Token balances (stored as integers to avoid decimal issues, divide by 1000000 for display)
+  ndtBalance: int("ndtBalance").default(0).notNull(),
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -39,23 +43,23 @@ export const tracks = mysqlTable("tracks", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 255 }).notNull(),
   artist: varchar("artist", { length: 255 }).notNull(),
-  album: varchar("album", { length: 255 }),
-  duration: int("duration").notNull(), // in seconds
+  userId: int("userId").notNull(),
   
   // IPFS storage
-  ipfsCid: varchar("ipfsCid", { length: 128 }).notNull(),
-  coverImageUrl: text("coverImageUrl"),
+  ipfsCid: varchar("ipfsCid", { length: 128 }),
+  ipfsMetadataCid: varchar("ipfsMetadataCid", { length: 128 }),
   
-  // Metadata
+  // Track metadata
+  duration: int("duration").default(0).notNull(), // in seconds
   genre: varchar("genre", { length: 64 }),
-  releaseYear: int("releaseYear"),
-  description: text("description"),
-  
-  // Upload info
-  uploadedBy: int("uploadedBy").notNull(),
+  coverImageUrl: text("coverImageUrl"),
   
   // Stats
   playCount: int("playCount").default(0).notNull(),
+  likeCount: int("likeCount").default(0).notNull(),
+  
+  // Status
+  isPublic: boolean("isPublic").default(true).notNull(),
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
@@ -71,11 +75,9 @@ export const playlists = mysqlTable("playlists", {
   id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 255 }).notNull(),
   description: text("description"),
-  coverImageUrl: text("coverImageUrl"),
-  
   userId: int("userId").notNull(),
+  coverImageUrl: text("coverImageUrl"),
   isPublic: boolean("isPublic").default(true).notNull(),
-  
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -90,152 +92,142 @@ export const playlistTracks = mysqlTable("playlistTracks", {
   id: int("id").autoincrement().primaryKey(),
   playlistId: int("playlistId").notNull(),
   trackId: int("trackId").notNull(),
-  position: int("position").notNull(),
-  
+  position: int("position").default(0).notNull(),
   addedAt: timestamp("addedAt").defaultNow().notNull(),
 });
 
-export type PlaylistTrack = typeof playlistTracks.$inferSelect;
-export type InsertPlaylistTrack = typeof playlistTracks.$inferInsert;
-
 /**
- * G.Rave Memorial System - Digital memorials for artists
+ * NFTs table
  */
-export const memorials = mysqlTable("memorials", {
+export const nfts = mysqlTable("nfts", {
   id: int("id").autoincrement().primaryKey(),
+  trackId: int("trackId"),
+  ownerId: int("ownerId").notNull(),
+  creatorId: int("creatorId").notNull(),
   
-  // Memorial info
-  artistName: varchar("artistName", { length: 255 }).notNull(),
-  artistBio: text("artistBio"),
-  birthDate: timestamp("birthDate"),
-  deathDate: timestamp("deathDate"),
+  // NFT metadata
+  tokenId: varchar("tokenId", { length: 128 }),
+  contractAddress: varchar("contractAddress", { length: 128 }),
+  blockchain: mysqlEnum("blockchain", ["ethereum", "solana", "polygon"]).notNull(),
   
-  // Visual elements
-  vinylImageUrl: text("vinylImageUrl"),
-  profileImageUrl: text("profileImageUrl"),
+  // Pricing (stored as integers, divide by 1000000 for display)
+  mintPrice: int("mintPrice").default(0).notNull(),
+  currentPrice: int("currentPrice").default(0).notNull(),
   
-  // Blockchain
-  smartContractAddress: varchar("smartContractAddress", { length: 128 }),
-  blockchainNetwork: mysqlEnum("blockchainNetwork", ["ethereum", "polygon", "solana"]),
-  
-  // IPFS metadata
-  metadataIpfsCid: varchar("metadataIpfsCid", { length: 128 }),
-  
-  // Stats
-  totalDonations: int("totalDonations").default(0).notNull(), // in cents
-  donationCount: int("donationCount").default(0).notNull(),
-  
-  // Creator
-  createdBy: int("createdBy").notNull(),
-  
-  // Beneficiaries (98% goes to heirs, 2% to platform)
-  beneficiaryAddresses: text("beneficiaryAddresses"), // JSON array of addresses
+  // Metadata
+  metadataUri: text("metadataUri"),
+  imageUrl: text("imageUrl"),
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
-export type Memorial = typeof memorials.$inferSelect;
-export type InsertMemorial = typeof memorials.$inferInsert;
+export type NFT = typeof nfts.$inferSelect;
+export type InsertNFT = typeof nfts.$inferInsert;
 
 /**
- * Donations to memorials
+ * Staking table
  */
-export const donations = mysqlTable("donations", {
+export const stakingPositions = mysqlTable("stakingPositions", {
   id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
   
-  memorialId: int("memorialId").notNull(),
-  donorUserId: int("donorUserId"),
+  // Staking details (amounts stored as integers)
+  stakedAmount: int("stakedAmount").default(0).notNull(),
+  rewardAmount: int("rewardAmount").default(0).notNull(),
   
-  // Payment info
-  amount: int("amount").notNull(), // in cents
-  currency: varchar("currency", { length: 10 }).default("USD").notNull(),
+  // Staking period
+  stakingPeriod: mysqlEnum("stakingPeriod", ["30days", "90days", "180days", "365days"]).notNull(),
+  apy: int("apy").default(0).notNull(), // stored as percentage * 100 (e.g., 1250 = 12.50%)
   
-  // Transaction details
-  transactionHash: varchar("transactionHash", { length: 128 }),
-  paymentMethod: mysqlEnum("paymentMethod", ["crypto", "telegram_stars", "card"]).notNull(),
-  walletAddress: varchar("walletAddress", { length: 128 }),
+  // Status
+  isActive: boolean("isActive").default(true).notNull(),
   
-  // Message
+  startDate: timestamp("startDate").defaultNow().notNull(),
+  endDate: timestamp("endDate").notNull(),
+  lastClaimDate: timestamp("lastClaimDate"),
+  
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type StakingPosition = typeof stakingPositions.$inferSelect;
+export type InsertStakingPosition = typeof stakingPositions.$inferInsert;
+
+/**
+ * G.Rave Memorial System
+ */
+export const graveMemorials = mysqlTable("graveMemorials", {
+  id: int("id").autoincrement().primaryKey(),
+  trackId: int("trackId").notNull(),
+  creatorId: int("creatorId").notNull(),
+  
+  // Memorial metadata
+  dedicatedTo: varchar("dedicatedTo", { length: 255 }).notNull(),
   message: text("message"),
-  donorName: varchar("donorName", { length: 255 }),
-  isAnonymous: boolean("isAnonymous").default(false).notNull(),
   
-  status: mysqlEnum("status", ["pending", "completed", "failed"]).default("pending").notNull(),
+  // 3D visualization data
+  vinylColor: varchar("vinylColor", { length: 7 }).default("#8B5CF6").notNull(),
+  candleCount: int("candleCount").default(27).notNull(),
   
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type Donation = typeof donations.$inferSelect;
-export type InsertDonation = typeof donations.$inferInsert;
-
-/**
- * AI Recommendations tracking
- */
-export const recommendations = mysqlTable("recommendations", {
-  id: int("id").autoincrement().primaryKey(),
+  // Blockchain data
+  smartContractAddress: varchar("smartContractAddress", { length: 128 }),
+  ipfsMetadataUri: text("ipfsMetadataUri"),
   
-  userId: int("userId").notNull(),
-  trackId: int("trackId").notNull(),
-  
-  // Recommendation metadata
-  score: int("score").notNull(), // 0-100
-  reason: text("reason"),
-  
-  // User interaction
-  wasPlayed: boolean("wasPlayed").default(false).notNull(),
-  wasLiked: boolean("wasLiked").default(false).notNull(),
-  wasSkipped: boolean("wasSkipped").default(false).notNull(),
+  // Donation tracking (stored as integers)
+  totalDonations: int("totalDonations").default(0).notNull(),
+  platformFee: int("platformFee").default(0).notNull(), // 2% of donations
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
-export type Recommendation = typeof recommendations.$inferSelect;
-export type InsertRecommendation = typeof recommendations.$inferInsert;
+export type GraveMemorial = typeof graveMemorials.$inferSelect;
+export type InsertGraveMemorial = typeof graveMemorials.$inferInsert;
 
 /**
- * User listening history for AI training
+ * Wallet transactions
  */
-export const listeningHistory = mysqlTable("listeningHistory", {
+export const transactions = mysqlTable("transactions", {
   id: int("id").autoincrement().primaryKey(),
-  
   userId: int("userId").notNull(),
-  trackId: int("trackId").notNull(),
-  
-  // Playback info
-  playedDuration: int("playedDuration").notNull(), // seconds actually played
-  completionRate: int("completionRate").notNull(), // percentage 0-100
-  
-  // Context
-  source: varchar("source", { length: 64 }), // "search", "playlist", "recommendation", etc.
-  
-  playedAt: timestamp("playedAt").defaultNow().notNull(),
-});
-
-export type ListeningHistory = typeof listeningHistory.$inferSelect;
-export type InsertListeningHistory = typeof listeningHistory.$inferInsert;
-
-/**
- * Telegram Stars transactions
- */
-export const telegramTransactions = mysqlTable("telegramTransactions", {
-  id: int("id").autoincrement().primaryKey(),
-  
-  userId: int("userId").notNull(),
-  telegramUserId: varchar("telegramUserId", { length: 64 }).notNull(),
   
   // Transaction details
-  amount: int("amount").notNull(), // in Telegram Stars
-  purpose: varchar("purpose", { length: 128 }).notNull(),
+  type: mysqlEnum("type", ["deposit", "withdrawal", "transfer", "stake", "unstake", "nft_purchase", "donation"]).notNull(),
+  amount: int("amount").default(0).notNull(),
+  currency: varchar("currency", { length: 16 }).default("NDT").notNull(),
+  
+  // Blockchain details
+  txHash: varchar("txHash", { length: 128 }),
+  blockchain: varchar("blockchain", { length: 32 }),
+  status: mysqlEnum("status", ["pending", "completed", "failed"]).default("pending").notNull(),
   
   // Related entities
-  relatedMemorialId: int("relatedMemorialId"),
-  relatedTrackId: int("relatedTrackId"),
+  relatedEntityType: varchar("relatedEntityType", { length: 32 }),
+  relatedEntityId: int("relatedEntityId"),
   
-  status: mysqlEnum("status", ["pending", "completed", "failed"]).default("pending").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Transaction = typeof transactions.$inferSelect;
+export type InsertTransaction = typeof transactions.$inferInsert;
+
+/**
+ * User activity/statistics
+ */
+export const userActivity = mysqlTable("userActivity", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  trackId: int("trackId"),
+  
+  activityType: mysqlEnum("activityType", ["play", "like", "share", "comment", "upload"]).notNull(),
+  
+  // Additional metadata
+  metadata: text("metadata"), // JSON string for flexible data
   
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
-export type TelegramTransaction = typeof telegramTransactions.$inferSelect;
-export type InsertTelegramTransaction = typeof telegramTransactions.$inferInsert;
+export type UserActivity = typeof userActivity.$inferSelect;
+export type InsertUserActivity = typeof userActivity.$inferInsert;
