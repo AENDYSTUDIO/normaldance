@@ -140,8 +140,8 @@ importers:
         specifier: ^11.6.0
         version: 11.6.0(typescript@5.9.3)
       axios:
-        specifier: ^1.12.0
-        version: 1.12.2
+        specifier: ^1.13.2
+        version: 1.13.2
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -4605,8 +4605,8 @@ packages:
     peerDependencies:
       axios: 0.x || 1.x
 
-  axios@1.12.2:
-    resolution: {integrity: sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==}
+  axios@1.13.2:
+    resolution: {integrity: sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==}
 
   babel-jest@29.7.0:
     resolution: {integrity: sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==}
@@ -5834,8 +5834,8 @@ packages:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
     engines: {node: '>= 0.4'}
 
-  form-data@4.0.4:
-    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
+  form-data@4.0.5:
+    resolution: {integrity: sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==}
     engines: {node: '>= 6'}
 
   forwarded@0.2.0:
@@ -9619,8 +9619,8 @@ snapshots:
       '@solana/kit': 3.0.3(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@solana/web3.js': 1.98.4(bufferutil@4.0.9)(typescript@5.9.3)(utf-8-validate@5.0.10)
       abitype: 1.0.6(typescript@5.9.3)(zod@3.25.76)
-      axios: 1.12.2
-      axios-retry: 4.5.0(axios@1.12.2)
+      axios: 1.13.2
+      axios-retry: 4.5.0(axios@1.13.2)
       jose: 6.1.0
       md5: 2.3.0
       uncrypto: 0.1.3
@@ -13617,7 +13617,7 @@ snapshots:
   '@stellar/stellar-sdk@13.3.0':
     dependencies:
       '@stellar/stellar-base': 13.1.0
-      axios: 1.12.2
+      axios: 1.13.2
       bignumber.js: 9.3.1
       eventsource: 2.0.2
       feaxios: 0.0.23
@@ -15740,15 +15740,15 @@ snapshots:
 
   aws-ssl-profiles@1.1.2: {}
 
-  axios-retry@4.5.0(axios@1.12.2):
+  axios-retry@4.5.0(axios@1.13.2):
     dependencies:
-      axios: 1.12.2
+      axios: 1.13.2
       is-retry-allowed: 2.2.0
 
-  axios@1.12.2:
+  axios@1.13.2:
     dependencies:
       follow-redirects: 1.15.11
-      form-data: 4.0.4
+      form-data: 4.0.5
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -17071,7 +17071,7 @@ snapshots:
     dependencies:
       is-callable: 1.2.7
 
-  form-data@4.0.4:
+  form-data@4.0.5:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
