@@ -100,7 +100,7 @@
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.181.0",
-    "@vitejs/plugin-react": "^5.0.4",
+    "@vitejs/plugin-react": "^5.1.2",
     "add": "^2.0.6",
     "autoprefixer": "^10.4.22",
     "drizzle-kit": "^0.31.4",
